@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".Menu">
+
+  <Button
+    android:id="@+id/btn_menu01"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="商品照合"
+    android:textSize="12sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+  <Button
+    android:id="@+id/btn_menu02"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="16dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="商品入庫"
+    android:textSize="12sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu01" />
+
+  <Button
+    android:id="@+id/btn_menu03"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="8dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="商品出庫"
+    android:textSize="12sp"
+    app:layout_constraintStart_toEndOf="@+id/btn_menu02"
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu01" />
+
+  <Button
+    android:id="@+id/btn_menu04"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="16dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="商品移動"
+    android:textSize="12sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/btn_menu03"
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu01" />
+
+  <Button
+    android:id="@+id/btn_menu05"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="16dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="入物移動"
+    android:textSize="12sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu02" />
+
+  <Button
+    android:id="@+id/btn_menu06"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="16dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="データ確認"
+    android:textSize="10sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu05" />
+
+  <Button
+    android:id="@+id/btn_menu07"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="8dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="データ転送"
+    android:textSize="10sp"
+    app:layout_constraintStart_toEndOf="@+id/btn_menu06"
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu05" />
+
+  <Button
+    android:id="@+id/btn_menu08"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_marginStart="16dp"
+    android:width="150px"
+    android:height="150px"
+    android:text="棚卸し"
+    android:textSize="12sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu06" />
+
+  <androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="?attr/colorPrimary"
+    android:theme="?attr/actionBarTheme"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
