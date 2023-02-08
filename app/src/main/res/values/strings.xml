@@ -1,3 +1,28 @@
 <resources>
   <string name="app_name">pot_terminal</string>
+
+  <string name="err_txt_number01">入力は必須です。</string>
+  <string name="err_txt_number02">数値で入力してください。</string>
+  <string name="err_txt_number03">3桁以内で入力してください。</string>
+
+  <string name="err_edt_amt01">入力は必須です。</string>
+  <string name="err_edt_amt02">数値で入力してください。</string>
+  <string name="err_edt_amt03">3桁以内で入力してください。</string>
+
+  <string name="err_shelf_shipping01">出棚を読んでください。</string>
+  <string name="err_shelf_shipping02">商品を読んでください。</string>
+
+  <string name="err_shelf_receiving01">入棚を読んでください。</string>
+  <string name="err_shelf_receiving02">商品を読んでください。</string>
+
+  <string name="err_shelf_replace_s01">出棚を読んでください。</string>
+  <string name="err_shelf_replace_s02">入棚を読んでください。</string>
+  <string name="err_shelf_replace_s03">商品を読んでください。</string>
+
+  <string name="err_shelf_replace_b01">出棚を読んでください。</string>
+
+  <string name="err_inventory01">1のみ入力できます。</string>
+  <string name="err_inventory02">検棚を読んでください。</string>
+  <string name="err_inventory03">商品を読んでください。</string>
+  <string name="err_inventory04">1＋ENTで確定してください。</string>
 </resources>

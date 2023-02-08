@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.DataConfirm" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ItemVerification">
+
+    <TextView
+      android:id="@+id/txt_view01"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="全"
+      app:layout_constraintEnd_toStartOf="@+id/txt_view02"
+      app:layout_constraintTop_toTopOf="@+id/txt_view02" />
+
+    <TextView
+      android:id="@+id/txt_view02"
+      android:layout_width="50dp"
+      android:layout_height="45dp"
+      android:layout_marginTop="24dp"
+      android:gravity="center|center_vertical"
+      android:text="@{viewmodel.txtView01}"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lay_potfile" />
+
+    <TextView
+      android:id="@+id/txt_view03"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="件"
+      app:layout_constraintStart_toEndOf="@+id/txt_view02"
+      app:layout_constraintTop_toTopOf="@+id/txt_view02" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_potfile"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="32dp"
+      android:layout_marginEnd="16dp"
+      android:hint="POTファイル"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:startIconDrawable="@drawable/baseline_file_24">
+
+      <AutoCompleteTextView
+        android:id="@+id/txt_potfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ListView
+      android:id="@+id/lst_view01"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      app:layout_constraintBottom_toTopOf="@+id/exe_button01"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/txt_view02" />
+
+    <Button
+      android:id="@+id/exe_button01"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      android:text="削除"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

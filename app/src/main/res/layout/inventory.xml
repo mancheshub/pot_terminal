@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.Inventory" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ShelfShipping">
+
+    <TextView
+      android:id="@+id/txt_view01"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:layout_marginEnd="8dp"
+      android:text="累計"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toStartOf="@+id/guideline01"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/txt_count01"
+      android:layout_width="55dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="32dp"
+      android:gravity="right"
+      android:text="@{viewmodel.txtCount01}"
+      android:textSize="20sp"
+      app:layout_constraintStart_toStartOf="@+id/guideline01"
+      app:layout_constraintTop_toTopOf="@+id/txt_view01" />
+
+    <TextView
+      android:id="@+id/txt_view03"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:text="点 棚 卸 済"
+      android:textSize="20sp"
+      app:layout_constraintStart_toEndOf="@+id/txt_count01"
+      app:layout_constraintTop_toTopOf="@+id/txt_view01" />
+
+    <TextView
+      android:id="@+id/lbl_view02"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:text="ﾛｹｰｼｮﾝ"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toStartOf="@+id/guideline01"
+      app:layout_constraintTop_toBottomOf="@+id/txt_view01" />
+
+    <TextView
+      android:id="@+id/txt_count02"
+      android:layout_width="55dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="32dp"
+      android:layout_marginTop="8dp"
+      android:gravity="right"
+      android:text="@{viewmodel.txtCount02}"
+      android:textSize="20sp"
+      app:layout_constraintStart_toStartOf="@+id/guideline01"
+      app:layout_constraintTop_toBottomOf="@+id/txt_view01" />
+
+    <TextView
+      android:id="@+id/txt_view04"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:text="点 棚 卸 済"
+      android:textSize="20sp"
+      app:layout_constraintStart_toEndOf="@+id/txt_count02"
+      app:layout_constraintTop_toTopOf="@+id/lbl_view02" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_location"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="24dp"
+      android:layout_marginEnd="16dp"
+      android:hint="検棚"
+      app:errorEnabled="true"
+      app:expandedHintEnabled="false"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/txt_view04"
+      app:startIconDrawable="@drawable/baseline_shelves_24">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@={viewmodel.txtLocation}"
+        android:textColor="#000000" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_item"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:hint="商品"
+      app:errorEnabled="true"
+      app:expandedHintEnabled="false"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lay_location"
+      app:startIconDrawable="@drawable/baseline_clothes_24">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@={viewmodel.txtItem}"
+        android:textColor="#000000" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_amt"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:hint="数量"
+      app:counterEnabled="true"
+      app:counterMaxLength="3"
+      app:errorEnabled="true"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lay_item"
+      app:startIconDrawable="@drawable/baseline_edit_24">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edt_amt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="@={viewmodel.edtAmt}">
+
+        <requestFocus />
+      </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline01"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_begin="102dp" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
