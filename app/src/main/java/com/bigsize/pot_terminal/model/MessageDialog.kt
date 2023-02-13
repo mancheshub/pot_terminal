@@ -2,31 +2,27 @@ package com.bigsize.pot_terminal.model
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.Failure
-import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.R
 
-class DeviceNODialog( val deviceNO:String ):DialogFragment() {
+class StaffNODialog( val staffNO:String ):DialogFragment() {
   private lateinit var dialog:AlertDialog
-
-  private val model01:FileOperation = FileOperation()
 
   override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
     val builder = AlertDialog.Builder( activity )
 
     val txtView = TextView( activity )
-    txtView.text = "端末設定"
+    txtView.text = "利用者"
     txtView.textSize = 20f
     txtView.setTextColor( Color.WHITE )
     txtView.setBackgroundColor( Color.rgb(74,138,245) )
@@ -34,65 +30,14 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
     txtView.gravity = Gravity.CENTER
 
     val inflater:LayoutInflater = requireActivity().layoutInflater
-    val view:View = inflater.inflate( R.layout.dialog_setting, null )
+    val view:View = inflater.inflate( R.layout.dialog_staff, null )
 
     builder.setCustomTitle( txtView )
     builder.setView( view )
 
-    if( deviceNO == "" ) {
-
-    builder.setPositiveButton( "設定" ) { dialog, id ->
-      val txtNumber = view.findViewById<EditText>( R.id.txt_number )
-
-      try {
-        model01.saveDeviceNO( "OVERWRITE", txtNumber.text.toString() )
-      } catch( e:Exception ) {
-        val intent = Intent( activity, Failure::class.java )
-        intent.putExtra( "MESSAGE", "端末番号を保存できませんでした。" )
-        startActivity( intent )
-      }
-
-      dialog.dismiss();
-    }
-
-    builder.setNegativeButton( "キャンセル" ) { dialog, id ->
-      dialog.dismiss();
-    }
-
-    }
-
-    dialog = builder.create()
-
-    return dialog
-  }
-}
-
-class MessageDialog:DialogFragment() {
-  private lateinit var dialog:AlertDialog
-
-  override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
-    val builder = AlertDialog.Builder( activity )
-
-    val txtView = TextView( activity )
-    txtView.text = arguments!!.getString( "title", "" )
-    txtView.textSize = 24f
-    txtView.setTextColor( Color.WHITE )
-    txtView.setBackgroundColor( Color.rgb(74,138,245) )
-    txtView.setPadding( 10,10,10,10 )
-    txtView.gravity = Gravity.CENTER
-
-    val msgView = TextView( activity )
-    msgView.text = arguments!!.getString( "message", "" )
-    msgView.textSize = 16f
-    msgView.setTextColor( Color.BLACK )
-    msgView.setPadding( 15, 10, 10, 40 )
-
-    builder.setCustomTitle( txtView )
-    builder.setView( msgView )
+    view.findViewById<TextView>( R.id.txt_number ).text = "スタッフ番号 " + staffNO + " でログイン中 ..."
 
     builder.setPositiveButton( "OK" ) { dialog, id ->
-      if( BuildConfig.DEBUG ) Log.d( "APP-MessageDialog", "終了" )
-
       dialog.dismiss();
     }
 
@@ -105,5 +50,142 @@ class MessageDialog:DialogFragment() {
     dialog.setCanceledOnTouchOutside( false )
 
     return dialog
+  }
+}
+
+class DeviceNODialog( val deviceNO:String ):DialogFragment() {
+  private lateinit var dialog:AlertDialog
+
+  private val model01:FileOperation = FileOperation()
+
+  override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
+    val builder = AlertDialog.Builder( activity )
+
+    val txtView = TextView( activity )
+    txtView.text = "端末"
+    txtView.textSize = 20f
+    txtView.setTextColor( Color.WHITE )
+    txtView.setBackgroundColor( Color.rgb(74,138,245) )
+    txtView.setPadding( 5,5,5,5 )
+    txtView.gravity = Gravity.CENTER
+
+    val inflater:LayoutInflater = requireActivity().layoutInflater
+    val view:View = inflater.inflate( R.layout.dialog_device, null )
+
+    builder.setCustomTitle( txtView )
+    builder.setView( view )
+
+    val txtNumber = view.findViewById<EditText>( R.id.txt_number )
+
+    if( deviceNO == "" ) {
+      builder.setPositiveButton( "設定" ) { dialog, id ->
+        try {
+          model01.saveDeviceNO( "OVERWRITE", txtNumber.text.toString() )
+        } catch( e:Exception ) {
+          val intent = Intent( activity, Failure::class.java )
+          intent.putExtra( "MESSAGE", "端末番号を保存できませんでした。" )
+          startActivity( intent )
+        }
+
+        dialog.dismiss();
+      }
+
+      builder.setNegativeButton( "キャンセル" ) { dialog, id ->
+        dialog.dismiss();
+      }
+    } else {
+      ( txtNumber as TextView ).text = deviceNO
+
+      builder.setNegativeButton( "OK" ) { dialog, id ->
+        dialog.dismiss();
+      }
+    }
+
+    // 戻るボタンでダイアログを閉じないようにします
+    setCancelable( false )
+
+    dialog = builder.create()
+
+    // ダイアログの外側をタップしてもダイアログを閉じないようにします
+    dialog.setCanceledOnTouchOutside( false )
+
+    return dialog
+  }
+}
+
+/**
+ * 汎用ダイアログを表示します
+ *
+ * @property [callbackType] コールバックメソッドの種類 - fromMessageDialog[callbackType]をコールバックとします
+ * @property [title] ダイアログのタイトル
+ * @property [message] ダイアログのテキスト
+ * @property [yesText] ダイアログの YES テキスト
+ * @property [canText] ダイアログの CANCEL テキスト
+ */
+class MessageDialog( val callbackType:String, val title:String, val message:String, val yesText:String, val canText:String ):DialogFragment() {
+  private lateinit var listner:DialogCallback
+  private lateinit var dialog:AlertDialog
+
+  override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
+    val builder = AlertDialog.Builder( activity )
+
+    if( title != "" ) {
+      val txtView = TextView( activity )
+      txtView.text = title
+      txtView.textSize = 24f
+      txtView.setTextColor( Color.WHITE )
+      txtView.setBackgroundColor( Color.rgb(74,138,245) )
+      txtView.setPadding( 10,10,10,10 )
+      txtView.gravity = Gravity.CENTER
+
+      builder.setCustomTitle( txtView )
+    }
+
+    if( message != "" ) {
+      val msgView = TextView( activity )
+      msgView.text = message
+      msgView.textSize = 16f
+      msgView.setTextColor( Color.BLACK )
+      msgView.setPadding( 50, 50, 50, 50 )
+
+      builder.setView( msgView )
+    }
+
+    if( yesText != "" ) {
+      builder.setPositiveButton( yesText ) { dialog, id ->
+        if( callbackType == "01" ) listner.fromMessageDialog01()
+        if( callbackType == "02" ) listner.fromMessageDialog02()
+
+        dialog.dismiss();
+      }
+    }
+
+    if( canText != "" ) {
+      builder.setNegativeButton( canText ) { dialog, id ->
+        dialog.dismiss();
+      }
+    }
+
+    // 戻るボタンでダイアログを閉じないようにします
+    setCancelable( false )
+
+    dialog = builder.create()
+
+    // ダイアログの外側をタップしてもダイアログを閉じないようにします
+    dialog.setCanceledOnTouchOutside( false )
+
+    return dialog
+  }
+
+  override fun onAttach( context:Context ) {
+    super.onAttach( context )
+
+    // 呼び出し元のMainActivityをListenerに変換します
+
+    try {
+      listner = activity as DialogCallback
+    } catch( e:ClassCastException ) {
+      throw ClassCastException( context.toString() + " must implement NoticeDialogListener" )
+    }
   }
 }

@@ -18,12 +18,22 @@
     app:layout_constraintTop_toTopOf="parent" />
 
   <ImageView
-    android:id="@+id/btn_settings"
+    android:id="@+id/btn_setting"
     android:layout_width="26sp"
     android:layout_height="26sp"
     android:layout_marginTop="15dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:srcCompat="@drawable/baseline_settings_24" />
+
+  <ImageView
+    android:id="@+id/btn_power"
+    android:layout_width="26sp"
+    android:layout_height="26sp"
+    android:layout_marginTop="15dp"
+    android:layout_marginEnd="16dp"
+    app:layout_constraintEnd_toStartOf="@+id/btn_setting"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/baseline_power_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

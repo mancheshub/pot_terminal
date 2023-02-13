@@ -10,11 +10,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 
-class Menu:DensoWaveBase() {
+class Lineup:DensoWaveBase() {
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
 
-    setContentView( R.layout.menu )
+    setContentView( R.layout.lineup )
 
     // ■ Activityをリストに加えます
 
@@ -22,20 +22,8 @@ class Menu:DensoWaveBase() {
 
     // ■ ActionBarを設定します
 
-    val actionBar:ActionBar? = supportActionBar
-
-    actionBar?.setDisplayShowTitleEnabled( false )
-    actionBar?.setDisplayShowHomeEnabled( false )
-    actionBar?.setDisplayShowCustomEnabled( true )
-    actionBar?.setCustomView( R.layout.actionbar_incontents );
-
-    val txtTitle = findViewById<TextView>( R.id.txt_title )
-    val txtStaffNO = findViewById<TextView>( R.id.txt_staffNO )
-    val btnClose = findViewById<ImageView>( R.id.btn_close )
-
-    txtTitle.text = "メニュー"
-    txtStaffNO.text = AppBase.staffNO
-    btnClose.setOnClickListener { finish() }
+    supportActionBar?.title = "メニュー"
+    supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     // ■ イベントを補足します
 
@@ -63,7 +51,7 @@ class Menu:DensoWaveBase() {
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
-    if( event.keyCode == KEY_F02 ) finish()
+    if( event.keyCode == KEY_F03 ) finish()
 
     if( event.keyCode != KEY_000 && event.keyCode != KEY_001 && event.keyCode != KEY_002 && event.keyCode != KEY_003 &&
         event.keyCode != KEY_004 && event.keyCode != KEY_005 && event.keyCode != KEY_006 && event.keyCode != KEY_007 &&

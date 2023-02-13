@@ -30,6 +30,9 @@ class AppBase:Application() {
       PotDivision( "棚卸データ", "9", "inventory.dat", "0", false ),
     )
 
+    // 特別動作する端末番号
+    public var specialDeviceNO:String = "999"
+
     // POTデータ転送先URL
     public val transferURL:String = "http://st-hightech-jp.corp.bigsize.com/api.php?at=post&st=ajaxReceivePOTData"
 

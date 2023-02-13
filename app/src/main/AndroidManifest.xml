@@ -16,7 +16,7 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/Theme.Pot_terminal">
-    <activity android:name=".Menu"></activity>
+    <activity android:name=".Lineup" />
     <activity android:name=".Failure" />
     <activity android:name=".ShelfReceiving" />
     <activity android:name=".ShelfShipping" />

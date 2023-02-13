@@ -19,7 +19,7 @@
       android:layout_width="wrap_content"
       android:layout_height="30dp"
       android:layout_marginStart="16dp"
-      android:layout_marginTop="32dp"
+      android:layout_marginTop="16dp"
       android:gravity="center_horizontal|center_vertical"
       android:text="全"
       app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
     <ListView
       android:id="@+id/lst_view01"
       android:layout_width="0dp"
-      android:layout_height="280dp"
+      android:layout_height="230dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="16dp"
       android:layout_marginEnd="16dp"
@@ -66,18 +66,6 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-      android:id="@+id/prg_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:text=""
-      android:textSize="16sp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.501"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
 
     <ProgressBar
       android:id="@+id/prg_view01"

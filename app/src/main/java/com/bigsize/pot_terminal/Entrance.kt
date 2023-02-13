@@ -5,17 +5,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.bigsize.pot_terminal.databinding.EntranceBinding
-import com.bigsize.pot_terminal.model.*
+import com.bigsize.pot_terminal.model.DeviceNODialog
+import com.bigsize.pot_terminal.model.MessageDialog
+import com.bigsize.pot_terminal.model.DialogCallback
+import com.bigsize.pot_terminal.model.AppUtility
+import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.viewmodel.Entrance
 import com.wada811.databinding.dataBinding
 
-class Entrance:DensoWaveBase() {
+class Entrance:DensoWaveBase(),DialogCallback {
   private val binding01:EntranceBinding by dataBinding()
   private val viewModel01:Entrance by viewModels()
 
@@ -31,23 +38,10 @@ class Entrance:DensoWaveBase() {
 
     AppBase.activitySet.add( this )
 
-   // ■ ActionBarを設定します
+    // ■ ActionBarを設定します
 
-    val actionBar:ActionBar? = supportActionBar
-
-    actionBar?.setDisplayShowTitleEnabled( false )
-    actionBar?.setDisplayShowHomeEnabled( false )
-    actionBar?.setDisplayShowCustomEnabled( true )
-    actionBar?.setCustomView( R.layout.actionbar_entrance );
-
-    val txtTitle = findViewById<TextView>(R.id.txt_title)
-    val btnSettings = findViewById<ImageView>(R.id.btn_settings)
-
-    txtTitle.text = "利用申告"
-    btnSettings.setOnClickListener {
-      val dialog = DeviceNODialog( model02.readDeviceNO() )
-      dialog.show( supportFragmentManager, "simple" )
-    }
+    supportActionBar?.title = "利用申告"
+    supportActionBar?.setDisplayHomeAsUpEnabled( false )
 
     // ■ バインディングしたレイアウトにデータをセットします
 
@@ -55,6 +49,60 @@ class Entrance:DensoWaveBase() {
 
     // ■ イベントを補足します
   }
+
+  /**
+   * ActionBarメニューを実装します
+   *
+   * @param [menu] メニューレイアウト
+   * @return
+   */
+  override fun onCreateOptionsMenu( menu:Menu ):Boolean {
+    menuInflater.inflate( R.menu.actionbar_entrance, menu )
+
+    return true
+  }
+
+  /**
+   * ActionBarメニューのイベントを補足します
+   * @param [item] アイテムオブジェクト
+   * @return
+   */
+  override fun onOptionsItemSelected( item:MenuItem ):Boolean {
+    when( item.itemId ) {
+      android.R.id.home -> {
+        finish()
+      }
+      R.id.iconItem01 -> {
+        val dialog = DeviceNODialog( model02.readDeviceNO() )
+        dialog.show( supportFragmentManager, "simple" )
+      }
+      R.id.iconItem02 -> {
+        val dialog:MessageDialog = MessageDialog( "01", "", "再起動しますがよろしいですか？", "はい", "いいえ" )
+        dialog.show( supportFragmentManager, "simple" )
+      }
+      else -> {}
+    }
+
+    return true
+  }
+
+  /**
+   * ダイアログで実行する処理を実装します
+   */
+  override fun fromMessageDialog01() {
+    val intent = Intent()
+
+    intent.setClassName(
+      "com.densowave.powermanagerservice",
+      "com.densowave.powermanagerservice.PowerManagerService"
+    )
+
+    intent.action = "com.densowave.powermanagerservice.action.REBOOT"
+
+    startService( intent )
+  }
+
+  override fun fromMessageDialog02() {}
 
   /**
    * キーイベントを捕捉します
@@ -84,6 +132,9 @@ class Entrance:DensoWaveBase() {
 
     if( msgError != "" ) {
       binding01.layInput.error = msgError
+
+      claimSound( playSoundNG )
+
       return super.dispatchKeyEvent( event )
     }
 
@@ -102,7 +153,7 @@ class Entrance:DensoWaveBase() {
       intent.putExtra( "MESSAGE", "端末番号がセットアップされていません。" )
       startActivity( intent )
     } else {
-      val intent = Intent( applicationContext, Menu::class.java )
+      val intent = Intent( applicationContext, Lineup::class.java )
       startActivity( intent )
     }
 

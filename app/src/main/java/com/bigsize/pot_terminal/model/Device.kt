@@ -16,79 +16,24 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 
 /**
- * ネットワーク管理クラス
- */
-class PlayNetwork( val context:Context ) {
-  private var network:ConnectivityManager? = null
-  private var wifi:WifiManager? = null
-
-  companion object {
-    var INSTANCE:PlayNetwork? = null
-
-    fun instance( context:Context ) = INSTANCE ?: PlayNetwork( context ).also { INSTANCE = it }
-  }
-
-  init {
-    network = context.getSystemService( Context.CONNECTIVITY_SERVICE ) as ConnectivityManager
-  }
-
-  /**
-   * ネットワークの接続状況を調べます
-   *
-   * @return 接続状況 net : wifi接続中 sim : モバイル接続中 nothing : 接続なし
-   */
-  public fun checkNetwork():String {
-    var isCondition:String = ""
-
-    val capabilities = network?.getNetworkCapabilities( network?.activeNetwork )
-
-    if( capabilities != null ) {
-      isCondition = when {
-        capabilities.hasTransport( NetworkCapabilities.TRANSPORT_WIFI ) -> "net"
-        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> "sim"
-        else -> "else"
-      }
-    } else {
-      isCondition = "nothing"
-    }
-
-    return isCondition
-  }
-
-  /**
-   * 終了します
-   */
-  fun close() {
-    network = null
-    PlayNetwork.INSTANCE = null
-  }
-}
-
-/**
  * 無線LAN管理クラス
  */
 class StatusWifi( val context:Context ) {
-  private var manager:WifiManager? = null
-
-  companion object {
-    var INSTANCE:StatusWifi? = null
-
-    fun instance( context:Context ) = INSTANCE ?: StatusWifi( context ).also { INSTANCE = it }
-  }
+  private var wifi:WifiManager? = null
 
   init {
-    manager = context.getSystemService( WIFI_SERVICE ) as WifiManager
+    wifi = context.getSystemService( WIFI_SERVICE ) as WifiManager
   }
 
   /**
    * 無線LANの接続状況を調べます
    *
-   * 電波強度は -100 から 0 dBm で 0 に近づくほど強度が高くなり 0 に近づくほど強度が高くなります。
+   * 電波強度は -100 から 0 dBm で 0 に近づくほど強度が高くなります。
    *
    * @return 電波強度
    */
   public fun checkWifi():Int {
-    val info:WifiInfo? = manager?.getConnectionInfo()
+    val info:WifiInfo? = wifi?.getConnectionInfo()
 
     val rssi:Int = info?.rssi ?: -100
 
@@ -98,8 +43,8 @@ class StatusWifi( val context:Context ) {
   /**
    * 終了します
    */
-  fun close() {
-    manager = null
+  public fun release() {
+    wifi = null
   }
 }
 
@@ -268,6 +213,8 @@ class PlaySound( var frequency:String, var sinDuration:String, var resDuration:S
   private fun writeStreamRes() {
     if( resDuration == "0" ) return
 
+    audioTrack?.write( resBuffer!!, 0, resBuffer!!.size )
+    audioTrack?.write( sinBuffer!!, 0, sinBuffer!!.size )
     audioTrack?.write( resBuffer!!, 0, resBuffer!!.size )
     audioTrack?.write( sinBuffer!!, 0, sinBuffer!!.size )
   }

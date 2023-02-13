@@ -11,13 +11,15 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bigsize.pot_terminal.databinding.DataConfirmBinding
+import com.bigsize.pot_terminal.model.DialogCallback
 import com.bigsize.pot_terminal.model.FileOperation
+import com.bigsize.pot_terminal.model.MessageDialog
 import com.bigsize.pot_terminal.model.PotDataModel02
 import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.adapter.DataConfirm as AD_DataConfirm
 import com.bigsize.pot_terminal.viewmodel.DataConfirm as VM_DataConfirm
 
-class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickListener {
+class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickListener,DialogCallback {
   private val binding01:DataConfirmBinding by dataBinding()
   private val viewModel01:VM_DataConfirm by viewModels()
 
@@ -37,20 +39,8 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
 
     // ■ ActionBarを設定します
 
-    val actionBar:ActionBar? = supportActionBar
-
-    actionBar?.setDisplayShowTitleEnabled( false )
-    actionBar?.setDisplayShowHomeEnabled( false )
-    actionBar?.setDisplayShowCustomEnabled( true )
-    actionBar?.setCustomView( R.layout.actionbar_incontents );
-
-    val txtTitle = findViewById<TextView>( R.id.txt_title )
-    val txtStaffNO = findViewById<TextView>( R.id.txt_staffNO )
-    val btnClose = findViewById<ImageView>( R.id.btn_close )
-
-    txtTitle.text = "データ確認"
-    txtStaffNO.text = AppBase.staffNO
-    btnClose.setOnClickListener { finish() }
+    supportActionBar?.title = "データ確認"
+    supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     // ■ バインディングしたレイアウトにデータをセットします
 
@@ -81,6 +71,11 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
 
     binding01.exeButton01.setOnClickListener( this )
     binding01.txtPotfile.setOnItemClickListener( this )
+
+    binding01.lstView01.setOnItemClickListener { adapterView:AdapterView<*>?, view:View?, position:Int, id:Long ->
+      val check = view!!.findViewById<CheckBox>( R.id.check )
+      check.isChecked = ! check.isChecked
+    }
   }
 
   override fun onDestroy() {
@@ -90,11 +85,35 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
   }
 
   /**
+   * ダイアログで実行する処理を実装します
+   */
+  override fun fromMessageDialog01() {
+    adapter01.updateItem()
+
+    // POTデータ区分を決定します
+
+    var position:Int = AppBase.potDivision.indexOfFirst { it.name == viewModel01.selectedItem }
+    var division:String = AppBase.potDivision[position].division
+
+    try {
+      model01.savePotData( "OVERWRITE", division, adapter01.potDataArray )
+    } catch( e:Exception ) {
+      val intent = Intent( applicationContext, Failure::class.java )
+      intent.putExtra( "MESSAGE", e.message )
+      startActivity( intent )
+    }
+
+    claimVibration( AppBase.vibrationFN )
+  }
+
+  override fun fromMessageDialog02() {}
+
+  /**
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
-    if( event.keyCode == KEY_F02 ) finish()
+    if( event.keyCode == KEY_F03 ) finish()
 
     return super.dispatchKeyEvent( event )
   }
@@ -106,6 +125,7 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     val item:String? = adapter02.getItem( position )
 
     claimSound( playSoundOK )
+    claimVibration( AppBase.vibrationOK )
 
     if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "選択アイテム = " + item )
 
@@ -137,23 +157,9 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     val vButton = v as Button
 
     claimSound( playSoundOK )
+    claimVibration( AppBase.vibrationOK )
 
-    adapter01.updateItem()
-
-    // アイテムが表示されていなければ以降何もしません
-    if( viewModel01.potDataArray.count() == 0 ) return
-
-    // POTデータ区分を決定します
-
-    var position:Int = AppBase.potDivision.indexOfFirst { it.name == viewModel01.selectedItem }
-    var division:String = AppBase.potDivision[position].division
-
-    try {
-      model01.savePotData( "OVERWRITE", division, adapter01.potDataArray )
-    } catch( e:Exception ) {
-      val intent = Intent( applicationContext, Failure::class.java )
-      intent.putExtra( "MESSAGE", e.message )
-      startActivity( intent )
-    }
+    val dialog:MessageDialog = MessageDialog( "01", "削除確認", "POTデータを削除しますがよろしいですか？", "はい", "いいえ" )
+    dialog.show( supportFragmentManager, "simple" )
   }
 }

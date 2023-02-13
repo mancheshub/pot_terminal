@@ -18,21 +18,21 @@ import com.bigsize.pot_terminal.model.PotDivision
 import com.bigsize.pot_terminal.databinding.DataTransferListview01Binding
 import com.bigsize.pot_terminal.model.FileOperation
 
-class DataTransfer( val context:Context?,var potFileArray:MutableList<PotDivision> ):BaseAdapter() {
+class DataTransfer( val context:Context?, var potFileArray:MutableList<PotDivision> ):BaseAdapter() {
   private val inflater = LayoutInflater.from( context )
 
   private val _chkCount:MutableLiveData<Int> = MutableLiveData( 0 )
   public val chkCount:LiveData<Int> get() = _chkCount
 
-  override fun getCount(): Int {
+  override fun getCount():Int {
     return potFileArray.count()
   }
 
-  override fun getItem( position:Int ): PotDivision {
+  override fun getItem( position:Int ):PotDivision {
     return potFileArray[position]
   }
 
-  override fun getItemId( position:Int ): Long {
+  override fun getItemId( position:Int ):Long {
     return position.toLong()
   }
 
@@ -55,27 +55,15 @@ class DataTransfer( val context:Context?,var potFileArray:MutableList<PotDivisio
     }
 
     binding01.check.setOnCheckedChangeListener{ _, isChecked ->
-      if( isChecked ) {
-        // ONの処理
-        if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "チェック入れた = " + position + " " + potData.isChecked )
+      val befChecked:Boolean = potData.isChecked
+      val aftChecked:Boolean = isChecked
 
-        // チェックした行の数量を累計します
-        if( potData.isChecked == false ) _chkCount.value = chkCount.value!! + potData.amt.toInt()
+      potData.isChecked = isChecked
+      potFileArray.set( position, potData )
 
-        // チェック状態をpotFileArrayに反映します
-        potData.isChecked = true
-        potFileArray.set( position, potData )
-      } else {
-        // OFFの処理
-        if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "チェック外した = " + position + " " + potData.isChecked )
-
-        // チェックを外した行の数量を累計します
-        if( potData.isChecked == true ) _chkCount.value = chkCount.value!! - potData.amt.toInt()
-
-        // チェック状態をpotFileArrayに反映します
-        potData.isChecked = false
-        potFileArray.set( position, potData )
-      }
+      // チェックした行の数量を累計します
+      if( befChecked != aftChecked && potData.isChecked == true ) _chkCount.value = chkCount.value!! + potData.amt.toInt()
+      if( befChecked != aftChecked && potData.isChecked == false ) _chkCount.value = chkCount.value!! - potData.amt.toInt()
     }
 
     // ViewModelをセットします

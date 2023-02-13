@@ -7,13 +7,15 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bigsize.pot_terminal.AppBase.Companion.vibrationOK
-import com.bigsize.pot_terminal.model.PlaySound
-import com.bigsize.pot_terminal.model.PlayVibration
+import com.bigsize.pot_terminal.model.*
 import com.densowave.bhtsdk.barcode.*
 import com.densowave.bhtsdk.barcode.BarcodeManager.BarcodeManagerListener
 import com.densowave.bhtsdk.barcode.BarcodeScanner.BarcodeDataListener
@@ -65,6 +67,14 @@ open class CommonBase:AppCompatActivity() {
   }
 
   /**
+   * Wifi関係
+   */
+
+  public val statusWifi:StatusWifi by lazy {
+    StatusWifi( this )
+  }
+
+  /**
    * バイブレーション関係
    */
 
@@ -75,6 +85,10 @@ open class CommonBase:AppCompatActivity() {
   /**
    * スキャナ関係
    */
+
+  // 読み取った複数商品QRデータ
+  protected val _scanMultiItem:MutableLiveData<String> = MutableLiveData()
+  public val scanMultiItem:LiveData<String> get() = _scanMultiItem
 
   // 読み取った棚QRデータ
   protected val _scanShelf:MutableLiveData<String> = MutableLiveData()
@@ -92,20 +106,27 @@ open class CommonBase:AppCompatActivity() {
    * -- 共通ライフサイクルメソッド
    */
 
+  override fun onCreate( savedInstanceState:Bundle? ) {
+    super.onCreate( savedInstanceState )
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "onCreate" )
+
+    // ナビゲーションの戻るリンクをクリックしたときのイベントを補足します
+    onBackPressedDispatcher.addCallback(
+      this, object: OnBackPressedCallback( true ) { override fun handleOnBackPressed() { finish() } }
+    )
+  }
+
   override fun onStart() {
     super.onStart()
 
     if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "onStart" )
-
-    hideSystemUI()
   }
 
   override fun onResume() {
     super.onResume()
 
-    // 画面が表示される際にビープ音を鳴らします
     claimSound( playSoundOK )
-
     claimVibration( AppBase.vibrationOK )
 
     if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "onResume" )
@@ -130,25 +151,49 @@ open class CommonBase:AppCompatActivity() {
     playVibration.release()
   }
 
-  override fun onWindowFocusChanged( hasFocus:Boolean ) {
-    super.onWindowFocusChanged( hasFocus )
-    if( hasFocus ) hideSystemUI()
+  /**
+   * -- 共通ActionBarメソッド
+   */
+
+  /**
+   * ActionBarメニューを実装します
+   *
+   * @param [menu] メニューレイアウト
+   * @return
+   */
+  override fun onCreateOptionsMenu( menu:Menu ):Boolean {
+    menuInflater.inflate( R.menu.actionbar_contents, menu )
+
+    return true
+  }
+
+  /**
+   * ActionBarメニューのイベントを補足します
+   * @param [item] アイテムオブジェクト
+   * @return
+   */
+  override fun onOptionsItemSelected( item:MenuItem ):Boolean {
+    when( item.itemId ) {
+      android.R.id.home -> {
+        if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "戻るボタンが選択されました。" )
+
+        finish()
+      }
+      R.id.iconItem01 -> {
+        if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "メニュー01ボタンが選択されました。" )
+
+        val dialog = StaffNODialog( AppBase.staffNO )
+        dialog.show( supportFragmentManager, "simple" )
+      }
+      else -> {}
+    }
+
+    return true
   }
 
   /**
    * -- 共通各種メソッド
    */
-
-  /**
-   * 全画面に切り替えます
-   */
-  private fun hideSystemUI() {
-    window.decorView.systemUiVisibility = (
-      View.SYSTEM_UI_FLAG_FULLSCREEN or
-      View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-      View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-    )
-  }
 
   /**
    * ビープ音を発動します
@@ -495,6 +540,7 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
 
           val _data:String = this.data ?: ""
 
+          if( _data.substring( 0, 3 ) == "M-P" ) _scanMultiItem.value = _data
           if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
           if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data
           if( _data.substring( 0, 3 ) == "M-H" ) _scanItem.value = _data

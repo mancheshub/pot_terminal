@@ -10,14 +10,17 @@
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
+    android:descendantFocusability="blocksDescendants"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
       android:id="@+id/name"
       android:layout_width="150dp"
-      android:layout_height="50dp"
+      android:layout_height="wrap_content"
       android:gravity="left|center_vertical"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
       android:text="@{viewmodel.name}"
       android:textSize="12sp"
       app:layout_constraintStart_toEndOf="@+id/check"
@@ -26,9 +29,10 @@
     <TextView
       android:id="@+id/text01"
       android:layout_width="5dp"
-      android:layout_height="45dp"
-      android:layout_marginTop="3dp"
+      android:layout_height="wrap_content"
       android:gravity="right|center_vertical"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
       android:text="["
       android:textSize="15sp"
       app:layout_constraintEnd_toStartOf="@+id/amt"
@@ -37,9 +41,10 @@
     <TextView
       android:id="@+id/amt"
       android:layout_width="55dp"
-      android:layout_height="45dp"
-      android:layout_marginTop="3dp"
+      android:layout_height="wrap_content"
       android:gravity="right|center_vertical"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
       android:text="@{viewmodel.amt}"
       android:textSize="15sp"
       app:layout_constraintEnd_toStartOf="@+id/text03"
@@ -48,9 +53,10 @@
     <TextView
       android:id="@+id/text03"
       android:layout_width="28dp"
-      android:layout_height="45dp"
-      android:layout_marginTop="3dp"
+      android:layout_height="wrap_content"
       android:gravity="right|center_vertical"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
       android:text="行 ]"
       android:textSize="15sp"
       app:layout_constraintEnd_toEndOf="parent"
@@ -59,9 +65,10 @@
     <CheckBox
       android:id="@+id/check"
       android:layout_width="30dp"
-      android:layout_height="50dp"
-      android:layout_marginTop="1dp"
+      android:layout_height="wrap_content"
       android:checked="@{viewmodel.isChecked}"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
       android:scaleX="1.00"
       android:scaleY="1.00"
       app:layout_constraintStart_toStartOf="parent"

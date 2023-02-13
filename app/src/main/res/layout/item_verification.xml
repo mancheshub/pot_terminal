@@ -48,47 +48,11 @@
       android:layout_marginStart="16dp"
       android:layout_marginTop="16dp"
       android:layout_marginEnd="16dp"
-      android:layout_marginBottom="16dp"
-      app:layout_constraintBottom_toTopOf="@+id/exe_button01"
+      android:layout_marginBottom="24dp"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/txt_view01" />
-
-    <Button
-      android:id="@+id/exe_button01"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="8dp"
-      android:layout_marginBottom="16dp"
-      android:text="初読"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/exe_button02"
-      app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-      android:id="@+id/exe_button02"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="8dp"
-      android:layout_marginBottom="16dp"
-      android:text="部読"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/exe_button03"
-      app:layout_constraintStart_toEndOf="@+id/exe_button01" />
-
-    <Button
-      android:id="@+id/exe_button03"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="16dp"
-      android:layout_marginBottom="16dp"
-      android:text="追読"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/exe_button02" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

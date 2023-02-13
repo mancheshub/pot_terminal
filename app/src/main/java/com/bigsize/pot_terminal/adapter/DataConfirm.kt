@@ -41,6 +41,8 @@ class DataConfirm( val context:Context?,var potDataArray:MutableList<PotDataMode
     val potData:PotDataModel02 = getItem( position )
     lateinit var binding01:DataConfirmListview01Binding
 
+    if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "AAA = " + position )
+
     // 表示部品をなければ作ってあれば再利用します
 
     if( itemView == null ) {
@@ -55,27 +57,15 @@ class DataConfirm( val context:Context?,var potDataArray:MutableList<PotDataMode
     }
 
     binding01.check.setOnCheckedChangeListener{ _, isChecked ->
-      if( isChecked ) {
-        // ONの処理
-        if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "チェック入れた = " + position + " " + potData.isChecked )
+      val befChecked:Boolean = potData.isChecked
+      val aftChecked:Boolean = isChecked
 
-        // チェックした行の数量を累計します
-        if( potData.isChecked == false ) _chkCount.value = chkCount.value!! + potData.amt.toInt()
+      potData.isChecked = isChecked
+      potDataArray.set( position, potData )
 
-        // チェック状態をpotDataArrayに反映します
-        potData.isChecked = true
-        potDataArray.set( position, potData )
-      } else {
-        // OFFの処理
-        if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "チェック外した = " + position + " " + potData.isChecked )
-
-        // チェックを外した行の数量を累計します
-        if( potData.isChecked == true ) _chkCount.value = chkCount.value!! - potData.amt.toInt()
-
-        // チェック状態をpotDataArrayに反映します
-        potData.isChecked = false
-        potDataArray.set( position, potData )
-      }
+      // チェックした行の数量を累計します
+      if( befChecked != aftChecked && potData.isChecked == true ) _chkCount.value = chkCount.value!! + potData.amt.toInt()
+      if( befChecked != aftChecked && potData.isChecked == false ) _chkCount.value = chkCount.value!! - potData.amt.toInt()
     }
 
     // ViewModelをセットします

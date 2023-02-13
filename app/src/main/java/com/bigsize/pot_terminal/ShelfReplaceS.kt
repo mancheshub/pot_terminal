@@ -34,20 +34,8 @@ class ShelfReplaceS:DensoWaveBase() {
 
     // ■ ActionBarを設定します
 
-    val actionBar:ActionBar? = supportActionBar
-
-    actionBar?.setDisplayShowTitleEnabled( false )
-    actionBar?.setDisplayShowHomeEnabled( false )
-    actionBar?.setDisplayShowCustomEnabled( true )
-    actionBar?.setCustomView( R.layout.actionbar_incontents );
-
-    val txtTitle = findViewById<TextView>( R.id.txt_title )
-    val txtStaffNO = findViewById<TextView>( R.id.txt_staffNO )
-    val btnClose = findViewById<ImageView>( R.id.btn_close )
-
-    txtTitle.text = "商品移動"
-    txtStaffNO.text = AppBase.staffNO
-    btnClose.setOnClickListener { finish() }
+    supportActionBar?.title = "商品移動"
+    supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     // ■ バインディングしたレイアウトにデータをセットします
 
@@ -81,7 +69,7 @@ class ShelfReplaceS:DensoWaveBase() {
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
-    if( event.keyCode == KEY_F02 ) finish()
+    if( event.keyCode == KEY_F03 ) finish()
 
     if( event.keyCode != KEY_ENT ) return super.dispatchKeyEvent( event )
 
@@ -103,6 +91,7 @@ class ShelfReplaceS:DensoWaveBase() {
     if( inputCheck( "shelf" ) == false ) return false
 
     claimSound( playSoundOK )
+    claimVibration( AppBase.vibrationOK )
 
     // すでに出棚と入棚が読まれていた場合はクリアします
     if( viewModel01.memLocation01 != "" && viewModel01.memLocation02 != "" ) {
@@ -164,6 +153,7 @@ class ShelfReplaceS:DensoWaveBase() {
     if( inputCheck( "box" ) == false ) return false
 
     claimSound( playSoundOK )
+    claimVibration( AppBase.vibrationOK )
 
     if( viewModel01.memLocation01 != "" && viewModel01.memLocation02 == "" ) {
       // 出棚記録用データを作成します
@@ -215,6 +205,7 @@ class ShelfReplaceS:DensoWaveBase() {
     if( inputCheck( "item" ) == false ) return false
 
     claimSound( playSoundOK )
+    claimVibration( AppBase.vibrationOK )
 
     // 記録用データを作成します
     viewModel01.memItem = scanItem.substring( 3, 21 )
@@ -244,6 +235,7 @@ class ShelfReplaceS:DensoWaveBase() {
     if( inputCheck( "amt" ) == false ) return false
 
     claimSound( playSoundOK )
+    claimVibration( AppBase.vibrationOK )
 
     // POTデータを作成します
     execDataSave()

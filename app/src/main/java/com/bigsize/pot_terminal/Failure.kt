@@ -20,20 +20,8 @@ class Failure:DensoWaveBase(),View.OnClickListener {
 
     // ■ ActionBarを設定します
 
-    val actionBar:ActionBar? = supportActionBar
-
-    actionBar?.setDisplayShowTitleEnabled( false )
-    actionBar?.setDisplayShowHomeEnabled( false )
-    actionBar?.setDisplayShowCustomEnabled( true )
-    actionBar?.setCustomView( R.layout.actionbar_incontents );
-
-    val txtTitle = findViewById<TextView>( R.id.txt_title )
-    val txtStaffNO = findViewById<TextView>( R.id.txt_staffNO )
-    val btnClose = findViewById<ImageView>( R.id.btn_close )
-
-    txtTitle.text = "エラー"
-    txtStaffNO.text = AppBase.staffNO
-    btnClose.setOnClickListener { finish() }
+    supportActionBar?.title = "エラー"
+    supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     val txtMessage = findViewById<TextView>( R.id.txt_message )
     val btnLogin = findViewById<Button>( R.id.btn_entry )

@@ -36,7 +36,7 @@ class DataTransfer:ViewModel() {
     potFileArray.clear()
 
     for( _item in AppBase.potDivision ) {
-      var potData:PotDivision = PotDivision(_item.name, _item.division, _item.fileName, "0", false )
+      var potData:PotDivision = PotDivision( _item.name, _item.division, _item.fileName, "0", false )
 
       val count:Int = model01.countPotData( potData.division )
 
