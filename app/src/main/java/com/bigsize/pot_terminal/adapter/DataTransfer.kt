@@ -1,9 +1,7 @@
 package com.bigsize.pot_terminal.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
-import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -12,11 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.LiveData
 import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.Failure
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDivision
 import com.bigsize.pot_terminal.databinding.DataTransferListview01Binding
-import com.bigsize.pot_terminal.model.FileOperation
 
 class DataTransfer( val context:Context?, var potFileArray:MutableList<PotDivision> ):BaseAdapter() {
   private val inflater = LayoutInflater.from( context )
@@ -80,23 +76,8 @@ class DataTransfer( val context:Context?, var potFileArray:MutableList<PotDivisi
   fun refreshItem( newItem:MutableList<PotDivision> ) {
     potFileArray = newItem
 
-    // チェック数量を0で更新します
-    _chkCount.value = 0
-
     // 内容の変更をListViewに通知します
     notifyDataSetChanged()
   }
 
-  /**
-   * アダプタデータを更新します
-   */
-  fun updateItem() {
-    potFileArray.removeIf { it.isChecked == true }
-
-    // チェック数量を0で更新します
-    _chkCount.value = 0
-
-    // 内容の変更をListViewに通知します
-    notifyDataSetChanged()
-  }
 }

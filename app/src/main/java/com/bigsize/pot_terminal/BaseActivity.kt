@@ -121,6 +121,8 @@ open class CommonBase:AppCompatActivity() {
     super.onStart()
 
     if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "onStart" )
+
+    hideSystemUI()
   }
 
   override fun onResume() {
@@ -194,6 +196,22 @@ open class CommonBase:AppCompatActivity() {
   /**
    * -- 共通各種メソッド
    */
+
+  /**
+   * 全画面に切り替えます
+   */
+  private fun hideSystemUI() {
+    window.decorView.systemUiVisibility = (
+      View.SYSTEM_UI_FLAG_FULLSCREEN or
+        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+      )
+  }
+
+  override fun onWindowFocusChanged( hasFocus:Boolean ) {
+    super.onWindowFocusChanged( hasFocus )
+    if( hasFocus ) hideSystemUI()
+  }
 
   /**
    * ビープ音を発動します
@@ -427,6 +445,7 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
    * -- スキャナの各種プロパティ
    */
 
+  protected var isPointMode = false
   private var mBarcodeManager:BarcodeManager? = null
   private var mBarcodeScanner:BarcodeScanner? = null
 
@@ -507,9 +526,14 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
 
         mBarcodeScanner!!.addDataListener( this )
 
-        val settings = mBarcodeScanner!!.getSettings()
+        val settings:BarcodeScannerSettings = mBarcodeScanner!!.getSettings()
         settings.notification.sound.enabled = false
         settings.notification.vibrate.enabled = false
+        settings.decode.symbologies.codabar.enabled = true
+
+        // ポイントスキャンモードを設定します
+        if( isPointMode == false ) settings.decode.pointScanMode = DecodeSettings.PointScanMode.DISABLED
+        if( isPointMode == true ) settings.decode.pointScanMode = DecodeSettings.PointScanMode.ENABLED
 
         mBarcodeScanner!!.setSettings( settings )
 
@@ -544,6 +568,7 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
           if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
           if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data
           if( _data.substring( 0, 3 ) == "M-H" ) _scanItem.value = _data
+          if( _data.substring( 0, 1 ) == "a" ) _scanItem.value = _data
         }
       }.setBarcodeData( data ) )
     }

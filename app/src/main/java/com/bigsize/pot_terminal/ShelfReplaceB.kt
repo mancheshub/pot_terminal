@@ -65,10 +65,6 @@ class ShelfReplaceB:DensoWaveBase(),View.OnClickListener {
    * ボタンがされた時に呼ばれるリスナー定義です
    */
   override fun onClick( v:View ) {
-    val vButton = v as Button
-
-    if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReplaceB", "ボタン名 = " + vButton.text )
-
     var ssb:String = ""
     var ssh:String = ""
     var ssf:String = ""
@@ -86,7 +82,7 @@ class ShelfReplaceB:DensoWaveBase(),View.OnClickListener {
 
     // 出場読ボタン
 
-    if( vButton.id == R.id.exe_button01 ) {
+    if( v.id == R.id.exe_button01 ) {
       var tmpString:String = "M-L91032560000"
 
       // 出棚記録用データを作成します
@@ -105,7 +101,7 @@ class ShelfReplaceB:DensoWaveBase(),View.OnClickListener {
 
     // 箱読ボタン
 
-    if( vButton.id == R.id.exe_button02 ) {
+    if( v.id == R.id.exe_button02 ) {
       var tmpString:String = "M-C020"
 
       // 記録用データを作成します
@@ -117,7 +113,7 @@ class ShelfReplaceB:DensoWaveBase(),View.OnClickListener {
 
     // 入場読ボタン
 
-    if( vButton.id == R.id.exe_button03 ) {
+    if( v.id == R.id.exe_button03 ) {
       var tmpString:String = "M-L91050510000"
 
       // 入棚記録用データを作成します

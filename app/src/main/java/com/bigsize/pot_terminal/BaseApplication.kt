@@ -30,24 +30,30 @@ class AppBase:Application() {
       PotDivision( "棚卸データ", "9", "inventory.dat", "0", false ),
     )
 
+    // Wifiの許容レベル - -50〜0まで
+    public val  permitWifiLevel:Int = -40
+
     // 特別動作する端末番号
-    public var specialDeviceNO:String = "999"
+    public val specialDeviceNO:String = "999"
 
     // POTデータ転送先URL
-    public val transferURL:String = "http://st-hightech-jp.corp.bigsize.com/api.php?at=post&st=ajaxReceivePOTData"
+    public val transferURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=potTransfer"
 
-    // 正常読取した場合のブザーとバイブレーション
+    // 商品照合関連URL
+    public val itemInspectionURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=itemInspection"
+
+    // 正常読取した場合のブザーとバイブレーションのレベル
     public val buzzerOK:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "20", "resDuration" to "0" )
     public val vibrationOK:Map<String,Array<String>> = mapOf( "rate" to arrayOf( "0", "100" ), "volume" to arrayOf( "0", "255" ) )
 
-    // 異常読取した場合のブザーとバイブレーション
+    // 異常読取した場合のブザーとバイブレーションのレベル
     public val buzzerNG:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "20", "resDuration" to "10" )
     public val vibrationNG:Map<String,Array<String>> = mapOf( "rate" to arrayOf( "0", "150", "20", "150", "20", "150" ), "volume" to arrayOf( "0", "255", "0", "255", "0", "255" ) )
 
-    // 途中読取した場合のブザーとバイブレーション
+    // 途中読取した場合のブザーとバイブレーションのレベル
     public val buzzerCT:Map<String,String> = mapOf( "frequency" to "2500", "sinDuration" to "20", "resDuration" to "0" )
 
-    // 完了した場合のブザーとバイブレーション
+    // 完了した場合のブザーとバイブレーションのレベル
     public val buzzerFN:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "350", "resDuration" to "0" )
     public val vibrationFN:Map<String,Array<String>> = mapOf( "rate" to arrayOf( "0", "800" ), "volume" to arrayOf( "0", "255" ) )
 

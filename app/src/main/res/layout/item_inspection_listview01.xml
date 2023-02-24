@@ -6,7 +6,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <variable name="viewmodel" type="com.bigsize.pot_terminal.model.PotDataModel01" />
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.model.PotDataModel03" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="@{viewmodel.cd}"
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +35,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="@{viewmodel.cn}"
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintStart_toEndOf="@+id/cd"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +48,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="@{viewmodel.sz}"
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintStart_toEndOf="@+id/cn"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,7 +60,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="["
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintEnd_toStartOf="@+id/amt_n"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,7 +72,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="@{viewmodel.amt_n}"
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintEnd_toStartOf="@+id/text02"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,7 +84,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="/"
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintEnd_toStartOf="@+id/amt_p"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -96,7 +96,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="@{viewmodel.amt_p}"
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintEnd_toStartOf="@+id/text03"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,7 +109,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="]"
-      android:textSize="21sp"
+      android:textSize="18sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 

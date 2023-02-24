@@ -89,7 +89,7 @@ class Entrance:DensoWaveBase(),DialogCallback {
   /**
    * ダイアログで実行する処理を実装します
    */
-  override fun fromMessageDialog01() {
+  override fun fromMessageDialog( callbackType:String ) {
     val intent = Intent()
 
     intent.setClassName(
@@ -101,8 +101,6 @@ class Entrance:DensoWaveBase(),DialogCallback {
 
     startService( intent )
   }
-
-  override fun fromMessageDialog02() {}
 
   /**
    * キーイベントを捕捉します

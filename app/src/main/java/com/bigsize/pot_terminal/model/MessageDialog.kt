@@ -3,17 +3,21 @@ package com.bigsize.pot_terminal.model
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.DialogInterface.OnShowListener
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.bigsize.pot_terminal.Failure
 import com.bigsize.pot_terminal.R
+
 
 class StaffNODialog( val staffNO:String ):DialogFragment() {
   private lateinit var dialog:AlertDialog
@@ -23,10 +27,10 @@ class StaffNODialog( val staffNO:String ):DialogFragment() {
 
     val txtView = TextView( activity )
     txtView.text = "利用者"
-    txtView.textSize = 20f
+    txtView.textSize = 18f
     txtView.setTextColor( Color.WHITE )
     txtView.setBackgroundColor( Color.rgb(74,138,245) )
-    txtView.setPadding( 5,5,5,5 )
+    txtView.setPadding( 10,10,10,10 )
     txtView.gravity = Gravity.CENTER
 
     val inflater:LayoutInflater = requireActivity().layoutInflater
@@ -49,6 +53,14 @@ class StaffNODialog( val staffNO:String ):DialogFragment() {
     // ダイアログの外側をタップしてもダイアログを閉じないようにします
     dialog.setCanceledOnTouchOutside( false )
 
+    // BUTTON_POSITIVEにフォーカスを当てます
+    dialog.setOnShowListener {
+      val negative:Button = dialog.getButton( DialogInterface.BUTTON_POSITIVE )
+      negative.setFocusable( true )
+      negative.setFocusableInTouchMode( true )
+      negative.requestFocus()
+    }
+
     return dialog
   }
 }
@@ -63,10 +75,10 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
 
     val txtView = TextView( activity )
     txtView.text = "端末"
-    txtView.textSize = 20f
+    txtView.textSize = 18f
     txtView.setTextColor( Color.WHITE )
     txtView.setBackgroundColor( Color.rgb(74,138,245) )
-    txtView.setPadding( 5,5,5,5 )
+    txtView.setPadding( 10,10,10,10 )
     txtView.gravity = Gravity.CENTER
 
     val inflater:LayoutInflater = requireActivity().layoutInflater
@@ -96,7 +108,7 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
     } else {
       ( txtNumber as TextView ).text = deviceNO
 
-      builder.setNegativeButton( "OK" ) { dialog, id ->
+      builder.setPositiveButton( "OK" ) { dialog, id ->
         dialog.dismiss();
       }
     }
@@ -108,6 +120,14 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
 
     // ダイアログの外側をタップしてもダイアログを閉じないようにします
     dialog.setCanceledOnTouchOutside( false )
+
+    // BUTTON_POSITIVEにフォーカスを当てます
+    dialog.setOnShowListener {
+      val negative:Button = dialog.getButton( DialogInterface.BUTTON_POSITIVE )
+      negative.setFocusable( true )
+      negative.setFocusableInTouchMode( true )
+      negative.requestFocus()
+    }
 
     return dialog
   }
@@ -132,7 +152,7 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
     if( title != "" ) {
       val txtView = TextView( activity )
       txtView.text = title
-      txtView.textSize = 24f
+      txtView.textSize = 18f
       txtView.setTextColor( Color.WHITE )
       txtView.setBackgroundColor( Color.rgb(74,138,245) )
       txtView.setPadding( 10,10,10,10 )
@@ -144,17 +164,16 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
     if( message != "" ) {
       val msgView = TextView( activity )
       msgView.text = message
-      msgView.textSize = 16f
+      msgView.textSize = 15f
       msgView.setTextColor( Color.BLACK )
-      msgView.setPadding( 50, 50, 50, 50 )
+      msgView.setPadding( 20, 20, 20, 20 )
 
       builder.setView( msgView )
     }
 
     if( yesText != "" ) {
       builder.setPositiveButton( yesText ) { dialog, id ->
-        if( callbackType == "01" ) listner.fromMessageDialog01()
-        if( callbackType == "02" ) listner.fromMessageDialog02()
+        if( callbackType != "00" ) listner.fromMessageDialog( callbackType )
 
         dialog.dismiss();
       }
@@ -173,6 +192,14 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
 
     // ダイアログの外側をタップしてもダイアログを閉じないようにします
     dialog.setCanceledOnTouchOutside( false )
+
+    // BUTTON_POSITIVEにフォーカスを当てます
+    dialog.setOnShowListener {
+      val negative:Button = dialog.getButton( DialogInterface.BUTTON_POSITIVE )
+      negative.setFocusable( true )
+      negative.setFocusableInTouchMode( true )
+      negative.requestFocus()
+    }
 
     return dialog
   }

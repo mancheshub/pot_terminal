@@ -35,6 +35,7 @@ class Lineup:DensoWaveBase() {
     val btnMenu06 = findViewById<Button>( R.id.btn_menu06 )
     val btnMenu07 = findViewById<Button>( R.id.btn_menu07 )
     val btnMenu08 = findViewById<Button>( R.id.btn_menu08 )
+    val btnMenu09 = findViewById<Button>( R.id.btn_menu09 )
 
     btnMenu01.setOnClickListener { startActivity( Intent( applicationContext, ItemVerification::class.java ) ) }
     btnMenu02.setOnClickListener { startActivity( Intent( applicationContext, ShelfReceiving::class.java ) ) }
@@ -44,6 +45,7 @@ class Lineup:DensoWaveBase() {
     btnMenu06.setOnClickListener { startActivity( Intent( applicationContext, DataConfirm::class.java ) ) }
     btnMenu07.setOnClickListener { startActivity( Intent( applicationContext, DataTransfer::class.java ) ) }
     btnMenu08.setOnClickListener { startActivity( Intent( applicationContext, Inventory::class.java ) ) }
+    btnMenu09.setOnClickListener { startActivity( Intent( applicationContext, ItemInspection::class.java ) ) }
   }
 
   /**
@@ -65,6 +67,7 @@ class Lineup:DensoWaveBase() {
     if( event.keyCode == KEY_006 ) startActivity( Intent( applicationContext, DataConfirm::class.java ) )
     if( event.keyCode == KEY_007 ) startActivity( Intent( applicationContext, DataTransfer::class.java ) )
     if( event.keyCode == KEY_008 ) startActivity( Intent( applicationContext, Inventory::class.java ) )
+    if( event.keyCode == KEY_009 ) startActivity( Intent( applicationContext, ItemInspection::class.java ) )
 
     return super.dispatchKeyEvent( event );
   }

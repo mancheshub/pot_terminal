@@ -18,7 +18,7 @@
       android:id="@+id/txt_view01"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="32dp"
+      android:layout_marginTop="16dp"
       android:layout_marginEnd="8dp"
       android:text="累計"
       android:textSize="20sp"

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.ItemInspection" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ItemVerification">
+
+    <ProgressBar
+      android:id="@+id/prg_view01"
+      style="?android:attr/progressBarStyleHorizontal"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:indeterminate="true"
+      android:visibility="invisible"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_group"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+      android:layout_width="0dp"
+      android:layout_height="45dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:focusedByDefault="false"
+      android:hint="作業グループ"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/prg_view01">
+
+      <AutoCompleteTextView
+        android:id="@+id/txt_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoText="false"
+        android:editable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_shop"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+      android:layout_width="0dp"
+      android:layout_height="45dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:hint="店舗"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lay_group">
+
+      <AutoCompleteTextView
+        android:id="@+id/txt_shop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_box"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+      android:layout_width="0dp"
+      android:layout_height="45dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:hint="箱"
+      app:layout_constraintEnd_toStartOf="@+id/lay_print"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lay_shop">
+
+      <AutoCompleteTextView
+        android:id="@+id/txt_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_print"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+      android:layout_width="0dp"
+      android:layout_height="45dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="16dp"
+      android:hint="印刷機"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/lay_box"
+      app:layout_constraintTop_toTopOf="@+id/lay_box">
+
+      <AutoCompleteTextView
+        android:id="@+id/txt_print"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+      android:id="@+id/exe_button01"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:text="クリア"
+      app:layout_constraintEnd_toStartOf="@+id/exe_button02"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lay_box" />
+
+    <Button
+      android:id="@+id/exe_button02"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:text="箱確定"
+      app:layout_constraintEnd_toStartOf="@+id/exe_button03"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/exe_button01"
+      app:layout_constraintTop_toTopOf="@+id/exe_button01" />
+
+    <Button
+      android:id="@+id/exe_button03"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="16dp"
+      android:text="確定"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/exe_button02"
+      app:layout_constraintTop_toTopOf="@+id/exe_button01" />
+
+    <TextView
+      android:id="@+id/txt_view01"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="全"
+      app:layout_constraintEnd_toStartOf="@+id/cnt_total"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <TextView
+      android:id="@+id/cnt_total"
+      android:layout_width="50dp"
+      android:layout_height="45dp"
+      android:gravity="center|center_vertical"
+      android:text="@{viewmodel.cntTotal}"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toStartOf="@+id/txt_view02"
+      app:layout_constraintTop_toBottomOf="@+id/exe_button01" />
+
+    <TextView
+      android:id="@+id/txt_view02"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="件中"
+      app:layout_constraintEnd_toStartOf="@+id/cnt_read"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <TextView
+      android:id="@+id/cnt_read"
+      android:layout_width="50dp"
+      android:layout_height="45dp"
+      android:gravity="center|center_vertical"
+      android:text="@{viewmodel.cntRead}"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toStartOf="@+id/txt_view03"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <TextView
+      android:id="@+id/txt_view03"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:layout_marginEnd="16dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="件"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <ListView
+      android:id="@+id/lst_view01"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/cnt_total" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

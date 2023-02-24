@@ -6,6 +6,9 @@ import com.bigsize.pot_terminal.model.PotDataModel01
 
 class ItemVerification:ViewModel() {
   // 全データ数とPOTで読んだデータ数
+  public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
+  public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
+
   public val txtView01:MutableLiveData<String> by lazy { MutableLiveData<String>() }
   public val txtView02:MutableLiveData<String> by lazy { MutableLiveData<String>() }
 

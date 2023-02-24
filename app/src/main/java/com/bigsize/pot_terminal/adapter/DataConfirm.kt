@@ -1,9 +1,7 @@
 package com.bigsize.pot_terminal.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
-import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -12,27 +10,25 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.LiveData
 import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.Failure
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDataModel02
 import com.bigsize.pot_terminal.databinding.DataConfirmListview01Binding
-import com.bigsize.pot_terminal.model.FileOperation
 
-class DataConfirm( val context:Context?,var potDataArray:MutableList<PotDataModel02> ):BaseAdapter() {
+class DataConfirm( val context:Context?, var potDataArray:MutableList<PotDataModel02> ):BaseAdapter() {
   private val inflater = LayoutInflater.from( context )
 
   private val _chkCount:MutableLiveData<Int> = MutableLiveData( 0 )
   public val chkCount:LiveData<Int> get() = _chkCount
 
-  override fun getCount(): Int {
+  override fun getCount():Int {
     return potDataArray.count()
   }
 
-  override fun getItem( position:Int ): PotDataModel02 {
+  override fun getItem( position:Int ):PotDataModel02 {
     return potDataArray[position]
   }
 
-  override fun getItemId( position:Int ): Long {
+  override fun getItemId( position:Int ):Long {
     return position.toLong()
   }
 
@@ -40,8 +36,6 @@ class DataConfirm( val context:Context?,var potDataArray:MutableList<PotDataMode
     var itemView:View? = convertView
     val potData:PotDataModel02 = getItem( position )
     lateinit var binding01:DataConfirmListview01Binding
-
-    if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "AAA = " + position )
 
     // 表示部品をなければ作ってあれば再利用します
 
@@ -81,22 +75,6 @@ class DataConfirm( val context:Context?,var potDataArray:MutableList<PotDataMode
    */
   fun refreshItem( newItem:MutableList<PotDataModel02> ) {
     potDataArray = newItem
-
-    // チェック数量を0で更新します
-    _chkCount.value = 0
-
-    // 内容の変更をListViewに通知します
-    notifyDataSetChanged()
-  }
-
-  /**
-   * アダプタデータを更新します
-   */
-  fun updateItem() {
-    potDataArray.removeIf { it.isChecked == true }
-
-    // チェック数量を0で更新します
-    _chkCount.value = 0
 
     // 内容の変更をListViewに通知します
     notifyDataSetChanged()

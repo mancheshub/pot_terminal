@@ -11,10 +11,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bigsize.pot_terminal.databinding.DataConfirmBinding
-import com.bigsize.pot_terminal.model.DialogCallback
-import com.bigsize.pot_terminal.model.FileOperation
-import com.bigsize.pot_terminal.model.MessageDialog
-import com.bigsize.pot_terminal.model.PotDataModel02
+import com.bigsize.pot_terminal.model.*
 import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.adapter.DataConfirm as AD_DataConfirm
 import com.bigsize.pot_terminal.viewmodel.DataConfirm as VM_DataConfirm
@@ -54,7 +51,6 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     // ■ AutoCompleteTextViewアダプタをセットします
 
     var menuItems:MutableList<String> = mutableListOf()
-
     for( _item in AppBase.potDivision ) { menuItems.add( _item.name ) }
 
     adapter02 = ArrayAdapter( applicationContext, R.layout.data_confirm_popup01, menuItems )
@@ -64,7 +60,7 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
 
     adapter01.chkCount.observe(this, Observer<Int> {
       if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "チェックした数量 = " + adapter01.chkCount.value )
-      binding01.txtView02.text = adapter01.chkCount.value.toString()
+      viewModel01.cntCheck.value = adapter01.chkCount.value.toString()
     })
 
     // ■ イベントを補足します
@@ -87,26 +83,47 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
   /**
    * ダイアログで実行する処理を実装します
    */
-  override fun fromMessageDialog01() {
-    adapter01.updateItem()
+  override fun fromMessageDialog( callbackType:String ) {
+    // 削除する場合
 
-    // POTデータ区分を決定します
+    if( callbackType == "01" ) {
+      if( viewModel01.potDataArray.size.toString() == "0" || ( viewModel01.potDataArray.indexOfFirst { it.isChecked == true } ) == -1 ) {
+        claimSound( playSoundNG )
+        claimVibration( AppBase.vibrationNG )
 
-    var position:Int = AppBase.potDivision.indexOfFirst { it.name == viewModel01.selectedItem }
-    var division:String = AppBase.potDivision[position].division
+        val dialog:MessageDialog = MessageDialog( "00", "エラー", getString( R.string.err_data_confirm01 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
 
-    try {
-      model01.savePotData( "OVERWRITE", division, adapter01.potDataArray )
-    } catch( e:Exception ) {
-      val intent = Intent( applicationContext, Failure::class.java )
-      intent.putExtra( "MESSAGE", e.message )
-      startActivity( intent )
+        return
+      }
+
+      viewModel01.potDataArray.removeIf { it.isChecked == true }
+
+      // 全データ数とPOTで読んだデータ数を更新します
+      viewModel01.cntCheck.value = "0"
+      viewModel01.cntTotal.value = viewModel01.potDataArray.size.toString()
+
+      adapter01.refreshItem( viewModel01.potDataArray )
+
+      // POTデータ区分を決定します
+      var position:Int = AppBase.potDivision.indexOfFirst { it.name == viewModel01.selectedItem }
+      var division:String = AppBase.potDivision[position].division
+
+      try {
+        model01.savePotData( "OVERWRITE", division, adapter01.potDataArray )
+      } catch( e:Exception ) {
+        val intent = Intent( applicationContext, Failure::class.java )
+        intent.putExtra( "MESSAGE", e.message )
+        startActivity( intent )
+      }
+
+      claimSound( playSoundFN )
+      claimVibration( AppBase.vibrationFN )
+
+      val dialog:MessageDialog = MessageDialog( "00", "削除完了", getString( R.string.msg_data_confirm02 ), "OK", "" )
+      dialog.show( supportFragmentManager, "simple" )
     }
-
-    claimVibration( AppBase.vibrationFN )
   }
-
-  override fun fromMessageDialog02() {}
 
   /**
    * キーイベントを捕捉します
@@ -133,33 +150,32 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     viewModel01.selectedItem = item!!
 
     // POTデータ区分を決定します
-
     var position:Int = AppBase.potDivision.indexOfFirst { it.name == item  }
     var division:String = AppBase.potDivision[position].division
 
-    var fileArray:MutableList<PotDataModel02> = mutableListOf()
-
     try {
-      fileArray = model01.readPotData( division )
+      viewModel01.potDataArray = model01.readPotData( division )
     } catch( e:Exception ) {
       val intent = Intent( applicationContext, Failure::class.java )
       intent.putExtra( "MESSAGE", e.message )
       startActivity( intent )
     }
 
-    adapter01.refreshItem( fileArray )
+    // 全データ数とPOTで読んだデータ数を更新します
+    viewModel01.cntCheck.value = "0"
+    viewModel01.cntTotal.value = viewModel01.potDataArray.size.toString()
+
+    adapter01.refreshItem( viewModel01.potDataArray )
   }
 
   /**
    * ボタンが押された時に呼ばれるリスナー定義です
    */
   override fun onClick( v:View ) {
-    val vButton = v as Button
-
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
-    val dialog:MessageDialog = MessageDialog( "01", "削除確認", "POTデータを削除しますがよろしいですか？", "はい", "いいえ" )
+    val dialog:MessageDialog = MessageDialog( "01", "削除確認", getString( R.string.msg_data_confirm01 ), "はい", "いいえ" )
     dialog.show( supportFragmentManager, "simple" )
   }
 }

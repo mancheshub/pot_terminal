@@ -1,7 +1,10 @@
 <resources>
   <string name="app_name">pot_terminal</string>
 
-  <string name="err_txt_number01">入力は必須です。</string>
+  <string name="alt_wifi01">Wifiの電波が弱くなっています。Wifiを再設定してください。</string>
+  <string name="err_communication01">通信エラーが発生しました。</string>
+
+  <string name="err_txt_number01">入力・選択は必須です。</string>
   <string name="err_txt_number02">数値で入力してください。</string>
   <string name="err_txt_number03">3桁以内で入力してください。</string>
 
@@ -25,4 +28,27 @@
   <string name="err_inventory02">検棚を読んでください。</string>
   <string name="err_inventory03">商品を読んでください。</string>
   <string name="err_inventory04">1＋ENTで確定してください。</string>
+
+  <string name="msg_item_verification01">照合が完了しました。</string>
+  <string name="err_item_verification01">該当の商品がありません。</string>
+
+  <string name="msg_item_inspection01">クリアしました。</string>
+  <string name="msg_item_inspection02">箱確定しました。</string>
+  <string name="msg_item_inspection03">SCMラベルを印字しました。</string>
+  <string name="msg_item_inspection04">検品をクリアしてよろしいですか？</string>
+  <string name="msg_item_inspection05">箱確定しますがよろしいですか？</string>
+  <string name="msg_item_inspection06">検品を完了してよろしいですか？</string>
+  <string name="err_item_inspection01">が検品しています。</string>
+  <string name="err_item_inspection02">該当の商品がありません。</string>
+  <string name="err_item_inspection03">箱確定するデータがありません。</string>
+  <string name="err_item_inspection04">確定するデータがありません。</string>
+
+  <string name="msg_data_confirm01">削除しますがよろしいですか？</string>
+  <string name="msg_data_confirm02">削除しました。</string>
+  <string name="err_data_confirm01">削除するデータがありません。</string>
+
+  <string name="msg_data_transfer01">転送しますがよろしいですか？</string>
+  <string name="msg_data_transfer02">転送しました。</string>
+  <string name="err_data_transfer01">転送するデータがありません。</string>
+
 </resources>

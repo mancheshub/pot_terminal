@@ -39,8 +39,6 @@ class Failure:DensoWaveBase(),View.OnClickListener {
    * ボタンがされた時に呼ばれるリスナー定義です
    */
   override fun onClick( v:View ) {
-    val vButton = v as Button
-
     finish()
   }
 }

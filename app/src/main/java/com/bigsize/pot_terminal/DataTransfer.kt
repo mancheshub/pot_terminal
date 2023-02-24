@@ -39,8 +39,11 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
 
     if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "電波強度 = " + rssi )
 
-    if( rssi < -25 ) {
-      val dialog:MessageDialog = MessageDialog( "02", "", "Wifiの電波が弱くなっています。Wifiを再設定してください。", "OK", "" )
+    if( rssi < AppBase.permitWifiLevel ) {
+      claimSound( playSoundNG )
+      claimVibration( AppBase.vibrationNG )
+
+      val dialog:MessageDialog = MessageDialog( "02", "", getString( R.string.msg_item_verification01 ), "OK", "" )
       dialog.show( supportFragmentManager, "simple" )
     }
 
@@ -66,26 +69,48 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
 
     adapter01.chkCount.observe(this, Observer<Int> {
       if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "チェックした数量 = " + adapter01.chkCount.value )
-      binding01.txtView02.text = "%,d".format( adapter01.chkCount.value!!.toInt() )
+      viewModel01.cntCheck.value = adapter01.chkCount.value.toString()
     })
 
-    viewModel01.apiStatus.observe(this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "APIステータス = " + viewModel01.apiStatus.value )
+    viewModel01.apiCondition.observe(this, Observer<String> {
+      if( ( viewModel01.apiCondition.value as String ) != "" ) {
 
-      if( viewModel01.apiStatus.value == "成功" ) {
-        viewModel01.initPOTData()
-        adapter01.refreshItem( viewModel01.potFileArray )
+      // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
+      val apiCondition:String = viewModel01.apiCondition.value as String
 
-        val dialog:MessageDialog = MessageDialog( "01", "転送完了", "POTデータの転送が完了しました。", "OK", "" )
-        dialog.show( supportFragmentManager, "simple" )
+      // プログレスバーを表示します
 
-        claimVibration( AppBase.vibrationFN )
+      if( apiCondition == "ST" ) {
+        binding01.prgView01.visibility = android.widget.ProgressBar.VISIBLE
       }
 
-      if( viewModel01.apiStatus.value == "失敗" ) {
+      // プログレスバーを消します - 異常終了
+
+      if( apiCondition == "ER" ) {
         val intent = Intent( applicationContext, Failure::class.java )
         intent.putExtra( "MESSAGE", "POTデータ受け皿のサーバの調子がよくありません。" )
         startActivity( intent )
+      }
+
+      // プログレスバーを消します - 正常終了
+
+      if( viewModel01.apiCondition.value == "FN" ) {
+        binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
+
+        viewModel01.initPOTData()
+
+        // POTで読んだデータ数を更新します
+        viewModel01.cntCheck.value = "0"
+
+        adapter01.refreshItem( viewModel01.potFileArray )
+
+        claimSound( playSoundFN )
+        claimVibration( AppBase.vibrationFN )
+
+        val dialog:MessageDialog = MessageDialog( "00", "転送完了", getString( R.string.msg_data_transfer02 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
+      }
+
       }
     })
 
@@ -108,16 +133,36 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
   /**
    * ダイアログで実行する処理を実装します
    */
-  override fun fromMessageDialog01() {}
-  override fun fromMessageDialog02() {
-    val intent = Intent( Settings.Panel.ACTION_WIFI )
-    startActivityForResult( intent, 0 )
+  override fun fromMessageDialog( callbackType:String ) {
+    // 転送する場合
+
+    if( callbackType == "01" ) {
+      if( viewModel01.potFileArray.size.toString() == "0" || ( viewModel01.potFileArray.indexOfFirst { it.isChecked == true } ) == -1 ) {
+        claimSound( playSoundNG )
+        claimVibration( AppBase.vibrationNG )
+
+        val dialog:MessageDialog = MessageDialog( "00", "エラー", getString( R.string.err_data_transfer01 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
+
+        return
+      }
+
+      // POTデータをアップロードします
+      viewModel01.uploadPOTData( AppBase.deviceNO )
+    }
+
+    // Wifi電波レベルが低下した場合
+
+    if( callbackType == "02" ) {
+      val intent = Intent( Settings.Panel.ACTION_WIFI )
+      startActivityForResult( intent, 0 )
+    }
   }
 
   /**
    * キーイベントを捕捉します
    */
-  override fun dispatchKeyEvent( event:KeyEvent):Boolean {
+  override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
@@ -128,12 +173,10 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
    * ボタンが押された時に呼ばれるリスナー定義です
    */
   override fun onClick( v:View ) {
-    val vButton = v as Button
-
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
-    // POTデータをアップロードします
-    viewModel01.uploadPOTData( AppBase.deviceNO )
+    val dialog:MessageDialog = MessageDialog( "01", "転送確認", getString( R.string.msg_data_transfer01 ), "はい", "いいえ" )
+    dialog.show( supportFragmentManager, "simple" )
   }
 }

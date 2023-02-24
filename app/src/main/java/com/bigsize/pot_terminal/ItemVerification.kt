@@ -46,6 +46,11 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
 
     binding01.viewmodel = viewModel01
 
+    if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "デバイス番号 = " + AppBase.deviceNO + " " + AppBase.specialDeviceNO )
+
+    // 上書きモードスイッチの初期値を設定します
+    if( AppBase.deviceNO == AppBase.specialDeviceNO ) binding01.swhMode01.isChecked = true
+
     // ■ ListViewアダプタをセットします
 
     adapter01 = AD_ItemVerification( applicationContext, viewModel01.potDataArray )
@@ -77,8 +82,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
   /**
    * ダイアログで実行する処理を実装します
    */
-  override fun fromMessageDialog01() {}
-  override fun fromMessageDialog02() {}
+  override fun fromMessageDialog( callbackType:String ) {}
 
   /**
    * キーイベントを捕捉します
@@ -102,17 +106,15 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
-    // 特別動作する端末については複数商品が読まれているときに複数商品を読むとクリアします
+    // 上書きモードがONの場合は商品データを一旦クリアします
 
-    if( viewModel01.potDataArray.size != 0 && AppBase.deviceNO == AppBase.specialDeviceNO ) {
+    if( binding01.swhMode01.isChecked == true ) {
       // 読込済な商品データをクリアします
       viewModel01.potDataArray = mutableListOf<PotDataModel01>()
 
-      // 照合済件数を更新します
-      viewModel01.txtView01.value = "照合 0 点"
-
-      // 全件数を更新します
-      viewModel01.txtView02.value = "全 0 点"
+      // 全データ数とPOTで読んだデータ数を更新します
+      viewModel01.cntRead.value = "0"
+      viewModel01.cntTotal.value = "0"
     }
 
     var ii:Int = 0
@@ -139,12 +141,12 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     }
 
     // 読んだ商品データを読込済な商品データに統合します
-    viewModel01.potDataArray.addAll(tmpDataArray)
+    viewModel01.potDataArray.addAll( tmpDataArray )
 
     if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "件数 = " + viewModel01.potDataArray.size )
 
-    // 全件数を更新します
-    viewModel01.txtView02.value = "全 " + viewModel01.potDataArray.sumBy { it.amt.toInt() } + " 点"
+    // 全データ数を更新します
+    viewModel01.cntTotal.value = ( viewModel01.potDataArray.sumBy { it.amt_p.toInt() } ).toString()
 
     // ListViewの内容を更新します
     adapter01.refreshItem( viewModel01.potDataArray )
@@ -155,7 +157,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
   /**
    * 商品を読んだ時の処理を定義します
    *
-   * @param [scanItem] 読み取った箱QRデータ
+   * @param [scanItem] 読み取ったQRデータ
    * @return 処理結果
    */
   fun readItem( scanItem:String? ):Boolean {
@@ -175,7 +177,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "品番 色番 サイズ = " + cd + " " + cn + " " + sz + " " + amt )
 
     // 該当商品を検索します
-    position = viewModel01.potDataArray.indexOfFirst { it.cd == model01.eightdigitsCd(cd) && it.cn == cn && it.sz == sz.replace(" ","") && it.amt_p.toInt() < it.amt.toInt() }
+    position = viewModel01.potDataArray.indexOfFirst { it.cd == model01.eightdigitsCd(cd) && it.cn == cn && it.sz == sz.replace(" ","") && it.amt_n.toInt() < it.amt_p.toInt() }
 
     if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "検索位置 = " + position.toString() )
 
@@ -183,12 +185,12 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       claimSound( playSoundNG )
       claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "01", "", "該当の商品がありません。", "OK", "" )
+      val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_item_verification01 ), "OK", "" )
       dialog.show( supportFragmentManager, "simple" )
     } else {
       // 該当位置のSKUの数量を増やします
       potData = viewModel01.potDataArray[position]
-      potData.amt_p = (potData.amt_p.toInt()+1).toString()
+      potData.amt_n = (potData.amt_n.toInt()+amt.toInt()).toString()
 
       // ViewModelを更新します
       viewModel01.potDataArray.set( position, potData )
@@ -196,16 +198,17 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       // ListViewの内容を更新します
       adapter01.refreshItem( viewModel01.potDataArray )
 
-      // 照合済件数を更新します
-      viewModel01.txtView01.value = "照合 " + viewModel01.potDataArray.sumBy { it.amt_p.toInt() } + " 点"
+      // POTで読んだデータ数を更新します
+      viewModel01.cntRead.value = ( viewModel01.potDataArray.sumBy { it.amt_n.toInt() } ).toString()
 
       // 終了したらその旨を表示します
-      position = viewModel01.potDataArray.indexOfFirst { it.amt_p.toInt() < it.amt.toInt() }
+
+      position = viewModel01.potDataArray.indexOfFirst { it.amt_n.toInt() < it.amt_p.toInt() }
       if( position == -1 ) {
         claimSound( playSoundFN )
         claimVibration( AppBase.vibrationFN )
 
-        val dialog:MessageDialog = MessageDialog( "01", "", "照合が完了しました。", "OK", "" )
+        val dialog:MessageDialog = MessageDialog( "01", "完了", getString( R.string.msg_item_verification01 ), "OK", "" )
         dialog.show( supportFragmentManager, "simple" )
       }
     }

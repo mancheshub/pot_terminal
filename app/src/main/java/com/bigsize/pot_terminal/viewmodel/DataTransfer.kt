@@ -7,7 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.model.*
+import com.bigsize.pot_terminal.model.AppUtility
+import com.bigsize.pot_terminal.model.DataTransferAPI
+import com.bigsize.pot_terminal.model.FileOperation
+import com.bigsize.pot_terminal.model.PotDivision
 import kotlinx.coroutines.launch
 import java.io.File
 import java.nio.file.Paths
@@ -15,7 +18,10 @@ import java.nio.file.Paths
 class DataTransfer:ViewModel() {
   private var model01:FileOperation = FileOperation()
   private var model02:AppUtility = AppUtility()
-  private var model03:POTAccessAPI = POTAccessAPI()
+  private var model03:DataTransferAPI = DataTransferAPI()
+
+  // チェックしたデータ数
+  public val cntCheck:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
 
   // 全データ数・進捗バー
   public val prgRate:MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
@@ -24,8 +30,8 @@ class DataTransfer:ViewModel() {
   public var potFileArray:MutableList<PotDivision> = mutableListOf<PotDivision>()
 
   // API通信状況
-  private val _apiStatus:MutableLiveData<String> = MutableLiveData( "" )
-  public val apiStatus:LiveData<String> get() = _apiStatus
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
+  public val apiCondition:LiveData<String> get() = _apiCondition
 
   init { initPOTData() }
 
@@ -64,6 +70,8 @@ class DataTransfer:ViewModel() {
     val dateHash:Map<String,String> = model02.returnPFileNameDate()
     var fileArray:MutableList<String> = mutableListOf()
 
+    _apiCondition.value = "ST"
+
     dofor@for( _item in potFileArray ) {
       if( _item.isChecked == false ) continue
 
@@ -97,9 +105,11 @@ class DataTransfer:ViewModel() {
         model03.startPOTData( AppBase.transferURL, potType, fileKey )
       } catch( e:Exception ) {
         e.printStackTrace()
-        _apiStatus.value = "失敗"
+        _apiCondition.value = "ER"
         break@dofor
       }
+
+      if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "データ転送開始 ..." )
 
       val bfReader = file.bufferedReader()
 
@@ -123,7 +133,7 @@ class DataTransfer:ViewModel() {
 
         if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "データ転送(ループ内)" )
 
-        _apiStatus.value = _item.name + "を" + "%,d".format(allLineNO) + "件まで転送済み ..."
+        //_apiCondition.value = _item.name + "を" + "%,d".format(allLineNO) + "件まで転送済み ..."
 
         // データ転送を実施します
 
@@ -133,9 +143,11 @@ class DataTransfer:ViewModel() {
           model03.execPOTData( AppBase.transferURL, potType, fileKey, fileData )
         } catch( e:Exception ) {
           e.printStackTrace()
-          _apiStatus.value = "失敗"
+          _apiCondition.value = "ER"
           break@dofor
         }
+
+        if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "データ転送中 ..." )
 
         lineNO = 0
         fileArray.clear()
@@ -144,7 +156,7 @@ class DataTransfer:ViewModel() {
       // 進捗値を計算します
       prgRate.value = allLineNO*100/maxCount
 
-      _apiStatus.value = _item.name + "を" + "%,d".format(allLineNO) + "件まで転送済み ..."
+      //_apiCondition.value = _item.name + "を" + "%,d".format(allLineNO) + "件まで転送済み ..."
 
       // 残りのPOTデータの転送を実施します
 
@@ -156,9 +168,11 @@ class DataTransfer:ViewModel() {
         model03.execPOTData( AppBase.transferURL, potType, fileKey, fileData )
       } catch( e:Exception ) {
         e.printStackTrace()
-        _apiStatus.value = "失敗"
+        _apiCondition.value = "ER"
         break@dofor
       }
+
+      if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "データ転送完了 ..." )
 
       lineNO = 0
       allLineNO = 0
@@ -170,13 +184,13 @@ class DataTransfer:ViewModel() {
       try {
         model01.deletePotData( _item.division )
       } catch( e:Exception ) {
-        _apiStatus.value = "失敗"
+        _apiCondition.value = "ER"
         break@dofor
       }
     }
 
-    if( _apiStatus.value != "" &&  _apiStatus.value != "失敗" ) {
-      _apiStatus.value = "成功"
+    if( _apiCondition.value != "" &&  _apiCondition.value != "ER" ) {
+      _apiCondition.value = "FN"
 
       // データ転送を終了します
 
@@ -184,7 +198,7 @@ class DataTransfer:ViewModel() {
         model03.finishPOTData( AppBase.transferURL, potType, fileKey )
       } catch( e:Exception ) {
         e.printStackTrace()
-        _apiStatus.value = "失敗"
+        _apiCondition.value = "ER"
       }
     }
   }
