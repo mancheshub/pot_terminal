@@ -47,7 +47,7 @@ class ShelfReceiving:DensoWaveBase() {
       readShelf( scanShelf.value )
     })
 
-    scanBox.observe(this, Observer<String> {
+    scanBox.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "箱データ = " + scanBox.value )
 
       readBox( scanBox.value )
@@ -224,6 +224,7 @@ class ShelfReceiving:DensoWaveBase() {
       if( msgError03 != "" ) { binding01.layAmt.error = msgError03 }
 
       claimSound( playSoundNG )
+      claimVibration( AppBase.vibrationNG )
 
       return false
     }

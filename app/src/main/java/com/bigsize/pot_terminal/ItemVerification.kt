@@ -58,13 +58,13 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
 
     // ■ 変更を補足します
 
-    scanMultiItem.observe(this, Observer<String> {
+    scanMultiItem.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "複数商品データ = " + scanMultiItem.value )
 
       readMultiItem( scanMultiItem.value )
     })
 
-    scanItem.observe(this, Observer<String> {
+    scanItem.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "商品データ = " + scanItem.value )
 
       readItem( scanItem.value )

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   package="com.bigsize.pot_terminal">
 
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
   <application
     android:usesCleartextTraffic="true"
@@ -27,6 +32,7 @@
     <activity android:name=".DataConfirm" />
     <activity android:name=".DataTransfer" />
     <activity android:name=".ItemInspection" />
+    <activity android:name=".SortShipping" />
     <activity android:name=".Entrance">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

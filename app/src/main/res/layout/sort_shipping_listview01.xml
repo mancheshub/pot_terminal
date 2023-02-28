@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.model.HashItem" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+      android:id="@+id/id"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="4dp"
+      android:layout_marginEnd="3dp"
+      android:gravity="left|center_vertical"
+      android:paddingTop="7sp"
+      android:paddingBottom="7sp"
+      android:text="@{viewmodel.id}"
+      android:textSize="12sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/item"
+      app:layout_constraintTop_toTopOf="@+id/item" />
+
+    <TextView
+      android:id="@+id/item"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="3dp"
+      android:layout_marginEnd="4dp"
+      android:gravity="left|center_vertical"
+      android:paddingTop="7sp"
+      android:paddingBottom="7sp"
+      android:text="@{viewmodel.item}"
+      android:textSize="12sp"
+      app:layout_constraintEnd_toStartOf="@+id/id"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

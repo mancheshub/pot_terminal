@@ -43,19 +43,19 @@ class ShelfReplaceS:DensoWaveBase() {
 
     // ■ 変更を補足します
 
-    scanShelf.observe(this, Observer<String> {
+    scanShelf.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReplaceS", "棚データ = " + scanShelf.value )
 
       readShelf( scanShelf.value )
     })
 
-    scanBox.observe(this, Observer<String> {
+    scanBox.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReplaceS", "箱データ = " + scanBox.value )
 
       readBox( scanBox.value )
     })
 
-    scanItem.observe(this, Observer<String> {
+    scanItem.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReplaceS", "商品データ = " + scanItem.value )
 
       readItem( scanItem.value )
@@ -298,6 +298,7 @@ class ShelfReplaceS:DensoWaveBase() {
       if( msgError04 != "" ) { binding01.layAmt.error = msgError04 }
 
       claimSound( playSoundNG )
+      claimVibration( AppBase.vibrationNG )
 
       return false
     }

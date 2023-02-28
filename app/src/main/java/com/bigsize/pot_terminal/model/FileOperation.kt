@@ -139,7 +139,7 @@ class FileOperation() {
    * POTデータを作成します
    *
    * @param [mode] 書き込みモード OVERWRITE：上書 APPEND：追記
-   * @param [division] POTデータ種別 "1"：入庫データ "2"：出庫データ "9"：棚卸しデータ
+   * @param [division] POTデータ種別 1 → 入庫データ 2 → 出庫データ 3 → 棚移動データ 4 → 箱移動データ 9 → 棚卸しデータ
    * @param [dataArray] POTデータ(複数指定可)
    */
   public fun savePotData( mode:String, division:String, dataArray:MutableList<PotDataModel02> ) {

@@ -234,7 +234,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       //}
     })
 
-    scanItem.observe(this, Observer<String> {
+    scanItem.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "商品データ = " + scanItem.value )
 
       readItem( scanItem.value )

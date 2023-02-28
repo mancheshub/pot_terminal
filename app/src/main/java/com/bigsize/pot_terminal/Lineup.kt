@@ -36,6 +36,7 @@ class Lineup:DensoWaveBase() {
     val btnMenu07 = findViewById<Button>( R.id.btn_menu07 )
     val btnMenu08 = findViewById<Button>( R.id.btn_menu08 )
     val btnMenu09 = findViewById<Button>( R.id.btn_menu09 )
+    val btnMenu10 = findViewById<Button>( R.id.btn_menu10 )
 
     btnMenu01.setOnClickListener { startActivity( Intent( applicationContext, ItemVerification::class.java ) ) }
     btnMenu02.setOnClickListener { startActivity( Intent( applicationContext, ShelfReceiving::class.java ) ) }
@@ -46,6 +47,7 @@ class Lineup:DensoWaveBase() {
     btnMenu07.setOnClickListener { startActivity( Intent( applicationContext, DataTransfer::class.java ) ) }
     btnMenu08.setOnClickListener { startActivity( Intent( applicationContext, Inventory::class.java ) ) }
     btnMenu09.setOnClickListener { startActivity( Intent( applicationContext, ItemInspection::class.java ) ) }
+    btnMenu10.setOnClickListener { startActivity( Intent( applicationContext, SortShipping::class.java ) ) }
   }
 
   /**
@@ -54,20 +56,6 @@ class Lineup:DensoWaveBase() {
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
-
-    if( event.keyCode != KEY_000 && event.keyCode != KEY_001 && event.keyCode != KEY_002 && event.keyCode != KEY_003 &&
-        event.keyCode != KEY_004 && event.keyCode != KEY_005 && event.keyCode != KEY_006 && event.keyCode != KEY_007 &&
-        event.keyCode != KEY_008 && event.keyCode != KEY_009 ) return super.dispatchKeyEvent( event )
-
-    if( event.keyCode == KEY_001 ) startActivity( Intent( applicationContext, ItemVerification::class.java ) )
-    if( event.keyCode == KEY_002 ) startActivity( Intent( applicationContext, ShelfReceiving::class.java ) )
-    if( event.keyCode == KEY_003 ) startActivity( Intent( applicationContext, ShelfShipping::class.java ) )
-    if( event.keyCode == KEY_004 ) startActivity( Intent( applicationContext, ShelfReplaceS::class.java ) )
-    if( event.keyCode == KEY_005 ) startActivity( Intent( applicationContext, ShelfReplaceB::class.java ) )
-    if( event.keyCode == KEY_006 ) startActivity( Intent( applicationContext, DataConfirm::class.java ) )
-    if( event.keyCode == KEY_007 ) startActivity( Intent( applicationContext, DataTransfer::class.java ) )
-    if( event.keyCode == KEY_008 ) startActivity( Intent( applicationContext, Inventory::class.java ) )
-    if( event.keyCode == KEY_009 ) startActivity( Intent( applicationContext, ItemInspection::class.java ) )
 
     return super.dispatchKeyEvent( event );
   }

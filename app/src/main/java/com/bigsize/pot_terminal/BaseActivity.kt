@@ -1,20 +1,27 @@
 package com.bigsize.pot_terminal
 
+import android.Manifest
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bigsize.pot_terminal.AppBase.Companion.vibrationOK
 import com.bigsize.pot_terminal.model.*
 import com.densowave.bhtsdk.barcode.*
 import com.densowave.bhtsdk.barcode.BarcodeManager.BarcodeManagerListener
@@ -23,7 +30,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.nio.charset.Charset
 import kotlin.concurrent.thread
 
 /**
@@ -67,7 +73,15 @@ open class CommonBase:AppCompatActivity() {
   }
 
   /**
-   * Wifi関係
+   * bluetooth関係
+   */
+
+  public val bluetooth:BluetoothAdapter by lazy {
+    BluetoothAdapter.getDefaultAdapter()
+  }
+
+  /**
+   * wifi関係
    */
 
   public val statusWifi:StatusWifi by lazy {
@@ -111,10 +125,45 @@ open class CommonBase:AppCompatActivity() {
 
     if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "onCreate" )
 
-    // ナビゲーションの戻るリンクをクリックしたときのイベントを補足します
+    // ■ ナビゲーションの戻るリンクをクリックしたときのイベントを補足します
+
     onBackPressedDispatcher.addCallback(
       this, object: OnBackPressedCallback( true ) { override fun handleOnBackPressed() { finish() } }
     )
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "クラス名 = " + componentName.shortClassName )
+
+    // ■ bluetoothを有効化します - 許可しない場合はActivityを閉じます
+
+    if( componentName.shortClassName == ".SortShipping" && bluetooth.isEnabled == false ) {
+      val intent = Intent( BluetoothAdapter.ACTION_REQUEST_ENABLE )
+
+      val launcher01:ActivityResultLauncher<Intent> = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ) { result:ActivityResult? ->
+        if( result?.resultCode == RESULT_CANCELED ) {
+          Toast.makeText( this, getString( R.string.err_bluetooth01 ), Toast.LENGTH_LONG ).show()
+          finish()
+        }
+      }
+
+      // bluetooth有効化ダイアログを表示します
+      launcher01.launch( intent )
+    }
+
+    // ■ 位置情報の権限を要求します
+
+    val launcher02:ActivityResultLauncher<String> = registerForActivityResult( ActivityResultContracts.RequestPermission() ) { granted:Boolean ->
+      if( granted ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "ACCESS_FINE_LOCATION : 許可した" )
+      }
+    }
+
+    if( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
+      if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "ACCESS_FINE_LOCATION : 元々許可していた" )
+    } else {
+      // 権限承認要求ダイアログを表示します
+      launcher02.launch( Manifest.permission.ACCESS_FINE_LOCATION )
+    }
+
   }
 
   override fun onStart() {
@@ -398,7 +447,6 @@ open class UnitechBase:CommonBase() {
   /**
    * スキャナのブロードキャストレシーバークラス
    */
-
   inner class UssReceiver:BroadcastReceiver() {
     override fun onReceive(context:Context?,intent:Intent? ) {
       intent ?: return

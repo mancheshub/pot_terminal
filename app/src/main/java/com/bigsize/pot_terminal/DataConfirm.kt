@@ -58,7 +58,7 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
 
     // ■ 変更を補足します
 
-    adapter01.chkCount.observe(this, Observer<Int> {
+    adapter01.chkCount.observe( this, Observer<Int> {
       if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "チェックした数量 = " + adapter01.chkCount.value )
       viewModel01.cntCheck.value = adapter01.chkCount.value.toString()
     })

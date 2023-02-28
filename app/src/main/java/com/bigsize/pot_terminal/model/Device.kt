@@ -1,19 +1,80 @@
 package com.bigsize.pot_terminal.model
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.Context.WIFI_SERVICE
-import android.media.*
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
+import android.content.Intent
+import android.media.AudioAttributes
+import android.media.AudioFormat
+import android.media.AudioManager
+import android.media.AudioTrack
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.R
 import kotlin.math.roundToInt
 import kotlin.math.sin
+
+
+/**
+ * bluetooth管理クラス
+ */
+class PlayBluetooth( val context:Context ) {
+  private var bluetooth:BluetoothManager? = null
+  private val REQUEST_ENABLEBLUETOOTH = 1
+
+  init {
+    bluetooth = context.getSystemService( Context.BLUETOOTH_SERVICE ) as BluetoothManager
+  }
+
+  /**
+   * bluetooth機能の有効化を要求します
+   */
+  public fun adapterEnable():Boolean {
+    return bluetooth?.adapter!!.isEnabled
+  }
+
+  /**
+   * 接続したことのあるデバイスの情報を取得します
+   */
+  public fun pickBoundedDevice():MutableList<HashItem> {
+    var itemDataArray:MutableList<HashItem> = mutableListOf()
+
+    val bondedDevices:Collection<BluetoothDevice> = bluetooth?.adapter!!.getBondedDevices()
+
+    for( device in bondedDevices ) {
+      itemDataArray.add( HashItem( device.name, device.address ) )
+    }
+
+    return itemDataArray
+  }
+
+  /**
+   * 接続したことのないデバイスを検索します
+   */
+  public fun searchDevice() {
+    if( bluetooth?.adapter!!.isDiscovering() ) {
+      // 検索中の場合は検出をキャンセルします
+      bluetooth?.adapter!!.cancelDiscovery();
+    }
+
+    // デバイスを検索します
+    bluetooth?.adapter!!.startDiscovery();
+  }
+
+
+  /**
+   * 終了します
+   */
+  public fun release() {
+    bluetooth = null
+  }
+
+}
+
 
 /**
  * 無線LAN管理クラス
@@ -22,7 +83,7 @@ class StatusWifi( val context:Context ) {
   private var wifi:WifiManager? = null
 
   init {
-    wifi = context.getSystemService( WIFI_SERVICE ) as WifiManager
+    wifi = context.getSystemService( Context.WIFI_SERVICE ) as WifiManager
   }
 
   /**

@@ -67,12 +67,12 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
 
     // ■ 変更を補足します
 
-    adapter01.chkCount.observe(this, Observer<Int> {
+    adapter01.chkCount.observe( this, Observer<Int> {
       if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "チェックした数量 = " + adapter01.chkCount.value )
       viewModel01.cntCheck.value = adapter01.chkCount.value.toString()
     })
 
-    viewModel01.apiCondition.observe(this, Observer<String> {
+    viewModel01.apiCondition.observe( this, Observer<String> {
       if( ( viewModel01.apiCondition.value as String ) != "" ) {
 
       // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します

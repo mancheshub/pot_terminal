@@ -4,6 +4,12 @@
   <string name="alt_wifi01">Wifiの電波が弱くなっています。Wifiを再設定してください。</string>
   <string name="err_communication01">通信エラーが発生しました。</string>
 
+  <string name="msg_bluetooth01">接続しました。</string>
+  <string name="msg_bluetooth02">切断しました。</string>
+  <string name="err_bluetooth01">bluetoothを利用する機能は利用できません。</string>
+  <string name="err_bluetooth02">許可しなければbluetooth機器検索機能が利用できません。</string>
+  <string name="err_bluetooth03">接続に失敗しました。</string>
+
   <string name="err_txt_number01">入力・選択は必須です。</string>
   <string name="err_txt_number02">数値で入力してください。</string>
   <string name="err_txt_number03">3桁以内で入力してください。</string>
@@ -23,6 +29,8 @@
   <string name="err_shelf_replace_s03">商品を読んでください。</string>
 
   <string name="err_shelf_replace_b01">出棚を読んでください。</string>
+  <string name="err_shelf_replace_b02">箱を読んでください。</string>
+  <string name="err_shelf_replace_b03">入棚を読んでください。</string>
 
   <string name="err_inventory01">1のみ入力できます。</string>
   <string name="err_inventory02">検棚を読んでください。</string>
