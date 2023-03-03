@@ -53,10 +53,10 @@ class ShelfReceiving:DensoWaveBase() {
       readBox( scanBox.value )
     })
 
-    scanItem.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "商品データ = " + scanItem.value )
+    scanItemM.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "商品データ = " + scanItemM.value )
 
-      readItem( scanItem.value )
+      readItem( scanItemM.value )
     })
 
     // ■ イベントを補足します
@@ -66,6 +66,7 @@ class ShelfReceiving:DensoWaveBase() {
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
+    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 

@@ -43,13 +43,15 @@
   <string name="msg_item_inspection01">クリアしました。</string>
   <string name="msg_item_inspection02">箱確定しました。</string>
   <string name="msg_item_inspection03">SCMラベルを印字しました。</string>
-  <string name="msg_item_inspection04">検品をクリアしてよろしいですか？</string>
+  <string name="msg_item_inspection04">クリアしますがよろしいですか？</string>
   <string name="msg_item_inspection05">箱確定しますがよろしいですか？</string>
   <string name="msg_item_inspection06">検品を完了してよろしいですか？</string>
+  <string name="msg_item_inspection07">すでにSCMラベルが印刷されています。必ず張り替えてください。</string>
   <string name="err_item_inspection01">が検品しています。</string>
   <string name="err_item_inspection02">該当の商品がありません。</string>
   <string name="err_item_inspection03">箱確定するデータがありません。</string>
   <string name="err_item_inspection04">確定するデータがありません。</string>
+  <string name="err_item_inspection05">他人が担当するデータをクリアできません。</string>
 
   <string name="msg_data_confirm01">削除しますがよろしいですか？</string>
   <string name="msg_data_confirm02">削除しました。</string>

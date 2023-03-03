@@ -46,9 +46,9 @@ class ItemInspection( val context:Context?, var itemList:MutableList<PotDataMode
     }
 
     // 検品途中・検品完了の場合は背景色を変更します
-    itemView.setBackgroundColor( Color.rgb(255,255,255) );
-    if( potData.amt_n != "0" && potData.amt_n.toInt() == potData.amt_p.toInt() ) { itemView.setBackgroundColor( Color.rgb(230,230,230) ); }
-    if( potData.amt_n != "0" && potData.amt_n.toInt() < potData.amt_p.toInt() ) { itemView.setBackgroundColor( Color.rgb(255,255,204) ); }
+    itemView.setBackgroundColor( Color.rgb( 255, 255, 255 ) );
+    if( potData.amt_n != "0" && potData.amt_n.toInt() == potData.amt_p.toInt() ) { itemView.setBackgroundColor( Color.rgb( 230, 230, 230 ) ); }
+    if( potData.amt_n != "0" && potData.amt_n.toInt() < potData.amt_p.toInt() ) { itemView.setBackgroundColor( Color.rgb( 255, 255, 204 ) ); }
 
     // ViewModelをセットします
     binding01.viewmodel = potData

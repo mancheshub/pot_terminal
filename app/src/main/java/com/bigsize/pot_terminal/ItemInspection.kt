@@ -52,7 +52,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       claimSound( playSoundNG )
       claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "04", "", getString( R.string.err_item_verification01 ), "OK", "" )
+      val dialog:MessageDialog = MessageDialog( "04", "", getString( R.string.alt_wifi01 ), "OK", "" )
       dialog.show( supportFragmentManager, "simple" )
     }
 
@@ -128,6 +128,18 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         dialog.show( supportFragmentManager, "simple" )
       }
 
+      // プログレスバーを消します - 警告終了
+
+      if( apiCondition == "AL01" ) {
+        val dialog:MessageDialog = MessageDialog( "00", "エラー", getString( R.string.err_item_inspection05 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
+      }
+
+      if( apiCondition == "AL03" ) {
+        val dialog:MessageDialog = MessageDialog( "05", "警告", getString( R.string.msg_item_inspection07 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
+      }
+
       // プログレスバーを消します - 正常終了
 
       // 終了ステータスでどのような処理が完了したかを判定します
@@ -146,7 +158,24 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       if( regex.containsMatchIn( apiCondition ) == true ) {
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
 
-        // 確定により店舗の検品状況に変化があったので店舗データと商品データを再取得します
+        if( apiCondition == "FN01" ) {
+          // クリアしたら空白の店舗データが選択されたとします
+          binding01.txtShop.setText( "", false )
+          viewModel01.selectedShopID = ""
+
+          // クリアしたら箱01が選択されたとします
+          binding01.txtBox.setText( "箱01", false )
+          viewModel01.selectedBoxID = "01"
+        }
+
+        if( apiCondition == "FN02" ) {
+          viewModel01.selectedBoxID = ( viewModel01.selectedBoxID.toInt() + 1 ).toString().padStart( 2, '0' )
+
+          // クリアしたら箱01が選択されたとします
+          binding01.txtBox.setText( "箱"+viewModel01.selectedBoxID, false )
+        }
+
+        // いずれの処理も店舗の検品状況に変化があったので店舗データと商品データを再取得します
         viewModel01.pickShopList()
         viewModel01.pickItemList( "nonExclusive" )
 
@@ -234,10 +263,10 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       //}
     })
 
-    scanItem.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "商品データ = " + scanItem.value )
+    scanItemH.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "商品データ = " + scanItemH.value )
 
-      readItem( scanItem.value )
+      readItem( scanItemH.value )
     })
 
     // ■ イベントを補足します
@@ -264,20 +293,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
   override fun fromMessageDialog( callbackType:String ) {
     // クリアボタンを押した場合
 
-    if( callbackType == "01" && inputCheck( "01" ) == true ) {
-      viewModel01.deceded( "01" )
-
-      // クリアしたら空白の店舗データが選択されたとします
-      binding01.txtShop.setText( "", false )
-      viewModel01.selectedShopID = ""
-
-      // クリアしたら箱01が選択されたとします
-      binding01.txtBox.setText( "箱01", false )
-      viewModel01.selectedBoxID = "01"
-
-      // クリアにより店舗データがクリアされたので商品データを再取得します
-      viewModel01.pickItemList( "nonExclusive" )
-    }
+    if( callbackType == "01" && inputCheck( "01" ) == true ) viewModel01.deceded( "01" )
 
     // 箱確定ボタンを押した場合
 
@@ -286,6 +302,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
     // 確定ボタンを押した場合
 
     if( callbackType == "03" && inputCheck( "03" ) == true ) viewModel01.deceded( "03" )
+    if( callbackType == "05" ) { viewModel01.isExecute03 = "0"; viewModel01.deceded( "03" ); }
 
     // Wifi電波レベルが低下した場合
 
@@ -299,6 +316,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
+    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
@@ -321,7 +339,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
     claimVibration( AppBase.vibrationOK )
 
     when( v.id ) {
-      R.id.itm_group -> {
+      R.id.itm_group -> { // 作業グループ選択
         item = adapter02.getItem( position )
 
         // 作業グループIDを決定します
@@ -344,10 +362,14 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         binding01.txtBox.setText( "箱01", false )
         viewModel01.selectedBoxID = "01"
 
+        // 作業グループを切り替えたら印刷機01が選択されたとします
+        binding01.txtPrint.setText( "印刷機01", false )
+        viewModel01.selectedPrintID = "ELS_FEL_P01"
+
         // 作業グループ変更により店舗データがクリアされたので商品データを再取得します
         viewModel01.pickItemList( "nonExclusive" )
       }
-      R.id.itm_shop -> {
+      R.id.itm_shop -> { // 店舗選択
         item = adapter03.getItem( position )
 
         // 店舗IDを決定します
@@ -366,7 +388,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         binding01.txtBox.setText( "箱01", false )
         viewModel01.selectedBoxID = "01"
       }
-      R.id.itm_box -> {
+      R.id.itm_box -> { // 箱選択
         item = adapter04.getItem( position )
 
         // 箱IDを決定します
@@ -378,7 +400,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         // 選択した箱のIDを記録します
         viewModel01.selectedBoxID = boxID
       }
-      R.id.itm_print -> {
+      R.id.itm_print -> { // 印刷機選択
         item = adapter05.getItem( position )
 
         // 印刷機IDを決定します

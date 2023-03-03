@@ -129,6 +129,7 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
+    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
@@ -150,7 +151,7 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     viewModel01.selectedItem = item!!
 
     // POTデータ区分を決定します
-    var position:Int = AppBase.potDivision.indexOfFirst { it.name == item  }
+    var position:Int = AppBase.potDivision.indexOfFirst { it.name == item }
     var division:String = AppBase.potDivision[position].division
 
     try {

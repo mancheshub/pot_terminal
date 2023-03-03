@@ -57,9 +57,14 @@ open class CommonBase:AppCompatActivity() {
     PlaySound( AppBase.buzzerOK["frequency"]!!, AppBase.buzzerOK["sinDuration"]!!, AppBase.buzzerOK["resDuration"]!! )
   }
 
-  // 異常読取した場合のブザー - ピッピッ
+  // 異常読取した場合のブザー - ピッピッピッ
   public val playSoundNG:PlaySound by lazy {
     PlaySound( AppBase.buzzerNG["frequency"]!!, AppBase.buzzerNG["sinDuration"]!!, AppBase.buzzerNG["resDuration"]!! )
+  }
+
+  // 異常読取した場合のブザー - ピッピッ
+  public val playSoundAR:PlaySound by lazy {
+    PlaySound( AppBase.buzzerAR["frequency"]!!, AppBase.buzzerAR["sinDuration"]!!, AppBase.buzzerAR["resDuration"]!! )
   }
 
   // 途中読取した場合のブザー - 高音のピッ
@@ -112,9 +117,13 @@ open class CommonBase:AppCompatActivity() {
   protected val _scanBox:MutableLiveData<String> = MutableLiveData()
   public val scanBox:LiveData<String> get() = _scanBox
 
-  // 読み取った商品QRデータ
-  protected val _scanItem:MutableLiveData<String> = MutableLiveData()
-  public val scanItem:LiveData<String> get() = _scanItem
+  // 読み取ったマンチェス商品QRデータ
+  protected val _scanItemM:MutableLiveData<String> = MutableLiveData()
+  public val scanItemM:LiveData<String> get() = _scanItemM
+
+  // 読み取ったはるやま商品QRデータ
+  protected val _scanItemH:MutableLiveData<String> = MutableLiveData()
+  public val scanItemH:LiveData<String> get() = _scanItemH
 
   /**
    * -- 共通ライフサイクルメソッド
@@ -458,7 +467,7 @@ open class UnitechBase:CommonBase() {
 
         if( scanData.substring( 0, 3 ) == "M-L" ) this@UnitechBase._scanShelf.value = scanData
         if( scanData.substring( 0, 3 ) == "M-C" ) this@UnitechBase._scanBox.value = scanData
-        if( scanData.substring( 0, 3 ) == "M-H" ) this@UnitechBase._scanItem.value = scanData
+        if( scanData.substring( 0, 3 ) == "M-H" ) this@UnitechBase._scanItemM.value = scanData
       }
     }
   }
@@ -473,7 +482,7 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
    */
 
   protected val KEY_F01:Int = 131
-  protected val KEY_F02:Int = 132
+  protected val KEY_F02:Int = 61
   protected val KEY_F03:Int = 133
   protected val KEY_F04:Int = 134
   protected val KEY_ENT:Int = 66
@@ -488,6 +497,10 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
   protected val KEY_007:Int = 14
   protected val KEY_008:Int = 15
   protected val KEY_009:Int = 16
+  protected val KEY_UP:Int = 19
+  protected val KEY_DOWN:Int = 20
+  protected val KEY_LEFT:Int = 21
+  protected val KEY_RIGHT:Int = 22
 
   /**
    * -- スキャナの各種プロパティ
@@ -612,11 +625,33 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
 
           val _data:String = this.data ?: ""
 
+          // クラス名に従ったコードが読めていなければエラーとします
+
+          if( componentName.shortClassName == ".ItemVerification" &&
+              _data.substring( 0, 3 ) != "M-P" && _data.substring( 0, 3 ) != "M-H" ) {
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
+          if( componentName.shortClassName == ".ItemInspection" && _data.substring( 0, 1 ) != "a" ) {
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
+          if(
+            ( componentName.shortClassName == ".ShelfReceiving" || componentName.shortClassName == ".ShelfShipping" ||
+              componentName.shortClassName == ".ShelfReplaceB" || componentName.shortClassName == ".ShelfReplaceS" ||
+              componentName.shortClassName == ".Inventory" ) &&
+            _data.substring( 0, 3 ) != "M-L" && _data.substring( 0, 3 ) != "M-C" && _data.substring( 0, 3 ) != "M-H" ) {
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
           if( _data.substring( 0, 3 ) == "M-P" ) _scanMultiItem.value = _data
           if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
           if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data
-          if( _data.substring( 0, 3 ) == "M-H" ) _scanItem.value = _data
-          if( _data.substring( 0, 1 ) == "a" ) _scanItem.value = _data
+          if( _data.substring( 0, 3 ) == "M-H" ) _scanItemM.value = _data
+          if( _data.substring( 0, 1 ) == "a" ) _scanItemH.value = _data
         }
       }.setBarcodeData( data ) )
     }

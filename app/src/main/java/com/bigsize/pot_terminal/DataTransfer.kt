@@ -43,7 +43,7 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
       claimSound( playSoundNG )
       claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "02", "", getString( R.string.msg_item_verification01 ), "OK", "" )
+      val dialog:MessageDialog = MessageDialog( "02", "", getString( R.string.alt_wifi01 ), "OK", "" )
       dialog.show( supportFragmentManager, "simple" )
     }
 
@@ -81,12 +81,15 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
       // プログレスバーを表示します
 
       if( apiCondition == "ST" ) {
+        binding01.exeButton01.isEnabled = false
         binding01.prgView01.visibility = android.widget.ProgressBar.VISIBLE
       }
 
       // プログレスバーを消します - 異常終了
 
       if( apiCondition == "ER" ) {
+        binding01.exeButton01.isEnabled = true
+
         val intent = Intent( applicationContext, Failure::class.java )
         intent.putExtra( "MESSAGE", "POTデータ受け皿のサーバの調子がよくありません。" )
         startActivity( intent )
@@ -95,6 +98,7 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
       // プログレスバーを消します - 正常終了
 
       if( viewModel01.apiCondition.value == "FN" ) {
+        binding01.exeButton01.isEnabled = true
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
 
         viewModel01.initPOTData()
@@ -163,6 +167,7 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
+    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 

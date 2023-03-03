@@ -4,17 +4,18 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.DialogInterface.OnShowListener
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.Failure
 import com.bigsize.pot_terminal.R
 
@@ -29,7 +30,7 @@ class StaffNODialog( val staffNO:String ):DialogFragment() {
     txtView.text = "利用者"
     txtView.textSize = 18f
     txtView.setTextColor( Color.WHITE )
-    txtView.setBackgroundColor( Color.rgb(74,138,245) )
+    txtView.setBackgroundColor( Color.rgb( 74, 138, 245 ) )
     txtView.setPadding( 10,10,10,10 )
     txtView.gravity = Gravity.CENTER
 
@@ -77,7 +78,7 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
     txtView.text = "端末"
     txtView.textSize = 18f
     txtView.setTextColor( Color.WHITE )
-    txtView.setBackgroundColor( Color.rgb(74,138,245) )
+    txtView.setBackgroundColor( Color.rgb( 74, 138, 245 ) )
     txtView.setPadding( 10,10,10,10 )
     txtView.gravity = Gravity.CENTER
 
@@ -89,7 +90,6 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
 
     val txtNumber = view.findViewById<EditText>( R.id.txt_number )
 
-    if( deviceNO == "" ) {
       builder.setPositiveButton( "設定" ) { dialog, id ->
         try {
           model01.saveDeviceNO( "OVERWRITE", txtNumber.text.toString() )
@@ -105,13 +105,6 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
       builder.setNegativeButton( "キャンセル" ) { dialog, id ->
         dialog.dismiss();
       }
-    } else {
-      ( txtNumber as TextView ).text = deviceNO
-
-      builder.setPositiveButton( "OK" ) { dialog, id ->
-        dialog.dismiss();
-      }
-    }
 
     // 戻るボタンでダイアログを閉じないようにします
     setCancelable( false )
@@ -120,14 +113,6 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
 
     // ダイアログの外側をタップしてもダイアログを閉じないようにします
     dialog.setCanceledOnTouchOutside( false )
-
-    // BUTTON_POSITIVEにフォーカスを当てます
-    dialog.setOnShowListener {
-      val negative:Button = dialog.getButton( DialogInterface.BUTTON_POSITIVE )
-      negative.setFocusable( true )
-      negative.setFocusableInTouchMode( true )
-      negative.requestFocus()
-    }
 
     return dialog
   }
@@ -149,12 +134,15 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
   override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
     val builder = AlertDialog.Builder( activity )
 
+    // ダイアログを開いた時はフラグONします
+    AppBase.isDialogPrint = "YES"
+
     if( title != "" ) {
       val txtView = TextView( activity )
       txtView.text = title
       txtView.textSize = 18f
       txtView.setTextColor( Color.WHITE )
-      txtView.setBackgroundColor( Color.rgb(74,138,245) )
+      txtView.setBackgroundColor( Color.rgb( 74, 138, 245 ) )
       txtView.setPadding( 10,10,10,10 )
       txtView.gravity = Gravity.CENTER
 
@@ -193,6 +181,13 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
     // ダイアログの外側をタップしてもダイアログを閉じないようにします
     dialog.setCanceledOnTouchOutside( false )
 
+    // ダイアログにフォーカスを当てません
+    dialog.window?.addFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE )
+
+    // Activityのタッチ操作を禁止します
+    activity?.window?.addFlags( WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE )
+
+    /*
     // BUTTON_POSITIVEにフォーカスを当てます
     dialog.setOnShowListener {
       val negative:Button = dialog.getButton( DialogInterface.BUTTON_POSITIVE )
@@ -200,6 +195,7 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
       negative.setFocusableInTouchMode( true )
       negative.requestFocus()
     }
+    */
 
     return dialog
   }
@@ -214,5 +210,15 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
     } catch( e:ClassCastException ) {
       throw ClassCastException( context.toString() + " must implement NoticeDialogListener" )
     }
+  }
+
+  public override fun onDestroyView() {
+    super.onDestroyView()
+
+    // ダイアログを閉じた時はフラグOFFします
+    AppBase.isDialogPrint = "NON"
+
+    // Activityのタッチ操作を許可します
+    activity?.window?.clearFlags( WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE )
   }
 }

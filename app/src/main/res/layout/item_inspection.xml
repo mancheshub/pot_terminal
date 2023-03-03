@@ -156,7 +156,7 @@
 
     <TextView
       android:id="@+id/cnt_total"
-      android:layout_width="50dp"
+      android:layout_width="60dp"
       android:layout_height="45dp"
       android:gravity="center|center_vertical"
       android:text="@{viewmodel.cntTotal}"
@@ -175,7 +175,7 @@
 
     <TextView
       android:id="@+id/cnt_read"
-      android:layout_width="50dp"
+      android:layout_width="60dp"
       android:layout_height="45dp"
       android:gravity="center|center_vertical"
       android:text="@{viewmodel.cntRead}"

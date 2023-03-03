@@ -140,6 +140,76 @@ class ItemInspectionAPI {
   }
 
   /**
+   * 検品担当状況を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [groupID] 作業グループID
+   * @param [shopID] 店舗ID
+   * @param [staffID] スタッフID
+   * @return 店舗データ
+   */
+  public suspend fun pickSICondition( accessURL:String, groupID:String, shopID:String, staffID:String ):String {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "SI" )
+      .add( "groupID", groupID )
+      .add( "shopID", shopID )
+      .add( "staffID", staffID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+
+    return apiResponseBody.text
+  }
+
+  /**
+   * SCMラベル印刷状況を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [groupID] 作業グループID
+   * @param [shopID] 店舗ID
+   * @return 店舗データ
+   */
+  public suspend fun pickSMCondition( accessURL:String, groupID:String, shopID:String ):String {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "SCM" )
+      .add( "groupID", groupID )
+      .add( "shopID", shopID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+
+    return apiResponseBody.text
+  }
+
+  /**
    * 更新処理を行います
    *
    * @param [accessURL] サーバプログラムのURL

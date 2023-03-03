@@ -57,6 +57,10 @@ class Lineup:DensoWaveBase() {
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
+    if( event.keyCode == KEY_F02 || event.keyCode == KEY_UP || event.keyCode == KEY_DOWN || event.keyCode == KEY_LEFT || event.keyCode == KEY_RIGHT ) {
+      claimSound( playSoundOK )
+    }
+
     return super.dispatchKeyEvent( event );
   }
 }

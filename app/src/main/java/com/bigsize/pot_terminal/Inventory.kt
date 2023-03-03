@@ -53,10 +53,10 @@ class Inventory:DensoWaveBase() {
       readBox( scanBox.value )
     })
 
-    scanItem.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "商品データ = " + scanItem.value )
+    scanItemM.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "商品データ = " + scanItemM.value )
 
-      readItem( scanItem.value )
+      readItem( scanItemM.value )
     })
 
     // ■ イベントを補足します

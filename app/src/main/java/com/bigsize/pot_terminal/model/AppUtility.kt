@@ -18,7 +18,11 @@ class AppUtility {
     // 10桁品番に変換します
     trueData = convertTrueCd( cdData )
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-Utility - eightdigitsCd","10桁品番 = " + trueData )
+    if( BuildConfig.DEBUG ) Log.d( "APP-Utility - eightdigitsCd","調整前10桁品番 = " + trueData )
+
+    trueData = trueData.padStart( 10, '0' )
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-Utility - eightdigitsCd","調整後10桁品番 = " + trueData )
 
     if( BuildConfig.DEBUG ) Log.d( "APP-Utility - eightdigitsCd","前4桁 = " + trueData.substring( 2, 6 ) )
     if( BuildConfig.DEBUG ) Log.d( "APP-Utility - eightdigitsCd","後4桁 = " + trueData.substring( 6, 10 ) )

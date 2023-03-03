@@ -15,6 +15,9 @@ class AppBase:Application() {
     // アクティビティインスタンス
     public var activitySet:MutableSet<Activity> = mutableSetOf()
 
+    // ダイアログ表示判断フラグ
+    public var isDialogPrint:String = "NON"
+
     // 端末番号
     public var deviceNO:String = "000"
 
@@ -49,6 +52,10 @@ class AppBase:Application() {
     // 異常読取した場合のブザーとバイブレーションのレベル
     public val buzzerNG:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "20", "resDuration" to "10" )
     public val vibrationNG:Map<String,Array<String>> = mapOf( "rate" to arrayOf( "0", "150", "20", "150", "20", "150" ), "volume" to arrayOf( "0", "255", "0", "255", "0", "255" ) )
+
+    // 読取エラーした場合のブザーとバイブレーションのレベル
+    public val buzzerAR:Map<String,String> = mapOf( "frequency" to "1950", "sinDuration" to "20", "resDuration" to "10" )
+    public val vibrationAR:Map<String,Array<String>> = mapOf( "rate" to arrayOf( "0", "150", "20", "150", "20", "150" ), "volume" to arrayOf( "0", "255", "0", "255", "0", "255" ) )
 
     // 途中読取した場合のブザーとバイブレーションのレベル
     public val buzzerCT:Map<String,String> = mapOf( "frequency" to "2500", "sinDuration" to "20", "resDuration" to "0" )

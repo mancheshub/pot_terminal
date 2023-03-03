@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.BaseAdapter
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDataModel01
@@ -45,9 +46,9 @@ class ItemVerification( val context:Context?, var potDataArray:MutableList<PotDa
     }
 
     // 検品途中・検品完了の場合は背景色を変更します
-    itemView.setBackgroundColor( Color.rgb(255,255,255) );
-    if( potData.amt_n != "0" && potData.amt_n.toInt() == potData.amt_p.toInt() ) itemView.setBackgroundColor( Color.rgb(230,230,230) )
-    if( potData.amt_n != "0" && potData.amt_n.toInt() < potData.amt_p.toInt() ) itemView.setBackgroundColor( Color.rgb(255,255,204) )
+    itemView.setBackgroundResource( R.drawable.border )
+    if( potData.amt_n != "0" && potData.amt_n.toInt() == potData.amt_p.toInt() ) itemView.setBackgroundResource( R.drawable.line_finished )
+    if( potData.amt_n != "0" && potData.amt_n.toInt() < potData.amt_p.toInt() ) itemView.setBackgroundResource( R.drawable.line_selected )
 
     // ViewModelをセットします
     binding01.viewmodel = potData

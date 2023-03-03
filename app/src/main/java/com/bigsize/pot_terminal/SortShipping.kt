@@ -97,14 +97,14 @@ class SortShipping:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickL
       }
     })
 
-    scanItem.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-SortShipping", "商品データ = " + scanItem.value )
+    scanItemM.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-SortShipping", "商品データ = " + scanItemM.value )
 
       claimSound( playSoundOK )
       claimVibration( AppBase.vibrationOK )
 
       // デバイスに書き込みします
-      viewModel01.write( scanItem.value.toString().toByteArray(StandardCharsets.UTF_8) )
+      viewModel01.write( scanItemM.value.toString().toByteArray(StandardCharsets.UTF_8) )
     })
 
     // ■ イベントを補足します
@@ -130,6 +130,7 @@ class SortShipping:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickL
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
+    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
@@ -259,6 +260,10 @@ class SortShipping:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickL
 
           claimSound( playSoundOK )
           claimVibration( AppBase.vibrationOK )
+
+          // 検索開始時はリストをクリアします
+          viewModel01.itemDataArray = mutableListOf()
+          adapter01.refreshItem( viewModel01.itemDataArray )
 
           // 検索中は検索ボタンをグレーアウトしてプログレスバーを表示します
           binding01.btnSearch.isEnabled = false

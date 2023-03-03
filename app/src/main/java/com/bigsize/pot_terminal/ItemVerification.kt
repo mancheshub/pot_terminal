@@ -64,10 +64,11 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       readMultiItem( scanMultiItem.value )
     })
 
-    scanItem.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "商品データ = " + scanItem.value )
+    scanItemM.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "商品データ = " + scanItemM.value )
 
-      readItem( scanItem.value )
+
+      readItem( scanItemM.value )
     })
 
     // ■ イベントを補足します
@@ -88,6 +89,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
+    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
@@ -172,9 +174,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     var cd:String = scanItem.substring( 3, 13 );
     var cn:String = scanItem.substring( 14, 16 );
     var sz:String = scanItem.substring( 17, 21 );
-    var amt:String = scanItem.substring( 21, 24 );
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "品番 色番 サイズ = " + cd + " " + cn + " " + sz + " " + amt )
+    if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "品番 色番 サイズ = " + cd + " " + cn + " " + sz )
 
     // 該当商品を検索します
     position = viewModel01.potDataArray.indexOfFirst { it.cd == model01.eightdigitsCd(cd) && it.cn == cn && it.sz == sz.replace(" ","") && it.amt_n.toInt() < it.amt_p.toInt() }
@@ -190,7 +191,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     } else {
       // 該当位置のSKUの数量を増やします
       potData = viewModel01.potDataArray[position]
-      potData.amt_n = (potData.amt_n.toInt()+amt.toInt()).toString()
+      potData.amt_n = (potData.amt_n.toInt()+1).toString()
 
       // ViewModelを更新します
       viewModel01.potDataArray.set( position, potData )

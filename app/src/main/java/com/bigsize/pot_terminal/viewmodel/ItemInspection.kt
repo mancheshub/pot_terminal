@@ -44,7 +44,12 @@ class ItemInspection:ViewModel() {
 
   // 箱リスト
   public val boxList:List<HashItem> = mutableListOf(
-    HashItem( "", "" ), HashItem( "01", "箱01" ), HashItem( "02", "箱02" ), HashItem( "03", "箱03" ), HashItem( "04", "箱04" ), HashItem( "05", "箱05" ),
+    HashItem( "", "" ), HashItem( "01", "箱01" ), HashItem( "02", "箱02" ), HashItem( "03", "箱03" ),
+    HashItem( "04", "箱04" ), HashItem( "05", "箱05" ), HashItem( "06", "箱06" ), HashItem( "07", "箱07" ),
+    HashItem( "08", "箱08" ), HashItem( "09", "箱09" ), HashItem( "10", "箱10" ), HashItem( "11", "箱11" ),
+    HashItem( "12", "箱12" ), HashItem( "13", "箱13" ), HashItem( "14", "箱14" ), HashItem( "15", "箱15" ),
+    HashItem( "16", "箱16" ), HashItem( "17", "箱17" ), HashItem( "18", "箱18" ), HashItem( "19", "箱19" ),
+    HashItem( "20", "箱20" ),
   )
 
   // 印刷機リスト
@@ -57,6 +62,12 @@ class ItemInspection:ViewModel() {
   public var selectedShopID:String = ""
   public var selectedBoxID:String = ""
   public var selectedPrintID:String = ""
+
+  // 確定処理実行判断フラグ - 店舗のSCMラベルが発行されている場合に警告表示する判定に利用します
+  public var isExecute03:String = ""
+
+  // クリア処理実行判断フラグ - 店舗の担当者が自分自身ではない場合にエラー表示する判定に利用します
+  public var isExecute01:String = ""
 
   init {}
 
@@ -147,15 +158,39 @@ class ItemInspection:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        model01.deceded( AppBase.itemInspectionURL, kind, selectedGroupID, selectedShopID, selectedBoxID, selectedPrintID, ( itemList.value as MutableList<PotDataModel03> ) )
+        // クリアボタンが押されたときは isExecute01 == "" となっているから自身が店舗の担当者であるかを調査します
+        // - 自身が担当者でない場合は isExecute01 == "0"  となるのでエラー画面をActivityから出力します
+        // - 自身が担当者である場合は isExecute01 != "0"  となるのでそのままクリア処理を実施します
+        if( kind == "01" && isExecute01 == "" ) {
+          isExecute01 = model01.pickSICondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID, AppBase.staffNO )
+        }
 
-        // 検品完了状態とします
-        if( kind == "03" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID, AppBase.staffNO )
+        // 確定ボタンが押されたときは isExecute03 == "" となっているからSCMラベル印刷状況を調査します
+        // - SCMラベルが印刷されていた場合は isExecute03 != "0" となるので警告画面をActivityから出力します
+        //   警告画面で"はい"を押したのちは一旦 isExecute03 = "0" で更新してこの処理をもう一度呼びます
+        // - SCMラベルが印刷されていない場合は isExecute03 == "0" となるのでそのまま確定処理を実施します
 
-        // 検品取消状態とします
-        if( kind == "01" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO )
+        if( kind == "03" && isExecute03 == "" ) {
+          isExecute03 = model01.pickSMCondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+        }
 
-        _apiCondition.value = "FN" + kind
+        if( ( kind == "01" && isExecute01 != "0" ) || kind == "02" || ( kind == "03" && isExecute03 == "0" ) ) {
+          model01.deceded( AppBase.itemInspectionURL, kind, selectedGroupID, selectedShopID, selectedBoxID, selectedPrintID, ( itemList.value as MutableList<PotDataModel03> ) )
+
+          // 検品完了状態とします
+          if( kind == "03" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID, AppBase.staffNO )
+
+          // 検品取消状態とします
+          if( kind == "01" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO )
+
+          // 調査状況をクリアします
+          isExecute01 = ""
+          isExecute03 = ""
+
+          _apiCondition.value = "FN" + kind
+        } else {
+          _apiCondition.value = "AL" + kind
+        }
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "致命的エラー" )
         _apiCondition.value = "ER"
