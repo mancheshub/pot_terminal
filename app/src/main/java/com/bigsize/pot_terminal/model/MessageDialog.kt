@@ -182,12 +182,11 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
     dialog.setCanceledOnTouchOutside( false )
 
     // ダイアログにフォーカスを当てません
-    dialog.window?.addFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE )
+    //dialog.window?.addFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE )
 
     // Activityのタッチ操作を禁止します
-    activity?.window?.addFlags( WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE )
+    //activity?.window?.addFlags( WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE )
 
-    /*
     // BUTTON_POSITIVEにフォーカスを当てます
     dialog.setOnShowListener {
       val negative:Button = dialog.getButton( DialogInterface.BUTTON_POSITIVE )
@@ -195,7 +194,6 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
       negative.setFocusableInTouchMode( true )
       negative.requestFocus()
     }
-    */
 
     return dialog
   }

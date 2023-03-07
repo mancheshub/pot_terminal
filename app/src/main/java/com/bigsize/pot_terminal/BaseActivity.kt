@@ -638,6 +638,11 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
             claimVibration( AppBase.vibrationAR )
           }
 
+          if( componentName.shortClassName == ".ExamLocation" && _data.substring( 0, 3 ) != "M-H" ) {
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
           if(
             ( componentName.shortClassName == ".ShelfReceiving" || componentName.shortClassName == ".ShelfShipping" ||
               componentName.shortClassName == ".ShelfReplaceB" || componentName.shortClassName == ".ShelfReplaceS" ||

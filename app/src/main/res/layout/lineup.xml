@@ -51,6 +51,24 @@
     app:layout_constraintTop_toBottomOf="@+id/div_line01" />
 
   <Button
+    android:id="@+id/btn_menu11"
+    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+    android:layout_width="135dp"
+    android:layout_height="50dp"
+    android:layout_marginEnd="16dp"
+    android:width="150px"
+    android:height="150px"
+    android:focusableInTouchMode="false"
+    android:paddingStart="10sp"
+    android:paddingEnd="10sp"
+    android:text="ﾛｹｰｼｮﾝ調査"
+    android:textSize="12sp"
+    app:icon="@drawable/baseline_arrow_forward_24"
+    app:iconSize="17dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/btn_menu01" />
+
+  <Button
     android:id="@+id/btn_menu10"
     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
@@ -66,7 +84,7 @@
     app:icon="@drawable/baseline_arrow_forward_24"
     app:iconSize="17dp"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/btn_menu01" />
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu01" />
 
   <Button
     android:id="@+id/btn_menu02"
@@ -102,7 +120,7 @@
     app:icon="@drawable/baseline_arrow_forward_24"
     app:iconSize="17dp"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/btn_menu02" />
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu02" />
 
   <Button
     android:id="@+id/btn_menu04"
@@ -138,7 +156,7 @@
     app:icon="@drawable/baseline_arrow_forward_24"
     app:iconSize="17dp"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/btn_menu04" />
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu04" />
 
   <Button
     android:id="@+id/btn_menu06"
@@ -174,7 +192,7 @@
     app:icon="@drawable/baseline_arrow_forward_24"
     app:iconSize="17dp"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/btn_menu06" />
+    app:layout_constraintTop_toBottomOf="@+id/btn_menu06" />
 
   <Button
     android:id="@+id/btn_menu08"

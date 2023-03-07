@@ -25,7 +25,7 @@ class ItemInspection:ViewModel() {
   public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
   public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
 
-  // 更新系API通信状況
+  // API通信状況
   // ST → 通信開始 ER → 通信エラー FN → 通信終了 SI_*** → 他人スタッフ***が検品中
   private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
   public val apiCondition:LiveData<String> get() = _apiCondition
@@ -57,7 +57,7 @@ class ItemInspection:ViewModel() {
     HashItem( "", "" ), HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ),
   )
 
-  // 現在選択している"作業グループ・店舗・箱・印刷機"データ
+  // 現在選択している"作業グループ・店舗・箱・印刷機"
   public var selectedGroupID:String = ""
   public var selectedShopID:String = ""
   public var selectedBoxID:String = ""

@@ -17,6 +17,58 @@ import okhttp3.Request
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
+class ExamLocationAPI {
+  private val model01:AppUtility = AppUtility()
+
+  private val httpClient = OkHttpClient.Builder()
+    .connectTimeout( 10, TimeUnit.SECONDS )
+    .writeTimeout( 10, TimeUnit.SECONDS )
+    .readTimeout( 30, TimeUnit.SECONDS )
+    .build()
+
+  /**
+   * 品番・色番・サイズから商品のロケーションを取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [cd] 品番
+   * @param [cn] 色番
+   * @param [sz] サイズ
+   *
+   * @return ロケーションデータ
+   */
+  public suspend fun pickLocation( accessURL:String, cd:String, cn:String, sz:String ):MutableList<PotDataModel04> {
+    val formBody = FormBody.Builder()
+      .add( "cd", cd )
+      .add( "cn", cn )
+      .add( "sz", sz )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    var tempList:MutableList<PotDataModel04> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      val location:String = it.ssb + it.ssh + it.ssf + "-" + it.sss + "-" + it.sst + "-" + it.sso
+
+      tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn, it.sz, it.cs, it.itn, location, it.ssa ) )
+    }
+
+    return tempList
+  }
+}
+
 class ItemInspectionAPI {
   private val model01:AppUtility = AppUtility()
 

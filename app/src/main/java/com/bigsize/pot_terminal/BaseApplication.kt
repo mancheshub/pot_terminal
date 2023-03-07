@@ -39,11 +39,14 @@ class AppBase:Application() {
     // 特別動作する端末番号
     public val specialDeviceNO:String = "999"
 
-    // POTデータ転送先URL
+    // POTデータ転送関連URL
     public val transferURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=potTransfer"
 
     // 商品照合関連URL
     public val itemInspectionURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=itemInspection"
+
+    // ロケーション検索関連URL
+    public val examLocationURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=examLocation"
 
     // 正常読取した場合のブザーとバイブレーションのレベル
     public val buzzerOK:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "20", "resDuration" to "0" )

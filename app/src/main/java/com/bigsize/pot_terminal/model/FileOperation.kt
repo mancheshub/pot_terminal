@@ -11,6 +11,8 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
 class FileOperation() {
+  private val model01:AppUtility = AppUtility()
+
   /**
    * 端末番号を取得します
    *
@@ -114,22 +116,22 @@ class FileOperation() {
       if( BuildConfig.DEBUG ) Log.d( "APP-FileOperation", "ロケーション02 = " + _item.substring(34,45) )
       if( BuildConfig.DEBUG ) Log.d( "APP-FileOperation", "数量 = " + _item.substring(61) )
 
-      var model01:PotDataModel02 = PotDataModel02(
-        "000",
-        _item.substring(3,11),
-        _item.substring(11,19),
-        _item.substring(19,22),
-        _item.substring(22,23),
-        _item.substring(45,55),
-        _item.substring(55,57),
-        _item.substring(57,61).replace(" ",""),
-        _item.substring(23,34),
-        _item.substring(34,45),
-        _item.substring(61),
-        false,
+      dataArray.add(
+        PotDataModel02(
+          "000",
+          _item.substring(3,11),
+          _item.substring(11,19),
+          _item.substring(19,22),
+          _item.substring(22,23),
+          model01.eightdigitsCd( _item.substring(45,55) ),
+          _item.substring(55,57),
+          _item.substring(57,61).replace(" ",""),
+          _item.substring(23,34),
+          _item.substring(34,45),
+          _item.substring(61),
+          false,
+        )
       )
-
-      dataArray.add( model01 )
     }
 
     return dataArray

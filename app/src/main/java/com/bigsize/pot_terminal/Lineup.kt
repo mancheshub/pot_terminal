@@ -37,6 +37,7 @@ class Lineup:DensoWaveBase() {
     val btnMenu08 = findViewById<Button>( R.id.btn_menu08 )
     val btnMenu09 = findViewById<Button>( R.id.btn_menu09 )
     val btnMenu10 = findViewById<Button>( R.id.btn_menu10 )
+    val btnMenu11 = findViewById<Button>( R.id.btn_menu11 )
 
     btnMenu01.setOnClickListener { startActivity( Intent( applicationContext, ItemVerification::class.java ) ) }
     btnMenu02.setOnClickListener { startActivity( Intent( applicationContext, ShelfReceiving::class.java ) ) }
@@ -48,6 +49,7 @@ class Lineup:DensoWaveBase() {
     btnMenu08.setOnClickListener { startActivity( Intent( applicationContext, Inventory::class.java ) ) }
     btnMenu09.setOnClickListener { startActivity( Intent( applicationContext, ItemInspection::class.java ) ) }
     btnMenu10.setOnClickListener { startActivity( Intent( applicationContext, SortShipping::class.java ) ) }
+    btnMenu11.setOnClickListener { startActivity( Intent( applicationContext, ExamLocation::class.java ) ) }
   }
 
   /**

@@ -7,16 +7,21 @@ class HashItem( var id:String, var item:String ) {}
 class PotDataModel01( var cd:String, var cn:String, var sz:String, var amt_n:String, var amt_p:String ) {}
 class PotDataModel02( var deviceNO:String, var date:String, var time:String, var staffNO:String, var mode:String, var cd:String, var cn:String, var sz:String, var location01:String, var location02:String, var amt:String, var isChecked:Boolean  ) {}
 class PotDataModel03( var cd:String, var cn:String, var sz:String, var hcd:String, var hcn:String, var hcz:String, var asn24:String, var asn25:String, var asn53:String, var bf0:String, var amt_n:String, var amt_p:String ) {}
+class PotDataModel04( var cd:String, var cn:String, var sz:String, var cs:String, var itn:String, var location:String, var amt:String ) {}
 
 /**
  * -- APIとのデータ交換フォーマット
  */
+
+// 一行データ交換モデル
 
 @Serializable
 data class APITextModel(
   val status:String,
   val text:String,
 )
+
+// 選択項目データ交換モデル
 
 @Serializable
 data class APIHashItemModel(
@@ -29,6 +34,8 @@ data class APIHashPartModel(
   val id:String,
   val item:String,
 )
+
+// はるやま商品データ交換モデル
 
 @Serializable
 data class APIFoelItemModel(
@@ -50,4 +57,28 @@ data class APIFoelPartModel(
   val bf0:String,
   val asn30_n:String,
   val asn30_p:String,
+)
+
+// マンチェス商品データ交換モデル
+
+@Serializable
+data class APIMcsItemModel(
+  val status:String,
+  val itemArray:List<APIMcsPartModel>,
+)
+
+@Serializable
+data class APIMcsPartModel(
+  val cd:String,
+  val cn:String,
+  val sz:String,
+  val cs:String,
+  val itn:String,
+  val ssb:String,
+  val ssh:String,
+  val ssf:String,
+  val sss:String,
+  val sst:String,
+  val sso:String,
+  val ssa:String,
 )
