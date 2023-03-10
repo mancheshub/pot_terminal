@@ -17,7 +17,6 @@ import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.adapter.ExamLocation as AD_ExamLocation
 import com.bigsize.pot_terminal.viewmodel.ExamLocation as VM_ExamLocation
 
-
 class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionListener,DialogCallback {
   private val binding01:ExamLocationBinding by dataBinding()
   private val viewModel01:VM_ExamLocation by viewModels()

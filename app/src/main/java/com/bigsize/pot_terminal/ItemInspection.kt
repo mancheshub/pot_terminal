@@ -171,7 +171,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         if( apiCondition == "FN02" ) {
           viewModel01.selectedBoxID = ( viewModel01.selectedBoxID.toInt() + 1 ).toString().padStart( 2, '0' )
 
-          // クリアしたら箱01が選択されたとします
+          // 箱確定したら次の箱が選択されたとします
           binding01.txtBox.setText( "箱"+viewModel01.selectedBoxID, false )
         }
 

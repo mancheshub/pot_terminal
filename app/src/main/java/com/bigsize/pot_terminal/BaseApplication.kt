@@ -39,6 +39,9 @@ class AppBase:Application() {
     // 特別動作する端末番号
     public val specialDeviceNO:String = "999"
 
+    // 客注出荷棚出関連URL
+    public val hetVerificationURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=hetVerification"
+
     // POTデータ転送関連URL
     public val transferURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=potTransfer"
 

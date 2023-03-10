@@ -62,10 +62,199 @@ class ExamLocationAPI {
     apiResponseBody.itemArray.forEach {
       val location:String = it.ssb + it.ssh + it.ssf + "-" + it.sss + "-" + it.sst + "-" + it.sso
 
-      tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn, it.sz, it.cs, it.itn, location, it.ssa ) )
+      tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.cs, it.itn, location, it.ssa ) )
     }
 
     return tempList
+  }
+}
+
+class HetVerificationAPI {
+  private val model01:AppUtility = AppUtility()
+
+  private val httpClient = OkHttpClient.Builder()
+    .connectTimeout( 10, TimeUnit.SECONDS )
+    .writeTimeout( 10, TimeUnit.SECONDS )
+    .readTimeout( 30, TimeUnit.SECONDS )
+    .build()
+
+  /**
+   * 伝発グループ情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @return 伝発グループデータ
+   */
+  public suspend fun pickGroupList( accessURL:String ):MutableList<HashItem> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "G" )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    var tempList:MutableList<HashItem> = mutableListOf()
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( HashItem( it.id, it.item ) )
+    }
+
+    return tempList
+  }
+
+  /**
+   * 店舗情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [groupID] 伝発グループID
+   * @return 店舗データ
+   */
+  public suspend fun pickShopList( accessURL:String, groupID:String ):MutableList<HashItem> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "S" )
+      .add( "groupID", groupID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
+
+    val tempList:MutableList<HashItem> = mutableListOf()
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( HashItem( it.id, it.item ) )
+    }
+
+    return tempList
+  }
+
+  /**
+   * 商品情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [groupID] 伝発グループID
+   * @param [shopID] 店舗ID
+   * @return 店舗データ
+   */
+  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):MutableList<PotDataModel01> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "I" )
+      .add( "groupID", groupID )
+      .add( "shopID", shopID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    val tempList:MutableList<PotDataModel01> = mutableListOf()
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( PotDataModel01( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, "0", it.ssa ) )
+    }
+
+    return tempList
+  }
+
+  /**
+   * 店舗の箱番号を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [shopID] 店舗ID
+   * @return 箱番号データ
+   */
+  public suspend fun pickBoxNO( accessURL:String, shopID:String ):String {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "B" )
+      .add( "shopID", shopID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+
+    return apiResponseBody.text
+  }
+
+  /**
+   * 棚出しを完了します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [groupID] 伝発グループID
+   * @param [shopID] 店舗ID
+   * @return エラー状況
+   */
+  public suspend fun finishVerification( accessURL:String, groupID:String, shopID:String ):String {
+    val formBody = FormBody.Builder()
+      .add( "mode", "U" )
+      .add( "kind", "01" )
+      .add( "groupID", groupID )
+      .add( "shopID", shopID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+
+    return apiResponseBody.text
   }
 }
 

@@ -40,6 +40,10 @@
   <string name="msg_item_verification01">照合が完了しました。</string>
   <string name="err_item_verification01">該当の商品がありません。</string>
 
+  <string name="msg_het_verification01">照合が完了しました。</string>
+  <string name="err_het_verification01">該当の商品がありません。</string>
+  <string name="err_het_verification02">棚状況更新に失敗しました。</string>
+
   <string name="msg_item_inspection01">クリアしました。</string>
   <string name="msg_item_inspection02">箱確定しました。</string>
   <string name="msg_item_inspection03">SCMラベルを印字しました。</string>

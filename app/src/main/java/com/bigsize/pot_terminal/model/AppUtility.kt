@@ -86,6 +86,8 @@ class AppUtility {
       if( first == "0" ) { trueData = trueData.substring( 2 ) }
       else if( first == "1" || first == "2" ) { trueData = "10" + trueData }
       else { trueData = "99" + trueData }
+
+      if( BuildConfig.DEBUG ) Log.d( "APP-Utility - convertTrueCd", "品番 = " + trueData )
     }
 
     else if( 3 <= trueData.length && trueData.length < 8 ) {

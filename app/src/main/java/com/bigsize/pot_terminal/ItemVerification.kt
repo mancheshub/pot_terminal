@@ -165,9 +165,6 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
   fun readItem( scanItem:String? ):Boolean {
     if( scanItem == null ) return false
 
-    claimSound( playSoundOK )
-    claimVibration( AppBase.vibrationOK )
-
     lateinit var potData:PotDataModel01
     var position:Int = 0
 
@@ -209,8 +206,11 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
         claimSound( playSoundFN )
         claimVibration( AppBase.vibrationFN )
 
-        val dialog:MessageDialog = MessageDialog( "01", "完了", getString( R.string.msg_item_verification01 ), "OK", "" )
+        val dialog:MessageDialog = MessageDialog( "00", "完了", getString( R.string.msg_item_verification01 ), "OK", "" )
         dialog.show( supportFragmentManager, "simple" )
+      } else {
+        claimSound( playSoundOK )
+        claimVibration( AppBase.vibrationOK )
       }
     }
 
