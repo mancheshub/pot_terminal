@@ -155,6 +155,12 @@ class ShelfReceiving:DensoWaveBase() {
     // 今回読んだ商品を表示します
     viewModel01.txtItem.value = cd + "  " + cn + "  " + sz
 
+    // 特別動作する端末番号でない場合は数量に1を自動入力します
+
+    if( AppBase.specialDeviceNO != "999" ) {
+      viewModel01.edtAmt.value = "1"
+    }
+
     return true
   }
 
@@ -179,6 +185,13 @@ class ShelfReceiving:DensoWaveBase() {
     // 商品と数量の表示をクリアします
     viewModel01.txtItem.value = ""
     viewModel01.edtAmt.value = ""
+
+    // 特別動作する端末番号でない場合は入棚をクリアします
+
+    if( AppBase.specialDeviceNO != "999" ) {
+      viewModel01.setMemLocation( "" )
+      viewModel01.txtLocation.value = ""
+    }
 
     return true
   }
@@ -209,6 +222,10 @@ class ShelfReceiving:DensoWaveBase() {
 
     if( msgError03 == "" && edtAmt.length > 3 ) {
       msgError03 = getString( R.string.err_edt_amt03 )
+    }
+
+    if( msgError03 == "" && AppBase.specialDeviceNO != "999" && edtAmt != "1" ) {
+      msgError03 = getString( R.string.err_edt_amt04 )
     }
 
     if( msgError01 == "" && viewModel01.memLocation == "" ) {

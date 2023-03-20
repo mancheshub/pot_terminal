@@ -99,6 +99,9 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
           startActivity( intent )
         }
 
+        // 特別動作する端末番号を書き換えます
+        AppBase.specialDeviceNO = txtNumber.text.toString()
+
         dialog.dismiss();
       }
 

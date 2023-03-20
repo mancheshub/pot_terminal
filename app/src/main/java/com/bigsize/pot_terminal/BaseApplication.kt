@@ -37,7 +37,7 @@ class AppBase:Application() {
     public val  permitWifiLevel:Int = -40
 
     // 特別動作する端末番号
-    public val specialDeviceNO:String = "999"
+    public var specialDeviceNO:String = "999"
 
     // 客注出荷棚出関連URL
     public val hetVerificationURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=hetVerification"
