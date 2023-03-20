@@ -26,6 +26,10 @@ class Inventory:DensoWaveBase() {
 
     setContentView( R.layout.inventory )
 
+    // ■ スキャナを設定します
+
+    isPointMode = true
+
     // ■ Activityをリストに加えます
 
     AppBase.activitySet.add( this )

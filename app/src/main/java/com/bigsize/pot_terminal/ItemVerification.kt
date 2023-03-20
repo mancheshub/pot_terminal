@@ -33,6 +33,10 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
 
     setContentView( R.layout.item_verification )
 
+    // ■ スキャナを設定します
+
+    isPointMode = true
+
     // ■ Activityをリストに加えます
 
     AppBase.activitySet.add( this )
