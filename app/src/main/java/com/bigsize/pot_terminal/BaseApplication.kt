@@ -34,10 +34,10 @@ class AppBase:Application() {
     )
 
     // Wifiの許容レベル - -50〜0まで
-    public val  permitWifiLevel:Int = -50
+    public val  permitWifiLevel:Int = -60
 
     // 特別動作する端末番号
-    public val specialDeviceNO:String = "999"
+    public var specialDeviceNO:String = "999"
 
     // 客注出荷棚出関連URL
     public val hetVerificationURL:String = "http://hightech.bigsize.co.jp/api.php?at=potTerminal&st=hetVerification"
