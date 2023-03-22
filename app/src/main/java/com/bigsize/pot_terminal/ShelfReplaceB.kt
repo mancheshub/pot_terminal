@@ -28,6 +28,10 @@ class ShelfReplaceB:DensoWaveBase() {
 
     setContentView( R.layout.shelf_replace_b )
 
+    // ■ スキャナを設定します
+
+    isPointMode = true
+
     // ■ Activityをリストに加えます
 
     AppBase.activitySet.add( this )

@@ -30,6 +30,10 @@ class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionL
 
     setContentView( R.layout.exam_location )
 
+    // ■ スキャナを設定します
+
+    isPointMode = true
+
     // ■ Wifi状態を確認します
 
     val rssi:Int = statusWifi.checkWifi()

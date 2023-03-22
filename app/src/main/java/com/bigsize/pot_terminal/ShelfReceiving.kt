@@ -26,6 +26,10 @@ class ShelfReceiving:DensoWaveBase() {
 
     setContentView( R.layout.shelf_receiving )
 
+    // ■ スキャナを設定します
+
+    isPointMode = true
+
     // ■ Activityをリストに加えます
 
     AppBase.activitySet.add( this )

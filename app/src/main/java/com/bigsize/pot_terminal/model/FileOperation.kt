@@ -155,8 +155,8 @@ class FileOperation() {
     lateinit var fileData:String
 
     for( _item in dataArray ) {
-      fileData =  _item.deviceNO + _item.date + _item.time + _item.staffNO + division + _item.location01 + _item.location02 +
-                  _item.cd.padStart(10,'0') + _item.cn + _item.sz.padEnd(4,' ') + _item.amt.padStart(3,'0')
+      fileData =  AppBase.deviceNO + _item.date + _item.time + _item.staffNO + division + _item.location01 + _item.location02 +
+                  model01.convertTrueCd(_item.cd).padStart(10,'0') + _item.cn + _item.sz.padEnd(4,' ') + _item.amt.padStart(3,'0')
       fileArray.add( fileData )
     }
 

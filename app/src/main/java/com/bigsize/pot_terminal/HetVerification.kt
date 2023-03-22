@@ -39,6 +39,10 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
 
     isPointMode = true
 
+    // ■ スキャナを設定します
+
+    isPointMode = true
+
     // ■ Wifi状態を確認します
 
     val rssi:Int = statusWifi.checkWifi()

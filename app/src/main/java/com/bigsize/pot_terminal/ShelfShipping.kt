@@ -26,6 +26,10 @@ class ShelfShipping:DensoWaveBase() {
 
     setContentView( R.layout.shelf_shipping )
 
+    // ■ スキャナを設定します
+
+    isPointMode = true
+
     // ■ Activityをリストに加えます
 
     AppBase.activitySet.add( this )
