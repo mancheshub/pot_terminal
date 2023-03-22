@@ -97,6 +97,10 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
         return
       }
 
+      viewModel01.potDataArray.forEach {
+        if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "CD CN SZ = " + it.cd + " " + it.cn + " " + it.sz )
+      }
+
       viewModel01.potDataArray.removeIf { it.isChecked == true }
 
       // 全データ数とPOTで読んだデータ数を更新します
