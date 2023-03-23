@@ -33,13 +33,12 @@
 
   <Button
     android:id="@+id/btn_menu01"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginStart="16dp"
     android:layout_marginTop="3dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -52,12 +51,11 @@
 
   <Button
     android:id="@+id/btn_menu11"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginEnd="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -70,12 +68,11 @@
 
   <Button
     android:id="@+id/btn_menu10"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginEnd="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -88,12 +85,11 @@
 
   <Button
     android:id="@+id/btn_menu02"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginStart="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -106,12 +102,11 @@
 
   <Button
     android:id="@+id/btn_menu03"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginEnd="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -124,12 +119,11 @@
 
   <Button
     android:id="@+id/btn_menu04"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginStart="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -142,12 +136,11 @@
 
   <Button
     android:id="@+id/btn_menu05"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginEnd="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -160,12 +153,11 @@
 
   <Button
     android:id="@+id/btn_menu06"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginStart="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -178,12 +170,11 @@
 
   <Button
     android:id="@+id/btn_menu07"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginEnd="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -196,12 +187,11 @@
 
   <Button
     android:id="@+id/btn_menu08"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginStart="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -237,13 +227,12 @@
 
   <Button
     android:id="@+id/btn_menu09"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginStart="16dp"
     android:layout_marginTop="3dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"
@@ -256,12 +245,11 @@
 
   <Button
     android:id="@+id/btn_menu12"
-    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
     android:layout_width="135dp"
     android:layout_height="50dp"
     android:layout_marginEnd="16dp"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:width="150px"
+    android:height="150px"
     android:focusableInTouchMode="false"
     android:paddingStart="10sp"
     android:paddingEnd="10sp"

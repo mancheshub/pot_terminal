@@ -11,18 +11,16 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
     <TextView
       android:id="@+id/cd"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:gravity="left|center_vertical"
-      android:paddingStart="3dp"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="@{viewmodel.cd}"
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,10 +30,8 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:gravity="left|center_vertical"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="@{viewmodel.cn}"
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintStart_toEndOf="@+id/cd"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,10 +41,8 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:gravity="left|center_vertical"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="@{viewmodel.sz}"
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintStart_toEndOf="@+id/cn"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,10 +51,8 @@
       android:layout_width="10dp"
       android:layout_height="wrap_content"
       android:gravity="right|center_vertical"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="["
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintEnd_toStartOf="@+id/amt"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,36 +61,30 @@
       android:layout_width="40dp"
       android:layout_height="wrap_content"
       android:gravity="center|center_vertical"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="@{viewmodel.amt_n}"
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintEnd_toStartOf="@+id/text02"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="@+id/text01" />
 
     <TextView
       android:id="@+id/text02"
       android:layout_width="10dp"
       android:layout_height="wrap_content"
       android:gravity="right|center_vertical"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="/"
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintEnd_toStartOf="@+id/amt_p"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="@+id/text01" />
 
     <TextView
       android:id="@+id/amt_p"
       android:layout_width="40dp"
       android:layout_height="wrap_content"
       android:gravity="center_horizontal|center_vertical"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="@{viewmodel.amt_p}"
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintEnd_toStartOf="@+id/text03"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="@+id/text01" />
 
     <TextView
       android:id="@+id/text03"
@@ -106,12 +92,10 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="3dp"
       android:gravity="right|center_vertical"
-      android:paddingTop="7sp"
-      android:paddingBottom="7sp"
       android:text="]"
-      android:textSize="21sp"
+      android:textSize="20sp"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="@+id/text01" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

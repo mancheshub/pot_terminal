@@ -149,6 +149,14 @@ class ShelfReceiving:DensoWaveBase() {
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
+    // ■ 前回読んだ商品があればPOTデータを作成します
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "前回の商品 = " + viewModel01.memItem )
+
+    if( AppBase.deviceNO == AppBase.specialDeviceNO && viewModel01.memItem != "" ) {
+      execDataSave( "1" )
+    }
+
     // 今回読んだ商品を記録します
     viewModel01.setMemItem( scanItem.substring( 3, 21 ) )
 
@@ -161,7 +169,9 @@ class ShelfReceiving:DensoWaveBase() {
 
     // 特別動作する端末番号でない場合は数量に1を自動入力します
 
-    if( AppBase.specialDeviceNO != "999" ) {
+    if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "deviceNO specialDeviceNO = " + AppBase.deviceNO + " " + AppBase.specialDeviceNO )
+
+    if( AppBase.deviceNO != AppBase.specialDeviceNO ) {
       viewModel01.edtAmt.value = "1"
     }
 
@@ -181,7 +191,7 @@ class ShelfReceiving:DensoWaveBase() {
     claimVibration( AppBase.vibrationOK )
 
     // POTデータを作成します
-    execDataSave()
+    execDataSave( viewModel01.edtAmt.value.toString() )
 
     // 前回読んだ商品をクリアします
     viewModel01.setMemItem( "" )
@@ -192,7 +202,7 @@ class ShelfReceiving:DensoWaveBase() {
 
     // 特別動作する端末番号でない場合は入棚をクリアします
 
-    if( AppBase.specialDeviceNO != "999" ) {
+    if( AppBase.deviceNO != AppBase.specialDeviceNO ) {
       viewModel01.setMemLocation( "" )
       viewModel01.txtLocation.value = ""
     }
@@ -228,7 +238,7 @@ class ShelfReceiving:DensoWaveBase() {
       msgError03 = getString( R.string.err_edt_amt03 )
     }
 
-    if( msgError03 == "" && AppBase.specialDeviceNO != "999" && edtAmt != "1" ) {
+    if( msgError03 == "" && AppBase.deviceNO != AppBase.specialDeviceNO && edtAmt != "1" ) {
       msgError03 = getString( R.string.err_edt_amt04 )
     }
 
@@ -257,7 +267,7 @@ class ShelfReceiving:DensoWaveBase() {
   /**
    * POTデータを作成します
    */
-  private fun execDataSave() {
+  private fun execDataSave( amt:String ) {
     val devision = "1"
     val dataArray:MutableList<PotDataModel02> = mutableListOf()
     val dateHash:Map<String,String> = model01.returnPRecodeDate()
@@ -265,7 +275,7 @@ class ShelfReceiving:DensoWaveBase() {
     dataArray.add( PotDataModel02(
       AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,
       viewModel01.memItem.substring( 0, 10 ), viewModel01.memItem.substring( 11, 13 ), viewModel01.memItem.substring( 14, 18 ),
-      "00000000000", viewModel01.memLocation, viewModel01.edtAmt.value.toString(), false,
+      "00000000000", viewModel01.memLocation, amt, false,
     ) )
 
     if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "登録" )

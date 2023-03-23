@@ -51,7 +51,9 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     // ■ AutoCompleteTextViewアダプタをセットします
 
     var menuItems:MutableList<String> = mutableListOf()
-    for( _item in AppBase.potDivision ) { menuItems.add( _item.name ) }
+    for( _item in AppBase.potDivision ) {
+      menuItems.add( _item.name + " ( " + model01.countPotData( _item.division ).toString() + " 行 )" )
+    }
 
     adapter02 = ArrayAdapter( applicationContext, R.layout.data_confirm_popup01, menuItems )
     binding01.txtPotfile.setAdapter( adapter02 )
@@ -145,13 +147,20 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "選択アイテム = " + item )
+    if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "アイテム = " + item )
+
+    // 選択アイテムからPOTファイル名のみを抽出します
+
+    val match = Regex( "(.+) \\(.+\\)" ).find( item!! )
+
+    var itemName:String? = ""
+    match?.groups?.forEach { itemName = it?.value }
 
     // 選択したアイテムを保存します
-    viewModel01.selectedItem = item!!
+    viewModel01.selectedItem = itemName!!
 
     // POTデータ区分を決定します
-    var position:Int = AppBase.potDivision.indexOfFirst { it.name == item }
+    var position:Int = AppBase.potDivision.indexOfFirst { it.name == itemName!! }
     var division:String = AppBase.potDivision[position].division
 
     try {

@@ -208,20 +208,12 @@ class ShelfReplaceB:DensoWaveBase() {
     binding01.layBox.error = null
     binding01.layLocation02.error = null
 
-    if( msgError01 == "" && execSubject == "enter" && viewModel01.memLocation01 == "" ) {
-      msgError01 = getString( R.string.err_shelf_replace_b01 )
-    }
-
-    if( msgError02 == "" && execSubject == "enter" && viewModel01.memBox == "" ) {
-      msgError02 = getString( R.string.err_shelf_replace_b02 )
-    }
-
-    if( msgError03 == "" && execSubject == "enter" && viewModel01.memLocation02 == "" ) {
-      msgError03 = getString( R.string.err_shelf_replace_b03 )
-    }
-
     if( msgError02 == "" && execSubject == "box" && viewModel01.memLocation01 == "" ) {
-      msgError01 = getString( R.string.err_shelf_replace_b01 )
+      msgError01 = getString( R.string.err_shelf_replace_b02 )
+    }
+
+    if( msgError02 == "" && execSubject == "shelf" && viewModel01.memLocation01 != "" && viewModel01.memBox == "" ) {
+      msgError02 = getString( R.string.err_shelf_replace_b01 )
     }
 
     if( msgError01 != "" || msgError02 != "" || msgError03 != "" ) {

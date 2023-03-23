@@ -28,16 +28,16 @@ class AppBase:Application() {
     public var potDivision:List<PotDivision> = listOf(
       PotDivision( "入庫データ", "1", "receiving.dat", "0", false ),
       PotDivision( "出庫データ", "2", "shipping.dat", "0", false ),
-      PotDivision( "棚移動データ", "3", "sreplace.dat", "0", false ),
-      PotDivision( "箱移動データ", "4", "breplace.dat", "0", false ),
+      PotDivision( "棚移データ", "3", "sreplace.dat", "0", false ),
+      PotDivision( "箱移データ", "4", "breplace.dat", "0", false ),
       PotDivision( "棚卸データ", "9", "inventory.dat", "0", false ),
     )
 
     // Wifiの許容レベル - -50〜0まで
-    public val  permitWifiLevel:Int = -60
+    public val  permitWifiLevel:Int = -40
 
     // 特別動作する端末番号
-    public var specialDeviceNO:String = "999"
+    public val specialDeviceNO:String = "999"
 
     // 客注出荷棚出関連URL
     public val hetVerificationURL:String = "http://hightech.bigsize.co.jp/api.php?at=potTerminal&st=hetVerification"
