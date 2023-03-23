@@ -34,7 +34,7 @@ class AppBase:Application() {
     )
 
     // Wifiの許容レベル - -50〜0まで
-    public val  permitWifiLevel:Int = -40
+    public val  permitWifiLevel:Int = -60
 
     // 特別動作する端末番号
     public val specialDeviceNO:String = "999"
