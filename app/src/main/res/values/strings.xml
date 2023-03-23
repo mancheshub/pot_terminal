@@ -29,9 +29,8 @@
   <string name="err_shelf_replace_s02">入棚を読んでください。</string>
   <string name="err_shelf_replace_s03">商品を読んでください。</string>
 
-  <string name="err_shelf_replace_b01">出棚を読んでください。</string>
-  <string name="err_shelf_replace_b02">箱を読んでください。</string>
-  <string name="err_shelf_replace_b03">入棚を読んでください。</string>
+  <string name="err_shelf_replace_b01">箱を読んでください。</string>
+  <string name="err_shelf_replace_b02">出棚を読んでください。</string>
 
   <string name="err_inventory01">1のみ入力できます。</string>
   <string name="err_inventory02">検棚を読んでください。</string>

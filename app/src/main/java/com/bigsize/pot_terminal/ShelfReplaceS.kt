@@ -212,6 +212,14 @@ class ShelfReplaceS:DensoWaveBase() {
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
+    // ■ 前回読んだ商品があればPOTデータを作成します
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReplaceS", "前回の商品 = " + viewModel01.memItem )
+
+    if( viewModel01.memItem != "" ) {
+      execDataSave( "1" )
+    }
+
     // 記録用データを作成します
     viewModel01.memItem = scanItem.substring( 3, 21 )
 
@@ -243,7 +251,7 @@ class ShelfReplaceS:DensoWaveBase() {
     claimVibration( AppBase.vibrationOK )
 
     // POTデータを作成します
-    execDataSave()
+    execDataSave( viewModel01.edtAmt.value.toString() )
 
     // クリアします
     viewModel01.memItem = ""
@@ -314,7 +322,7 @@ class ShelfReplaceS:DensoWaveBase() {
   /**
    * POTデータを作成します
    */
-  private fun execDataSave() {
+  private fun execDataSave( amt:String ) {
     val devision = "3"
     val dataArray:MutableList<PotDataModel02> = mutableListOf()
     val dateHash:Map<String,String> = model01.returnPRecodeDate()
@@ -322,7 +330,7 @@ class ShelfReplaceS:DensoWaveBase() {
     dataArray.add( PotDataModel02(
       AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,
       viewModel01.memItem.substring( 0, 10 ), viewModel01.memItem.substring( 11, 13 ), viewModel01.memItem.substring( 14, 18 ),
-      viewModel01.memLocation01, viewModel01.memLocation02, viewModel01.edtAmt.value.toString(), false,
+      viewModel01.memLocation01, viewModel01.memLocation02, amt, false,
     ) )
 
     try {
