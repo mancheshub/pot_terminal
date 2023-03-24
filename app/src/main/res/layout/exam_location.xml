@@ -31,6 +31,7 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="16dp"
       android:text="調査する商品"
+      android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
 
@@ -146,6 +147,7 @@
       android:layout_marginTop="16dp"
       android:layout_marginEnd="16dp"
       android:text="ロケーション"
+      android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_itn" />
 

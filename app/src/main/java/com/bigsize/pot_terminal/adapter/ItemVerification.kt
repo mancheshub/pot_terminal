@@ -45,6 +45,15 @@ class ItemVerification( val context:Context?, var potDataArray:MutableList<PotDa
       binding01 = itemView!!.tag as ItemVerificationListview01Binding
     }
 
+    binding01.text01.setTextColor( Color.BLACK )
+    binding01.text02.setTextColor( Color.BLACK )
+    binding01.text03.setTextColor( Color.BLACK )
+    binding01.amt.setTextColor( Color.BLACK )
+    binding01.amtP.setTextColor( Color.BLACK )
+    binding01.cd.setTextColor( Color.BLACK )
+    binding01.cn.setTextColor( Color.BLACK )
+    binding01.sz.setTextColor( Color.BLACK )
+
     // 検品途中・検品完了の場合は背景色を変更します
     itemView.setBackgroundResource( R.drawable.border )
     if( potData.amt_n != "0" && potData.amt_n.toInt() == potData.amt_p.toInt() ) itemView.setBackgroundResource( R.drawable.line_finished )

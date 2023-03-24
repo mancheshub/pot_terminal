@@ -11,7 +11,8 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="5dp">
 
     <TextView
       android:id="@+id/id"
@@ -23,7 +24,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="@{viewmodel.id}"
-      android:textSize="12sp"
+      android:textSize="15sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/item"
@@ -39,7 +40,7 @@
       android:paddingTop="7sp"
       android:paddingBottom="7sp"
       android:text="@{viewmodel.item}"
-      android:textSize="12sp"
+      android:textSize="15sp"
       app:layout_constraintEnd_toStartOf="@+id/id"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"

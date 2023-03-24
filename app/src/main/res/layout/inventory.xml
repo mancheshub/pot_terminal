@@ -20,15 +20,17 @@
       android:layout_height="45dp"
       android:gravity="right|center_vertical"
       android:text="累計"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/txt_count01"
       app:layout_constraintTop_toTopOf="@+id/txt_count01" />
 
     <TextView
       android:id="@+id/txt_view03"
-      android:layout_width="110dp"
+      android:layout_width="160dp"
       android:layout_height="45dp"
       android:gravity="right|center_vertical"
       android:text="ロケーション"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/txt_count02"
       app:layout_constraintTop_toTopOf="@+id/txt_count02" />
 
@@ -39,6 +41,7 @@
       android:layout_marginEnd="16dp"
       android:gravity="center_horizontal|center_vertical"
       android:text="件"
+      android:textSize="23sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/txt_count01" />
 
@@ -49,6 +52,7 @@
       android:layout_marginEnd="16dp"
       android:gravity="center_horizontal|center_vertical"
       android:text="件"
+      android:textSize="23sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/txt_count02" />
 
@@ -59,7 +63,7 @@
       android:layout_marginTop="8dp"
       android:gravity="center|center_vertical"
       android:text="@{viewmodel.txtCount01}"
-      android:textSize="20sp"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/txt_view02"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,7 +73,7 @@
       android:layout_height="45dp"
       android:gravity="center|center_vertical"
       android:text="@{viewmodel.txtCount02}"
-      android:textSize="20sp"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/txt_view04"
       app:layout_constraintTop_toBottomOf="@+id/txt_count01" />
 
@@ -82,8 +86,11 @@
       android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:hint="検棚"
+      android:textColorHint="?android:textColor"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_err_appearance"
       app:expandedHintEnabled="false"
+      app:hintTextAppearance="@style/textInput_txt_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/txt_count02"
@@ -92,10 +99,11 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txt_location"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:enabled="false"
         android:text="@={viewmodel.txtLocation}"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="23sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -107,8 +115,11 @@
       android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:hint="商品"
+      android:textColorHint="?android:textColor"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_err_appearance"
       app:expandedHintEnabled="false"
+      app:hintTextAppearance="@style/textInput_txt_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_location"
@@ -117,10 +128,11 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txt_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:enabled="false"
         android:text="@={viewmodel.txtItem}"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="23sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -132,9 +144,14 @@
       android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:hint="数量"
+      android:textColorHint="?android:textColor"
       app:counterEnabled="true"
       app:counterMaxLength="3"
+      app:counterOverflowTextAppearance="@style/textInput_txt_appearance"
+      app:counterTextAppearance="@style/textInput_txt_appearance"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_err_appearance"
+      app:hintTextAppearance="@style/textInput_txt_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_item"
@@ -143,9 +160,10 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edt_amt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:inputType="number"
-        android:text="@={viewmodel.edtAmt}">
+        android:text="@={viewmodel.edtAmt}"
+        android:textSize="23sp">
 
         <requestFocus />
       </com.google.android.material.textfield.TextInputEditText>

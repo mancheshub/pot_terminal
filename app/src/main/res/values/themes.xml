@@ -19,11 +19,14 @@
     <item name="android:padding">0dp</item>
     <item name="android:paddingLeft">0dp</item>
     <item name="android:paddingRight">0dp</item>
+    <item name="android:textColor">@color/black</item>
   </style>
 
   <!-- TextInputLayout error theme. -->
-  <style name="textInput_appearance" parent="@android:style/TextAppearance">
+  <style name="textInput_txt_appearance" parent="@android:style/TextAppearance">
     <item name="android:textSize">20sp</item>
-    <item name="android:translateX">-30</item>
+  </style>
+  <style name="textInput_err_appearance" parent="@android:style/TextAppearance">
+    <item name="android:textSize">15sp</item>
   </style>
 </resources>

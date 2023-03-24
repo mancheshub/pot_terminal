@@ -1,16 +1,17 @@
 package com.bigsize.pot_terminal
 
-import android.os.Bundle
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.app.ActionBar
+import com.bigsize.pot_terminal.databinding.LineupBinding
+import com.wada811.databinding.dataBinding
 
-class Lineup:DensoWaveBase() {
+class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
+  private val binding01:LineupBinding by dataBinding()
+
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
 
@@ -27,31 +28,31 @@ class Lineup:DensoWaveBase() {
 
     // ■ イベントを補足します
 
-    val btnMenu01 = findViewById<Button>( R.id.btn_menu01 )
-    val btnMenu02 = findViewById<Button>( R.id.btn_menu02 )
-    val btnMenu03 = findViewById<Button>( R.id.btn_menu03 )
-    val btnMenu04 = findViewById<Button>( R.id.btn_menu04 )
-    val btnMenu05 = findViewById<Button>( R.id.btn_menu05 )
-    val btnMenu06 = findViewById<Button>( R.id.btn_menu06 )
-    val btnMenu07 = findViewById<Button>( R.id.btn_menu07 )
-    val btnMenu08 = findViewById<Button>( R.id.btn_menu08 )
-    val btnMenu09 = findViewById<Button>( R.id.btn_menu09 )
-    val btnMenu10 = findViewById<Button>( R.id.btn_menu10 )
-    val btnMenu11 = findViewById<Button>( R.id.btn_menu11 )
-    val btnMenu12 = findViewById<Button>( R.id.btn_menu12 )
+    binding01.btnMenu01.setOnClickListener( this )
+    binding01.btnMenu02.setOnClickListener( this )
+    binding01.btnMenu03.setOnClickListener( this )
+    binding01.btnMenu04.setOnClickListener( this )
+    binding01.btnMenu05.setOnClickListener( this )
+    binding01.btnMenu06.setOnClickListener( this )
+    binding01.btnMenu07.setOnClickListener( this )
+    binding01.btnMenu08.setOnClickListener( this )
+    binding01.btnMenu09.setOnClickListener( this )
+    binding01.btnMenu10.setOnClickListener( this )
+    binding01.btnMenu11.setOnClickListener( this )
+    binding01.btnMenu12.setOnClickListener( this )
 
-    btnMenu01.setOnClickListener { startActivity( Intent( applicationContext, ItemVerification::class.java ) ) }
-    btnMenu02.setOnClickListener { startActivity( Intent( applicationContext, ShelfReceiving::class.java ) ) }
-    btnMenu03.setOnClickListener { startActivity( Intent( applicationContext, ShelfShipping::class.java ) ) }
-    btnMenu04.setOnClickListener { startActivity( Intent( applicationContext, ShelfReplaceS::class.java ) ) }
-    btnMenu05.setOnClickListener { startActivity( Intent( applicationContext, ShelfReplaceB::class.java ) ) }
-    btnMenu06.setOnClickListener { startActivity( Intent( applicationContext, DataConfirm::class.java ) ) }
-    btnMenu07.setOnClickListener { startActivity( Intent( applicationContext, DataTransfer::class.java ) ) }
-    btnMenu08.setOnClickListener { startActivity( Intent( applicationContext, Inventory::class.java ) ) }
-    btnMenu09.setOnClickListener { startActivity( Intent( applicationContext, ItemInspection::class.java ) ) }
-    btnMenu10.setOnClickListener { startActivity( Intent( applicationContext, SortShipping::class.java ) ) }
-    btnMenu11.setOnClickListener { startActivity( Intent( applicationContext, ExamLocation::class.java ) ) }
-    btnMenu12.setOnClickListener { startActivity( Intent( applicationContext, HetVerification::class.java ) ) }
+    binding01.btnMenu01.setOnFocusChangeListener( this )
+    binding01.btnMenu02.setOnFocusChangeListener( this )
+    binding01.btnMenu03.setOnFocusChangeListener( this )
+    binding01.btnMenu04.setOnFocusChangeListener( this )
+    binding01.btnMenu05.setOnFocusChangeListener( this )
+    binding01.btnMenu06.setOnFocusChangeListener( this )
+    binding01.btnMenu07.setOnFocusChangeListener( this )
+    binding01.btnMenu08.setOnFocusChangeListener( this )
+    binding01.btnMenu09.setOnFocusChangeListener( this )
+    binding01.btnMenu10.setOnFocusChangeListener( this )
+    binding01.btnMenu11.setOnFocusChangeListener( this )
+    binding01.btnMenu12.setOnFocusChangeListener( this )
   }
 
   /**
@@ -66,5 +67,33 @@ class Lineup:DensoWaveBase() {
     }
 
     return super.dispatchKeyEvent( event );
+  }
+
+  /**
+   * ボタンが押された時に呼ばれるリスナー定義です
+   */
+  override fun onClick( v:View ) {
+    claimSound( playSoundOK )
+    claimVibration( AppBase.vibrationOK )
+
+    when( v.id ) {
+      R.id.btn_menu01 -> { startActivity( Intent( applicationContext, ItemVerification::class.java ) ) }
+      R.id.btn_menu02 -> { startActivity( Intent( applicationContext, ShelfReceiving::class.java ) ) }
+      R.id.btn_menu03 -> { startActivity( Intent( applicationContext, ShelfShipping::class.java ) ) }
+      R.id.btn_menu04 -> { startActivity( Intent( applicationContext, ShelfReplaceS::class.java ) ) }
+      R.id.btn_menu05 -> { startActivity( Intent( applicationContext, ShelfReplaceB::class.java ) ) }
+      R.id.btn_menu06 -> { startActivity( Intent( applicationContext, DataConfirm::class.java ) ) }
+      R.id.btn_menu07 -> { startActivity( Intent( applicationContext, DataTransfer::class.java ) ) }
+      R.id.btn_menu08 -> { startActivity( Intent( applicationContext, Inventory::class.java ) ) }
+      R.id.btn_menu09 -> { startActivity( Intent( applicationContext, ItemInspection::class.java ) ) }
+      R.id.btn_menu10 -> { startActivity( Intent( applicationContext, SortShipping::class.java ) ) }
+      R.id.btn_menu11 -> { startActivity( Intent( applicationContext, ExamLocation::class.java ) ) }
+      R.id.btn_menu12 -> { startActivity( Intent( applicationContext, HetVerification::class.java ) ) }
+    }
+  }
+
+  override fun onFocusChange( v:View, hasFocus:Boolean ) {
+    if( hasFocus == false ) { return }
+    supportActionBar?.title = (v as Button).text
   }
 }

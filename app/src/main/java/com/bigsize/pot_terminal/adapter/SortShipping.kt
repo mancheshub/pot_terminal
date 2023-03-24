@@ -1,6 +1,7 @@
 package com.bigsize.pot_terminal.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +45,9 @@ class SortShipping( val context:Context?, var itemDataArray:MutableList<HashItem
       // 1行レイアウトのbinding01をtagから復元します
       binding01 = itemView!!.tag as SortShippingListview01Binding
     }
+
+    binding01.item.setTextColor( Color.BLACK )
+    binding01.id.setTextColor( Color.BLACK )
 
     // ViewModelをセットします
     binding01.viewmodel = itemData

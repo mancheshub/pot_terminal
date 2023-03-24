@@ -1,6 +1,7 @@
 package com.bigsize.pot_terminal.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +47,15 @@ class ExamLocation( val context:Context?, var itemList:MutableList<PotDataModel0
       // 1行レイアウトのbinding01をtagから復元します
       binding01 = itemView!!.tag as ExamLocationListview01Binding
     }
+
+    binding01.text01.setTextColor( Color.BLACK )
+    binding01.text02.setTextColor( Color.BLACK )
+    binding01.amt.setTextColor( Color.BLACK )
+    binding01.cd.setTextColor( Color.BLACK )
+    binding01.cn.setTextColor( Color.BLACK )
+    binding01.sz.setTextColor( Color.BLACK )
+    binding01.cs.setTextColor( Color.BLACK )
+    binding01.location.setTextColor( Color.BLACK )
 
     // ViewModelをセットします
     binding01.viewmodel = potData

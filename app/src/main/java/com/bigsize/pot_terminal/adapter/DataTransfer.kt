@@ -1,6 +1,7 @@
 package com.bigsize.pot_terminal.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +50,11 @@ class DataTransfer( val context:Context?, var potFileArray:MutableList<PotDivisi
       // 1行レイアウトのbinding01をtagから復元します
       binding01 = itemView!!.tag as DataTransferListview01Binding
     }
+
+    binding01.name.setTextColor( Color.BLACK )
+    binding01.text01.setTextColor( Color.BLACK )
+    binding01.text02.setTextColor( Color.BLACK )
+    binding01.amt.setTextColor( Color.BLACK )
 
     binding01.check.setOnCheckedChangeListener{ _, isChecked ->
       val befChecked:Boolean = potData.isChecked

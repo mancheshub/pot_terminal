@@ -132,6 +132,7 @@ class Entrance:DensoWaveBase(),DialogCallback {
       binding01.layInput.error = msgError
 
       claimSound( playSoundNG )
+      claimVibration( AppBase.vibrationNG )
 
       return super.dispatchKeyEvent( event )
     }
