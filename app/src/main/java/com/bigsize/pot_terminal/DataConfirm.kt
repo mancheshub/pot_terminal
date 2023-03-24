@@ -147,14 +147,14 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "アイテム = " + item )
-
     // 選択アイテムからPOTファイル名のみを抽出します
 
     val match = Regex( "(.+) \\(.+\\)" ).find( item!! )
 
     var itemName:String? = ""
     match?.groups?.forEach { itemName = it?.value }
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-DataConfirm", "選択アイテム = " + itemName )
 
     // 選択したアイテムを保存します
     viewModel01.selectedItem = itemName!!

@@ -24,7 +24,9 @@
       android:layout_marginEnd="16dp"
       android:hint="出棚"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_appearance"
       app:expandedHintEnabled="false"
+      app:hintTextAppearance="@style/textInput_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -33,10 +35,11 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txt_location01"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:enabled="false"
         android:text="@={viewmodel.txtLocation01}"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="23sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -49,7 +52,9 @@
       android:layout_marginEnd="16dp"
       android:hint="入棚"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_appearance"
       app:expandedHintEnabled="false"
+      app:hintTextAppearance="@style/textInput_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_location01"
@@ -58,10 +63,11 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txt_location02"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:enabled="false"
         android:text="@={viewmodel.txtLocation02}"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="23sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -74,7 +80,9 @@
       android:layout_marginEnd="16dp"
       android:hint="商品"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_appearance"
       app:expandedHintEnabled="false"
+      app:hintTextAppearance="@style/textInput_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_location02"
@@ -83,10 +91,11 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txt_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:enabled="false"
         android:text="@={viewmodel.txtItem}"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="23sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -100,7 +109,10 @@
       android:hint="数量"
       app:counterEnabled="true"
       app:counterMaxLength="3"
+      app:counterTextAppearance="@style/textInput_appearance"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_appearance"
+      app:hintTextAppearance="@style/textInput_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_item"
@@ -109,20 +121,14 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edt_amt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:inputType="number"
-        android:text="@={viewmodel.edtAmt}">
+        android:text="@={viewmodel.edtAmt}"
+        android:textSize="23sp">
 
         <requestFocus />
       </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-      android:id="@+id/guideline01"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      app:layout_constraintGuide_begin="102dp" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

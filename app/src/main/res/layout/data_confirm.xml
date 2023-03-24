@@ -20,6 +20,7 @@
       android:layout_height="45dp"
       android:gravity="center_horizontal|center_vertical"
       android:text="全"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/cnt_total"
       app:layout_constraintTop_toTopOf="@+id/cnt_total" />
 
@@ -29,7 +30,7 @@
       android:layout_height="45dp"
       android:gravity="center|center_vertical"
       android:text="@{viewmodel.cntTotal}"
-      android:textSize="20sp"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/txt_view02"
       app:layout_constraintTop_toBottomOf="@+id/lay_potfile" />
 
@@ -39,6 +40,7 @@
       android:layout_height="45dp"
       android:gravity="center_horizontal|center_vertical"
       android:text="件中"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/cnt_check"
       app:layout_constraintTop_toTopOf="@+id/cnt_total" />
 
@@ -48,7 +50,7 @@
       android:layout_height="45dp"
       android:gravity="center|center_vertical"
       android:text="@{viewmodel.cntCheck}"
-      android:textSize="20sp"
+      android:textSize="23sp"
       app:layout_constraintEnd_toStartOf="@+id/txt_view03"
       app:layout_constraintTop_toTopOf="@+id/cnt_total" />
 
@@ -59,18 +61,21 @@
       android:layout_marginEnd="16dp"
       android:gravity="center_horizontal|center_vertical"
       android:text="件"
+      android:textSize="23sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/cnt_total" />
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/lay_potfile"
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-      android:layout_width="0dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginTop="16dp"
       android:layout_marginEnd="16dp"
       android:hint="POTファイル"
+      app:errorTextAppearance="@style/textInput_appearance"
+      app:hintTextAppearance="@style/textInput_appearance"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -79,8 +84,9 @@
       <AutoCompleteTextView
         android:id="@+id/txt_potfile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:editable="false" />
+        android:layout_height="65dp"
+        android:editable="false"
+        android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ListView

@@ -87,7 +87,7 @@ class ShelfReplaceB:DensoWaveBase() {
     if( scanShelf == null ) return false
 
     // 入力チェックを行います
-    if( inputCheck( "shelf" ) == false ) return false
+    if( inputCheck( "01" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -149,7 +149,7 @@ class ShelfReplaceB:DensoWaveBase() {
     if( scanBox == null ) return false
 
     // 入力チェックを行います
-    if( inputCheck( "box" ) == false ) return false
+    if( inputCheck( "02" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -169,12 +169,8 @@ class ShelfReplaceB:DensoWaveBase() {
    * @return 処理結果
    */
   fun execEnter():Boolean {
-    binding01.layLocation01.error = null
-    binding01.layBox.error = null
-    binding01.layLocation02.error = null
-
     // 入力チェックを行います
-    if( inputCheck( "enter" ) == false ) return false
+    if( inputCheck( "03" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -196,7 +192,7 @@ class ShelfReplaceB:DensoWaveBase() {
   /**
    * 入力チェックを行います
    *
-   * @param [execSubject] 処理対象
+   * @param [execSubject] チェックモード 01 : 棚読み取り時 02 : 箱読み取り時 03 : ENT押下時
    * @return 入力チェック結果
    */
   private fun inputCheck( execSubject:String ):Boolean {
@@ -208,12 +204,24 @@ class ShelfReplaceB:DensoWaveBase() {
     binding01.layBox.error = null
     binding01.layLocation02.error = null
 
-    if( msgError02 == "" && execSubject == "box" && viewModel01.memLocation01 == "" ) {
+    if( msgError02 == "" && execSubject == "02" && viewModel01.memLocation01 == "" ) {
       msgError01 = getString( R.string.err_shelf_replace_b02 )
     }
 
-    if( msgError02 == "" && execSubject == "shelf" && viewModel01.memLocation01 != "" && viewModel01.memBox == "" ) {
+    if( msgError02 == "" && execSubject == "01" && viewModel01.memLocation01 != "" && viewModel01.memBox == "" ) {
       msgError02 = getString( R.string.err_shelf_replace_b01 )
+    }
+
+    if( msgError01 == "" && execSubject == "03" && viewModel01.memLocation01 == "" ) {
+      msgError01 = getString( R.string.err_shelf_replace_b02 )
+    }
+
+    if( msgError02 == "" && execSubject == "03" && viewModel01.memBox == "" ) {
+      msgError02 = getString( R.string.err_shelf_replace_b01 )
+    }
+
+    if( msgError03 == "" && execSubject == "03" && viewModel01.memLocation02 == "" ) {
+      msgError03 = getString( R.string.err_shelf_replace_b03 )
     }
 
     if( msgError01 != "" || msgError02 != "" || msgError03 != "" ) {

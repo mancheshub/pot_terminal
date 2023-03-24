@@ -90,6 +90,9 @@ class ShelfShipping:DensoWaveBase() {
   fun readShelf( scanShelf:String? ):Boolean {
     if( scanShelf == null ) return false
 
+    // 入力チェックを行います
+    if( inputCheck( "01" ) == false ) return false
+
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
@@ -118,6 +121,9 @@ class ShelfShipping:DensoWaveBase() {
   fun readBox( scanBox:String? ):Boolean {
     if( scanBox == null ) return false
 
+    // 入力チェックを行います
+    if( inputCheck( "02" ) == false ) return false
+
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
@@ -145,6 +151,9 @@ class ShelfShipping:DensoWaveBase() {
    */
   fun readItem( scanItem:String? ):Boolean {
     if( scanItem == null ) return false
+
+    // 入力チェックを行います
+    if( inputCheck( "03" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -177,7 +186,7 @@ class ShelfShipping:DensoWaveBase() {
    */
   fun execEnter():Boolean {
     // 入力チェックを行います
-    if( inputCheck() == false ) return false
+    if( inputCheck( "04" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -198,9 +207,10 @@ class ShelfShipping:DensoWaveBase() {
   /**
    * 入力チェックを行います
    *
+   * @param [execSubject] チェックモード 01 : 棚読み取り時 02 : 箱読み取り時 03 : 商品読み取り時 04 : ENT押下時
    * @return 入力チェック結果
    */
-  private fun inputCheck():Boolean {
+  private fun inputCheck( execSubject:String ):Boolean {
     var msgError01:String = ""
     var msgError02:String = ""
     var msgError03:String = ""
@@ -211,23 +221,23 @@ class ShelfShipping:DensoWaveBase() {
 
     val edtAmt:String = viewModel01.edtAmt.value.toString()
 
-    if( msgError03 == "" && edtAmt.isEmpty() ) {
+    if( msgError03 == "" && execSubject == "04" && edtAmt.isEmpty() ) {
       msgError03 = getString( R.string.err_edt_amt01 )
     }
 
-    if( msgError03 == "" && model01.isNumber(edtAmt) == false ) {
+    if( msgError03 == "" && execSubject == "04" && model01.isNumber(edtAmt) == false ) {
       msgError03 = getString( R.string.err_edt_amt02 )
     }
 
-    if( msgError03 == "" && edtAmt.length > 3 ) {
+    if( msgError03 == "" && execSubject == "04" && edtAmt.length > 3 ) {
       msgError03 = getString( R.string.err_edt_amt03 )
     }
 
-    if( msgError01 == "" && viewModel01.memLocation == "" ) {
+    if( msgError01 == "" && execSubject == "04" && viewModel01.memLocation == "" ) {
       msgError01 = getString( R.string.err_shelf_shipping01 )
     }
 
-    if( msgError02== "" && viewModel01.memItem == "" ) {
+    if( msgError02== "" && execSubject == "04" && viewModel01.memItem == "" ) {
       msgError02 = getString( R.string.err_shelf_shipping02 )
     }
 
