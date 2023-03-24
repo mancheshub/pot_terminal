@@ -73,9 +73,6 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
    * ボタンが押された時に呼ばれるリスナー定義です
    */
   override fun onClick( v:View ) {
-    claimSound( playSoundOK )
-    claimVibration( AppBase.vibrationOK )
-
     when( v.id ) {
       R.id.btn_menu01 -> { startActivity( Intent( applicationContext, ItemVerification::class.java ) ) }
       R.id.btn_menu02 -> { startActivity( Intent( applicationContext, ShelfReceiving::class.java ) ) }
