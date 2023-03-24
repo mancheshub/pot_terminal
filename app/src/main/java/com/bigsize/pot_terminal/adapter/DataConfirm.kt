@@ -1,6 +1,7 @@
 package com.bigsize.pot_terminal.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +50,18 @@ class DataConfirm( val context:Context?, var potDataArray:MutableList<PotDataMod
       // 1行レイアウトのbinding01をtagから復元します
       binding01 = itemView!!.tag as DataConfirmListview01Binding
     }
+
+    binding01.time.setTextColor( Color.BLACK )
+    binding01.cd.setTextColor( Color.BLACK )
+    binding01.cn.setTextColor( Color.BLACK )
+    binding01.sz.setTextColor( Color.BLACK )
+    binding01.location01.setTextColor( Color.BLACK )
+    binding01.location02.setTextColor( Color.BLACK )
+    binding01.text01.setTextColor( Color.BLACK )
+    binding01.text02.setTextColor( Color.BLACK )
+    binding01.text04.setTextColor( Color.BLACK )
+    binding01.text05.setTextColor( Color.BLACK )
+    binding01.amt.setTextColor( Color.BLACK )
 
     binding01.check.setOnCheckedChangeListener{ _, isChecked ->
       val befChecked:Boolean = potData.isChecked

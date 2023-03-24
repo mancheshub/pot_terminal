@@ -80,11 +80,11 @@
       android:text="@{viewmodel.amt}"
       android:textSize="20sp"
       android:textStyle="bold"
-      app:layout_constraintEnd_toStartOf="@+id/text03"
+      app:layout_constraintEnd_toStartOf="@+id/text02"
       app:layout_constraintTop_toTopOf="@+id/text01" />
 
     <TextView
-      android:id="@+id/text03"
+      android:id="@+id/text02"
       android:layout_width="5dp"
       android:layout_height="25dp"
       android:layout_marginEnd="3dp"

@@ -37,7 +37,7 @@
     <ListView
       android:id="@+id/lst_view01"
       android:layout_width="0dp"
-      android:layout_height="100dp"
+      android:layout_height="230dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
