@@ -93,7 +93,7 @@ class ShelfReplaceS:DensoWaveBase() {
     if( scanShelf == null ) return false
 
     // 入力チェックを行います
-    if( inputCheck( "shelf" ) == false ) return false
+    if( inputCheck( "01" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -155,7 +155,7 @@ class ShelfReplaceS:DensoWaveBase() {
     if( scanBox == null ) return false
 
     // 入力チェックを行います
-    if( inputCheck( "box" ) == false ) return false
+    if( inputCheck( "02" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -207,7 +207,7 @@ class ShelfReplaceS:DensoWaveBase() {
     if( scanItem == null ) return false
 
     // 入力チェックを行います
-    if( inputCheck( "item" ) == false ) return false
+    if( inputCheck( "03" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -245,7 +245,7 @@ class ShelfReplaceS:DensoWaveBase() {
     binding01.layAmt.error = null
 
     // 入力チェックを行います
-    if( inputCheck( "amt" ) == false ) return false
+    if( inputCheck( "04" ) == false ) return false
 
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
@@ -264,7 +264,7 @@ class ShelfReplaceS:DensoWaveBase() {
   /**
    * 入力チェックを行います
    *
-   * @param [execSubject] 処理対象
+   * @param [execSubject] チェックモード 01 : 棚読み取り時 02 : 箱読み取り時 03 : 商品読み取り時 04 : ENT押下時
    * @return 入力チェック結果
    */
   private fun inputCheck( execSubject:String ):Boolean {
@@ -280,27 +280,27 @@ class ShelfReplaceS:DensoWaveBase() {
 
     val edtAmt:String = viewModel01.edtAmt.value.toString()
 
-    if( msgError04 == "" && execSubject == "amt" && edtAmt.isEmpty() ) {
+    if( msgError04 == "" && execSubject == "04" && edtAmt.isEmpty() ) {
       msgError04 = getString( R.string.err_edt_amt01 )
     }
 
-    if( msgError04 == "" && execSubject == "amt" && model01.isNumber(edtAmt) == false ) {
+    if( msgError04 == "" && execSubject == "04" && model01.isNumber(edtAmt) == false ) {
       msgError04 = getString( R.string.err_edt_amt02 )
     }
 
-    if( msgError04 == "" && execSubject == "amt" && edtAmt.length > 3 ) {
+    if( msgError04 == "" && execSubject == "04" && edtAmt.length > 3 ) {
       msgError04 = getString( R.string.err_edt_amt03 )
     }
 
-    if( msgError01 == "" && ( execSubject == "item" || execSubject == "amt" ) && viewModel01.memLocation01 == "" ) {
+    if( msgError01 == "" && ( execSubject == "03" || execSubject == "04" ) && viewModel01.memLocation01 == "" ) {
       msgError01 = getString( R.string.err_shelf_replace_s01 )
     }
 
-    if( msgError02 == "" && ( execSubject == "item" || execSubject == "amt" ) && viewModel01.memLocation02 == "" ) {
+    if( msgError02 == "" && ( execSubject == "03" || execSubject == "04" ) && viewModel01.memLocation02 == "" ) {
       msgError02 = getString( R.string.err_shelf_replace_s02 )
     }
 
-    if( msgError03 == "" && execSubject == "amt" && viewModel01.memItem == "" ) {
+    if( msgError03 == "" && execSubject == "04" && viewModel01.memItem == "" ) {
       msgError03 = getString( R.string.err_shelf_replace_s03 )
     }
 

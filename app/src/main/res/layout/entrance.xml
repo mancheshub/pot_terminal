@@ -24,7 +24,10 @@
       android:hint="利用者番号"
       app:counterEnabled="true"
       app:counterMaxLength="3"
+      app:counterTextAppearance="@style/textInput_appearance"
       app:errorEnabled="true"
+      app:errorTextAppearance="@style/textInput_appearance"
+      app:hintTextAppearance="@style/textInput_appearance"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -34,9 +37,10 @@
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txt_number"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:inputType="number"
-        android:text="@={viewmodel.txtNumber}">
+        android:text="@={viewmodel.txtNumber}"
+        android:textSize="23sp">
 
         <requestFocus />
       </com.google.android.material.textfield.TextInputEditText>

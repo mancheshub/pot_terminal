@@ -20,4 +20,10 @@
     <item name="android:paddingLeft">0dp</item>
     <item name="android:paddingRight">0dp</item>
   </style>
+
+  <!-- TextInputLayout error theme. -->
+  <style name="textInput_appearance" parent="@android:style/TextAppearance">
+    <item name="android:textSize">20sp</item>
+    <item name="android:translateX">-30</item>
+  </style>
 </resources>
