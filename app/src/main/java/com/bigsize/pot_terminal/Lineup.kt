@@ -92,6 +92,9 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
     }
   }
 
+  /**
+   * ボタンがフォーカスされた時に呼ばれるリスナー定義です
+   */
   override fun onFocusChange( v:View, hasFocus:Boolean ) {
     if( hasFocus == false ) { return }
     supportActionBar?.title = (v as Button).text
