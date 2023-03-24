@@ -23,8 +23,10 @@
   </style>
 
   <!-- TextInputLayout error theme. -->
-  <style name="textInput_appearance" parent="@android:style/TextAppearance">
+  <style name="textInput_txt_appearance" parent="@android:style/TextAppearance">
     <item name="android:textSize">20sp</item>
-    <item name="android:translateX">-30</item>
+  </style>
+  <style name="textInput_err_appearance" parent="@android:style/TextAppearance">
+    <item name="android:textSize">15sp</item>
   </style>
 </resources>
