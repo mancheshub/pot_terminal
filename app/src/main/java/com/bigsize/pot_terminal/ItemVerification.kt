@@ -28,6 +28,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
 
   private val model01:AppUtility = AppUtility()
 
+  private var dialogFIN:MessageDialog? = null
+
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
 
@@ -93,7 +95,6 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
-    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
@@ -121,6 +122,12 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       // 全データ数とPOTで読んだデータ数を更新します
       viewModel01.cntRead.value = "0"
       viewModel01.cntTotal.value = "0"
+    }
+
+    // 特別動作する端末番号である場合は完了ダイアログを閉じます
+
+    if( AppBase.deviceNO == AppBase.specialDeviceNO && dialogFIN != null ) {
+      dialogFIN?.dismiss()
     }
 
     var ii:Int = 0
@@ -210,8 +217,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
         claimSound( playSoundFN )
         claimVibration( AppBase.vibrationFN )
 
-        val dialog:MessageDialog = MessageDialog( "00", "完了", getString( R.string.msg_item_verification01 ), "OK", "" )
-        dialog.show( supportFragmentManager, "simple" )
+        dialogFIN = MessageDialog( "00", "完了", getString( R.string.msg_item_verification01 ), "OK", "" )
+        dialogFIN?.show( supportFragmentManager, "simple" )
       } else {
         claimSound( playSoundOK )
         claimVibration( AppBase.vibrationOK )

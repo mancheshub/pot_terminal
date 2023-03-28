@@ -44,17 +44,17 @@ class ItemInspection:ViewModel() {
 
   // 箱リスト
   public val boxList:List<HashItem> = mutableListOf(
-    HashItem( "", "" ), HashItem( "01", "箱01" ), HashItem( "02", "箱02" ), HashItem( "03", "箱03" ),
+    HashItem( "01", "箱01" ), HashItem( "02", "箱02" ), HashItem( "03", "箱03" ),
     HashItem( "04", "箱04" ), HashItem( "05", "箱05" ), HashItem( "06", "箱06" ), HashItem( "07", "箱07" ),
     HashItem( "08", "箱08" ), HashItem( "09", "箱09" ), HashItem( "10", "箱10" ), HashItem( "11", "箱11" ),
     HashItem( "12", "箱12" ), HashItem( "13", "箱13" ), HashItem( "14", "箱14" ), HashItem( "15", "箱15" ),
     HashItem( "16", "箱16" ), HashItem( "17", "箱17" ), HashItem( "18", "箱18" ), HashItem( "19", "箱19" ),
-    HashItem( "20", "箱20" ),
+    HashItem( "20", "箱20" ), HashItem( "", "" ),
   )
 
   // 印刷機リスト
   public val printList:List<HashItem> = mutableListOf(
-    HashItem( "", "" ), HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ),
+    HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "", "" ),
   )
 
   // 現在選択している"作業グループ・店舗・箱・印刷機"
@@ -129,6 +129,8 @@ class ItemInspection:ViewModel() {
 
         // 自分が検品した店舗もしくは誰も検品していない店舗の場合のみ処理します
 
+        _itemList.value = mutableListOf()
+
         if( apiExclusive == "999" ) {
           // 検品開始状態とします
           if( flagExclusive == "exeExclusive" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-start", selectedGroupID, selectedShopID, AppBase.staffNO )
@@ -157,6 +159,8 @@ class ItemInspection:ViewModel() {
     viewModelScope.launch {
       _apiCondition.value = "ST"
 
+      if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "isExecute01 = " + isExecute01 )
+
       try {
         // クリアボタンが押されたときは isExecute01 == "" となっているから自身が店舗の担当者であるかを調査します
         // - 自身が担当者でない場合は isExecute01 == "0"  となるのでエラー画面をActivityから出力します
@@ -183,14 +187,14 @@ class ItemInspection:ViewModel() {
           // 検品取消状態とします
           if( kind == "01" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO )
 
-          // 調査状況をクリアします
-          isExecute01 = ""
-          isExecute03 = ""
-
           _apiCondition.value = "FN" + kind
         } else {
           _apiCondition.value = "AL" + kind
         }
+
+        // 調査状況をクリアします
+        isExecute01 = ""
+        isExecute03 = ""
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "致命的エラー" )
         _apiCondition.value = "ER"
