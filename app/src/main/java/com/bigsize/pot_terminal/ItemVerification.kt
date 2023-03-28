@@ -29,6 +29,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
   private val model01:AppUtility = AppUtility()
 
   private var dialogFIN:MessageDialog? = null
+  private var dialogERR:MessageDialog? = null
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
@@ -124,11 +125,9 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       viewModel01.cntTotal.value = "0"
     }
 
-    // 特別動作する端末番号である場合は完了ダイアログを閉じます
-
-    if( AppBase.deviceNO == AppBase.specialDeviceNO && dialogFIN != null ) {
-      dialogFIN?.dismiss()
-    }
+    // ダイアログが表示されていれば閉じます
+    dialogFIN?.dismiss()
+    dialogERR?.dismiss()
 
     var ii:Int = 0
     var indexNO:Int = 0
@@ -179,6 +178,10 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     lateinit var potData:PotDataModel01
     var position:Int = 0
 
+    // ダイアログが表示されていれば閉じます
+    dialogFIN?.dismiss()
+    dialogERR?.dismiss()
+
     var cd:String = scanItem.substring( 3, 13 );
     var cn:String = scanItem.substring( 14, 16 );
     var sz:String = scanItem.substring( 17, 21 );
@@ -194,8 +197,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       claimSound( playSoundNG )
       claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_item_verification01 ), "OK", "" )
-      dialog.show( supportFragmentManager, "simple" )
+      dialogERR = MessageDialog( "00", "", getString( R.string.err_item_verification01 ), "OK", "" )
+      dialogERR?.show( supportFragmentManager, "simple" )
     } else {
       // 該当位置のSKUの数量を増やします
       potData = viewModel01.potDataArray[position]
