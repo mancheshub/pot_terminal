@@ -3,6 +3,7 @@
 
   <string name="alt_wifi01">Wifiの電波が弱くなっています。Wifiを再設定してください。</string>
   <string name="err_communication01">通信エラーが発生しました。</string>
+  <string name="err_communication02">スタッフ番号が取得できません。</string>
 
   <string name="msg_bluetooth01">接続しました。</string>
   <string name="msg_bluetooth02">切断しました。</string>

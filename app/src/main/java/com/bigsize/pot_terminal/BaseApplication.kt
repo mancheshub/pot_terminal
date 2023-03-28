@@ -15,9 +15,6 @@ class AppBase:Application() {
     // アクティビティインスタンス
     public var activitySet:MutableSet<Activity> = mutableSetOf()
 
-    // ダイアログ表示判断フラグ
-    public var isDialogPrint:String = "NON"
-
     // 端末番号
     public var deviceNO:String = "000"
 

@@ -137,9 +137,6 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
   override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
     val builder = AlertDialog.Builder( activity )
 
-    // ダイアログを開いた時はフラグONします
-    AppBase.isDialogPrint = "YES"
-
     if( title != "" ) {
       val txtView = TextView( activity )
       txtView.text = title
@@ -215,9 +212,6 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
 
   public override fun onDestroyView() {
     super.onDestroyView()
-
-    // ダイアログを閉じた時はフラグOFFします
-    AppBase.isDialogPrint = "NON"
 
     // Activityのタッチ操作を許可します
     activity?.window?.clearFlags( WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE )

@@ -299,6 +299,8 @@ open class CommonBase:AppCompatActivity() {
   }
 }
 
+
+
 /**
  * ユニテック社製ハンディーターミナル用のアクティビティクラス
  */
@@ -652,11 +654,19 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
             claimVibration( AppBase.vibrationAR )
           }
 
-          if( _data.substring( 0, 3 ) == "M-P" ) _scanMultiItem.value = _data
-          if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
-          if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data
-          if( _data.substring( 0, 3 ) == "M-H" ) _scanItemM.value = _data
-          if( _data.substring( 0, 1 ) == "a" ) _scanItemH.value = _data
+          // スタッフ番号が不意にクリアされてしまった場合はエラーとします
+
+          if( AppBase.staffNO == "000" ) {
+            val intent = Intent( applicationContext, Failure::class.java )
+            intent.putExtra( "MESSAGE", getString( R.string.err_communication02 ) )
+            startActivity( intent )
+          } else {
+            if( _data.substring( 0, 3 ) == "M-P" ) _scanMultiItem.value = _data
+            if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
+            if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data
+            if( _data.substring( 0, 3 ) == "M-H" ) _scanItemM.value = _data
+            if( _data.substring( 0, 1 ) == "a" ) _scanItemH.value = _data
+          }
         }
       }.setBarcodeData( data ) )
     }

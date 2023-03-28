@@ -107,7 +107,9 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
     viewModel01.apiCondition.observe( this, Observer<String> {
       if( ( viewModel01.apiCondition.value as String ) != "" ) {
 
-      // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
+      var regex:Regex? = null
+
+        // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
       val apiCondition:String = viewModel01.apiCondition.value as String
 
       // プログレスバーを表示します
@@ -130,13 +132,22 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
 
       // プログレスバーを消します - 警告終了
 
-      if( apiCondition == "AL01" ) {
-        val dialog:MessageDialog = MessageDialog( "00", "エラー", getString( R.string.err_item_inspection05 ), "OK", "" )
-        dialog.show( supportFragmentManager, "simple" )
-      }
+      regex = Regex( "AL0" )
+      if( regex.containsMatchIn( apiCondition ) == true ) {
+        binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
 
-      if( apiCondition == "AL03" ) {
-        val dialog:MessageDialog = MessageDialog( "05", "警告", getString( R.string.msg_item_inspection07 ), "OK", "" )
+        // 警告ダイアログを表示します
+
+        var message:String = ""
+        var callbackFlag:String = ""
+
+        if( apiCondition == "AL01" ) { callbackFlag = "00"; message = getString( R.string.err_item_inspection05 ); }
+        if( apiCondition == "AL03" ) { callbackFlag = "05"; message = getString( R.string.msg_item_inspection07 ); }
+
+        claimSound( playSoundNG )
+        claimVibration( AppBase.vibrationNG )
+
+        val dialog:MessageDialog = MessageDialog( callbackFlag, "警告", message, "OK", "" )
         dialog.show( supportFragmentManager, "simple" )
       }
 
@@ -146,8 +157,6 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       // FN01 → クリア FN02 → 箱確定 FN03 → 確定 FN** → 左記以外
 
       // 誤って確定(欠品)した時に引き続き同店舗で検品するために、確定後は店舗セレクトボックスの内容をそのままとします
-
-      var regex:Regex? = null
 
       regex = Regex( "FN9" )
       if( regex.containsMatchIn( apiCondition ) == true ) {
@@ -316,7 +325,6 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
    * キーイベントを捕捉します
    */
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
-    if( AppBase.isDialogPrint == "YES" ) return true
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
 
