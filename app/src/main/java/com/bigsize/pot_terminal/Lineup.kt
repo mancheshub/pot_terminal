@@ -66,6 +66,15 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
       claimSound( playSoundOK )
     }
 
+    if( event.keyCode == KEY_001 ) startActivity( Intent( applicationContext, ItemVerification::class.java ) )
+    if( event.keyCode == KEY_002 ) startActivity( Intent( applicationContext, ExamLocation::class.java ) )
+    if( event.keyCode == KEY_003 ) startActivity( Intent( applicationContext, ShelfReceiving::class.java ) )
+    if( event.keyCode == KEY_004 ) startActivity( Intent( applicationContext, ShelfShipping::class.java ) )
+    if( event.keyCode == KEY_005 ) startActivity( Intent( applicationContext, ShelfReplaceS::class.java ) )
+    if( event.keyCode == KEY_006 ) startActivity( Intent( applicationContext, ShelfReplaceB::class.java ) )
+    if( event.keyCode == KEY_007 ) startActivity( Intent( applicationContext, DataConfirm::class.java ) )
+    if( event.keyCode == KEY_008 ) startActivity( Intent( applicationContext, DataTransfer::class.java ) )
+
     return super.dispatchKeyEvent( event );
   }
 
