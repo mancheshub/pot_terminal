@@ -54,7 +54,7 @@ class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionL
 
     // ■ ActionBarを設定します
 
-    supportActionBar?.title = "ロケーション調査"
+    supportActionBar?.title = "場所確認"
     supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     // ■ バインディングしたレイアウトにデータをセットします
