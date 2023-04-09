@@ -109,7 +109,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
 
       var regex:Regex? = null
 
-        // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
+      // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
       val apiCondition:String = viewModel01.apiCondition.value as String
 
       // プログレスバーを表示します
@@ -287,7 +287,6 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
     binding01.txtShop.setOnItemClickListener( this )
     binding01.txtBox.setOnItemClickListener( this )
     binding01.txtPrint.setOnItemClickListener( this )
-
   }
 
   override fun onDestroy() {
@@ -477,6 +476,9 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_item_inspection02 ), "OK", "" )
       dialog.show( supportFragmentManager, "simple" )
     } else {
+      claimSound( playSoundOK )
+      claimVibration( AppBase.vibrationOK )
+
       // 商品情報の照合状況を更新します
       viewModel01.updateItemList( position )
 
@@ -491,16 +493,12 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       // 終了したらその旨を表示します
       position = ( viewModel01.itemList.value as MutableList<PotDataModel03> ).indexOfFirst { it.amt_n.toInt() < it.amt_p.toInt() }
       if( position == -1 ) {
-        claimSound( playSoundOK )
-        claimVibration( AppBase.vibrationOK )
+        if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "完了" )
 
         val dialog:MessageDialog = MessageDialog( "03", "確定確認", getString( R.string.msg_item_inspection06 ), "はい", "いいえ" )
         dialog.show( supportFragmentManager, "simple" )
       }
     }
-
-    claimSound( playSoundOK )
-    claimVibration( AppBase.vibrationOK )
 
     return true
   }
