@@ -125,6 +125,10 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
       if( regex.containsMatchIn( apiCondition ) == true ) {
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
 
+        // いずれの処理も店舗の棚出状況に変化があったので店舗データと商品データを再取得します
+        viewModel01.pickShopList()
+        viewModel01.pickItemList()
+
         // 完了ダイアログを表示します
 
         val dialog:MessageDialog = MessageDialog( "00", "完了", getString( R.string.msg_het_verification01 ), "OK", "" )
