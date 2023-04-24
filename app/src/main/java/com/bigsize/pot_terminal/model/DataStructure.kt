@@ -21,6 +21,14 @@ data class APITextModel(
   val text:String,
 )
 
+@Serializable
+data class APILineModel(
+  val status:String,
+  val text01:String,
+  val text02:String,
+  val text03:String,
+)
+
 // 選択項目データ交換モデル
 
 @Serializable

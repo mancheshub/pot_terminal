@@ -42,9 +42,13 @@
   <string name="msg_item_verification01">照合が完了しました。</string>
   <string name="err_item_verification01">該当の商品がありません。</string>
 
-  <string name="msg_het_verification01">照合が完了しました。</string>
-  <string name="err_het_verification01">該当の商品がありません。</string>
-  <string name="err_het_verification02">棚状況更新に失敗しました。</string>
+  <string name="msg_box_shipping01">照合が完了しました。</string>
+  <string name="err_box_shipping01">該当の商品がありません。</string>
+  <string name="err_box_shipping02">棚状況更新に失敗しました。</string>
+  <string name="alt_box_shipping01">仕分棚にない商品が含まれています。</string>
+
+  <string name="msg_box_confirm01">照合が完了しました。</string>
+  <string name="err_box_confirm01">該当の商品がありません。</string>
 
   <string name="msg_item_inspection01">クリアしました。</string>
   <string name="msg_item_inspection02">箱確定しました。</string>
@@ -66,5 +70,4 @@
   <string name="msg_data_transfer01">転送しますがよろしいですか？</string>
   <string name="msg_data_transfer02">転送しました。</string>
   <string name="err_data_transfer01">転送するデータがありません。</string>
-
 </resources>

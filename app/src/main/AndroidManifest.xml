@@ -35,7 +35,8 @@
     <activity android:name=".ItemInspection" />
     <activity android:name=".SortShipping" />
     <activity android:name=".ExamLocation" android:windowSoftInputMode="stateAlwaysHidden" />
-    <activity android:name=".HetVerification" />
+    <activity android:name=".BoxShipping" />
+    <activity android:name=".BoxConfirm" />
     <activity android:name=".Entrance">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

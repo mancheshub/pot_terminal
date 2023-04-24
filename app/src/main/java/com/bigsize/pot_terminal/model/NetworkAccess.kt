@@ -17,6 +17,85 @@ import okhttp3.Request
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
+class BoxConfirmAPI {
+  private val model01:AppUtility = AppUtility()
+
+  private val httpClient = OkHttpClient.Builder()
+    .connectTimeout( 10, TimeUnit.SECONDS )
+    .writeTimeout( 10, TimeUnit.SECONDS )
+    .readTimeout( 30, TimeUnit.SECONDS )
+    .build()
+
+  /**
+   * 箱番号から店舗名を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [boxno] 物理箱番号
+   * @return 店舗名
+   */
+  public suspend fun pickShopname( accessURL:String, boxno:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "S" )
+      .add( "boxno", boxno )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+
+  /**
+   * 箱番号からから商品を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [boxno] 物理箱番号
+   * @return 商品データ
+   */
+  public suspend fun pickItem( accessURL:String, boxno:String ):Pair<String,MutableList<PotDataModel01>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "I" )
+      .add( "boxno", boxno )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel01> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( PotDataModel01( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+}
+
 class ExamLocationAPI {
   private val model01:AppUtility = AppUtility()
 
@@ -25,6 +104,7 @@ class ExamLocationAPI {
     .writeTimeout( 10, TimeUnit.SECONDS )
     .readTimeout( 30, TimeUnit.SECONDS )
     .build()
+
 
   /**
    * 品番・色番・サイズから商品のロケーションを取得します
@@ -56,8 +136,9 @@ class ExamLocationAPI {
       }
     }
 
-    var tempList:MutableList<PotDataModel04> = mutableListOf()
     val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    var tempList:MutableList<PotDataModel04> = mutableListOf()
 
     apiResponseBody.itemArray.forEach {
       val location:String = it.ssb + it.ssh + it.ssf + "-" + it.sss + "-" + it.sst + "-" + it.sso
@@ -69,7 +150,7 @@ class ExamLocationAPI {
   }
 }
 
-class HetVerificationAPI {
+class BoxShippingAPI {
   private val model01:AppUtility = AppUtility()
 
   private val httpClient = OkHttpClient.Builder()
@@ -140,9 +221,8 @@ class HetVerificationAPI {
       }
     }
 
-    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
-
     val tempList:MutableList<HashItem> = mutableListOf()
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
@@ -157,9 +237,9 @@ class HetVerificationAPI {
    * @param [accessURL] サーバプログラムのURL
    * @param [groupID] 伝発グループID
    * @param [shopID] 店舗ID
-   * @return 店舗データ
+   * @return 商品データ
    */
-  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):MutableList<PotDataModel01> {
+  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):Pair<String,MutableList<PotDataModel01>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "I" )
@@ -180,15 +260,14 @@ class HetVerificationAPI {
       }
     }
 
-    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
-
     val tempList:MutableList<PotDataModel01> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( PotDataModel01( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, "0", it.ssa ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -329,9 +408,8 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
-
     val tempList:MutableList<HashItem> = mutableListOf()
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
@@ -369,9 +447,8 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APIFoelItemModel = Json.decodeFromString<APIFoelItemModel>( resJSON!! )
-
     val tempList:MutableList<PotDataModel03> = mutableListOf()
+    val apiResponseBody:APIFoelItemModel = Json.decodeFromString<APIFoelItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( PotDataModel03( model01.eightdigitsCd(it.cd), it.cn, it.sz, it.asn21, it.asn22, it.asn23, it.asn24, it.asn25, it.asn53, it.bf0, it.asn30_n.toInt().toString(), it.asn30_p.toInt().toString() ) )

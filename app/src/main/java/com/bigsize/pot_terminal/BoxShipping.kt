@@ -13,18 +13,18 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.HetVerificationBinding
+import com.bigsize.pot_terminal.databinding.BoxShippingBinding
 import com.bigsize.pot_terminal.model.*
 import com.densowave.bhtsdk.barcode.BarcodeScannerSettings
 import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.adapter.HetVerification as AD_HetVerification
-import com.bigsize.pot_terminal.viewmodel.HetVerification as VM_HetVerification
+import com.bigsize.pot_terminal.adapter.BoxShipping as AD_BoxShipping
+import com.bigsize.pot_terminal.viewmodel.BoxShipping as VM_BoxShipping
 
-class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback {
-  private val binding01:HetVerificationBinding by dataBinding()
-  private val viewModel01:VM_HetVerification by viewModels()
+class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback {
+  private val binding01:BoxShippingBinding by dataBinding()
+  private val viewModel01:VM_BoxShipping by viewModels()
 
-  private lateinit var adapter01:AD_HetVerification
+  private lateinit var adapter01:AD_BoxShipping
   private lateinit var adapter02:ArrayAdapter<String>
   private lateinit var adapter03:ArrayAdapter<String>
 
@@ -33,11 +33,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
 
-    setContentView( R.layout.het_verification )
-
-    // ■ スキャナを設定します
-
-    isPointMode = true
+    setContentView( R.layout.box_shipping )
 
     // ■ スキャナを設定します
 
@@ -63,7 +59,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
 
     // ■ ActionBarを設定します
 
-    supportActionBar?.title = "客注出荷棚出"
+    supportActionBar?.title = "商品箱出"
     supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     // ■ バインディングしたレイアウトにデータをセットします
@@ -72,7 +68,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
 
     // ■ ListViewアダプタをセットします
 
-    adapter01 = AD_HetVerification( applicationContext, ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
+    adapter01 = AD_BoxShipping( applicationContext, ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
     binding01.lstView01.adapter = adapter01
 
     // ■ 伝発グループデータを取得します
@@ -83,6 +79,8 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
 
     viewModel01.apiCondition.observe( this, Observer<String> {
       if( ( viewModel01.apiCondition.value as String ) != "" ) {
+
+      var regex:Regex? = null
 
       // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
       val apiCondition:String = viewModel01.apiCondition.value as String
@@ -95,8 +93,20 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
 
       // プログレスバーを消します - 警告終了
 
-      if( apiCondition == "AL01" ) {
-        val dialog:MessageDialog = MessageDialog( "00", "エラー", getString( R.string.err_het_verification02 ), "OK", "" )
+      regex = Regex( "AL" )
+      if( regex.containsMatchIn( apiCondition ) == true ) {
+        binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
+
+        // 警告ダイアログを表示します
+
+        var message:String = ""
+        if( apiCondition == "AL01" ) message = getString( R.string.err_box_shipping02 )
+        if( apiCondition == "AL02" ) message = getString( R.string.alt_box_shipping01 )
+
+        claimSound( playSoundNG )
+        claimVibration( AppBase.vibrationNG )
+
+        val dialog:MessageDialog = MessageDialog( "00", "警告", message, "OK", "" )
         dialog.show( supportFragmentManager, "simple" )
       }
 
@@ -114,8 +124,6 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
 
       // プログレスバーを消します - 正常終了
 
-      var regex:Regex? = null
-
       regex = Regex( "FN9" )
       if( regex.containsMatchIn( apiCondition ) == true ) {
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
@@ -131,7 +139,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
 
         // 完了ダイアログを表示します
 
-        val dialog:MessageDialog = MessageDialog( "00", "完了", getString( R.string.msg_het_verification01 ), "OK", "" )
+        val dialog:MessageDialog = MessageDialog( "00", "完了", getString( R.string.msg_box_shipping01 ), "OK", "" )
         dialog.show( supportFragmentManager, "simple" )
       }
 
@@ -141,13 +149,13 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
     viewModel01.groupList.observe( this, Observer<MutableList<HashItem>> {
       if( ( viewModel01.groupList.value as MutableList<HashItem> ).size != 0 ) {
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "伝発グループセレクトボックス内容更新" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "伝発グループセレクトボックス内容更新" )
 
         // 伝発グループ名を抽出します
         var menuItems:MutableList<String> = mutableListOf()
         for( _item in viewModel01.groupList.value as MutableList<HashItem> ) { menuItems.add( _item.item ) }
 
-        adapter02 = ArrayAdapter( applicationContext, R.layout.het_verification_popup01, menuItems )
+        adapter02 = ArrayAdapter( applicationContext, R.layout.box_shipping_popup01, menuItems )
         binding01.txtGroup.setAdapter( adapter02 )
 
       }
@@ -156,13 +164,13 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
     viewModel01.shopList.observe( this, Observer<MutableList<HashItem>> {
       if( ( viewModel01.shopList.value as MutableList<HashItem> ).size != 0 ) {
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "店舗セレクトボックス内容更新" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "店舗セレクトボックス内容更新" )
 
         // 店舗名を抽出します
         var menuItems:MutableList<String> = mutableListOf()
         for( _item in viewModel01.shopList.value as MutableList<HashItem> ) { menuItems.add( _item.item ) }
 
-        adapter03 = ArrayAdapter( applicationContext, R.layout.het_verification_popup02, menuItems )
+        adapter03 = ArrayAdapter( applicationContext, R.layout.box_shipping_popup02, menuItems )
         binding01.txtShop.setAdapter( adapter03 )
 
       }
@@ -171,13 +179,13 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
     viewModel01.itemList.observe( this, Observer<MutableList<PotDataModel01>> {
       //if( ( viewModel01.itemList.value as MutableList<PotDataModel01> ).size != 0 ) {
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "商品データ内容更新" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "商品データ内容更新" )
 
         // 全データ数とPOTで読んだデータ数を更新します
         viewModel01.cntRead.value = "0"
         viewModel01.cntTotal.value = ( ( viewModel01.itemList.value as MutableList<PotDataModel01> ).sumBy { it.amt_p.toInt() } ).toString()
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "全データ数 POTで読んだデータ数 = " + viewModel01.cntTotal.value + " " + viewModel01.cntRead.value  )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "全データ数 POTで読んだデータ数 = " + viewModel01.cntTotal.value + " " + viewModel01.cntRead.value  )
 
         // ListViewの内容を更新します
         adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
@@ -186,7 +194,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
     })
 
     scanItemM.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "商品データ = " + scanItemM.value )
+      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "商品データ = " + scanItemM.value )
 
       readItem( scanItemM.value )
     })
@@ -247,7 +255,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
         var position:Int = ( viewModel01.groupList.value as MutableList<HashItem> ).indexOfFirst { it.item == item }
         var groupID:String = ( viewModel01.groupList.value as MutableList<HashItem> )[position].id
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "選択アイテム - グループ = " + groupID + " " + item )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "選択アイテム - グループ = " + groupID + " " + item )
 
         // 選択した伝発グループのIDを記録します
         viewModel01.selectedGroupID = groupID
@@ -269,7 +277,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
         var position:Int = ( viewModel01.shopList.value as MutableList<HashItem> ).indexOfFirst { it.item == item }
         var shopID:String = ( viewModel01.shopList.value as MutableList<HashItem> )[position].id
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "選択アイテム - 店舗 = " + shopID + " " + item )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "選択アイテム - 店舗 = " + shopID + " " + item )
 
         // 選択した店舗のIDを記録します
         viewModel01.selectedShopID = shopID
@@ -297,18 +305,18 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
     var cn:String = scanItem.substring( 14, 16 );
     var sz:String = scanItem.substring( 17, 21 ).replace( " ", "" );
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "品番 色番 サイズ = " + cd + " " + cn + " " + sz )
+    if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "品番 色番 サイズ = " + cd + " " + cn + " " + sz )
 
     // 該当商品を検索します
     position = ( viewModel01.itemList.value as MutableList<PotDataModel01> ).indexOfFirst { model01.convertTrueCd(it.cd) == cd && it.cn == cn && it.sz == sz && it.amt_n.toInt() < it.amt_p.toInt() }
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "検索位置 = " + position.toString() )
+    if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "検索位置 = " + position.toString() )
 
     if( position == -1 ) {
       claimSound( playSoundNG )
       claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_het_verification01 ), "OK", "" )
+      val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_box_shipping01 ), "OK", "" )
       dialog.show( supportFragmentManager, "simple" )
     } else {
       // 商品情報の照合状況を更新します
@@ -320,7 +328,7 @@ class HetVerification:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCall
       // POTで読んだデータ数を更新します
       viewModel01.cntRead.value = ( ( viewModel01.itemList.value as MutableList<PotDataModel01> ).sumBy { it.amt_n.toInt() } ).toString()
 
-      if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "POTで読んだ件数 = " + viewModel01.cntRead.value )
+      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "POTで読んだ件数 = " + viewModel01.cntRead.value )
 
       // 終了したらその旨を表示します
       position = ( viewModel01.itemList.value as MutableList<PotDataModel01> ).indexOfFirst { it.amt_n.toInt() < it.amt_p.toInt() }

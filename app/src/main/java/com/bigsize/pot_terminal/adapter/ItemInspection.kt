@@ -67,8 +67,6 @@ class ItemInspection( val context:Context?, var itemList:MutableList<PotDataMode
 
   /**
    * アダプタデータを更新します
-   *
-   * @param newItem
    */
   fun refreshItem( newItem:MutableList<PotDataModel03> ) {
     itemList = newItem

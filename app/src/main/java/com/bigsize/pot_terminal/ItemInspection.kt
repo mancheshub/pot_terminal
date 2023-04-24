@@ -479,13 +479,13 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       claimSound( playSoundOK )
       claimVibration( AppBase.vibrationOK )
 
-      // 商品情報の照合状況を更新します
+      // 商品情報の検品数を更新します
       viewModel01.updateItemList( position )
 
       // ListViewの内容を更新します
       adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel03> ) )
 
-      // POTで読んだデータ数をクリアします
+      // POTで読んだデータ数を更新します
       viewModel01.cntRead.value = ( ( viewModel01.itemList.value as MutableList<PotDataModel03> ).sumBy { it.amt_n.toInt() } ).toString()
 
       if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "POTで読んだ件数 = " + viewModel01.cntRead.value )

@@ -36,8 +36,8 @@ class AppBase:Application() {
     // 特別動作する端末番号
     public val specialDeviceNO:String = "999"
 
-    // 客注出荷棚出関連URL
-    public val hetVerificationURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=hetVerification"
+    // 場所確認関連URL
+    public val examLocationURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=examLocation"
 
     // POTデータ転送関連URL
     public val transferURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=potTransfer"
@@ -45,8 +45,11 @@ class AppBase:Application() {
     // 商品照合関連URL
     public val itemInspectionURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=itemInspection"
 
-    // ロケーション検索関連URL
-    public val examLocationURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=examLocation"
+    // 商品箱出関連URL
+    public val boxShippingURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=boxShipping"
+
+    // 棚確認関連URL
+    public val boxConfirmURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=boxConfirm"
 
     // 正常読取した場合のブザーとバイブレーションのレベル
     public val buzzerOK:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "20", "resDuration" to "0" )

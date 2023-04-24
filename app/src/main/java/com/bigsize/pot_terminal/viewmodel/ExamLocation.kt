@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class ExamLocation: ViewModel() {
   private var model01:ExamLocationAPI = ExamLocationAPI()
 
-  // 読んだ商品
+  // 商品と商品名
   public val txtCd:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
   public val txtCn:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
   public val txtSz:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }

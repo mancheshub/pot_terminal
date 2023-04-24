@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.HashItem
-import com.bigsize.pot_terminal.model.HetVerificationAPI
+import com.bigsize.pot_terminal.model.BoxShippingAPI
 import com.bigsize.pot_terminal.model.PotDataModel01
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
-class HetVerification:ViewModel() {
-  private var model01:HetVerificationAPI = HetVerificationAPI()
+class BoxShipping:ViewModel() {
+  private var model01:BoxShippingAPI = BoxShippingAPI()
 
   // 全データ数とPOTで読んだデータ数
   public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
@@ -59,10 +59,10 @@ class HetVerification:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _groupList.value = model01.pickGroupList( AppBase.hetVerificationURL )
+        _groupList.value = model01.pickGroupList( AppBase.boxShippingURL )
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "致命的エラー" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"
         e.printStackTrace()
       }
@@ -77,10 +77,10 @@ class HetVerification:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _shopList.value = model01.pickShopList( AppBase.hetVerificationURL, selectedGroupID )
+        _shopList.value = model01.pickShopList( AppBase.boxShippingURL, selectedGroupID )
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "致命的エラー" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"
         e.printStackTrace()
       }
@@ -96,12 +96,17 @@ class HetVerification:ViewModel() {
 
       try {
         // 店舗の箱番号を取得します
-        txtBoxno.value = model01.pickBoxNO( AppBase.hetVerificationURL, selectedShopID )
+        txtBoxno.value = model01.pickBoxNO( AppBase.boxShippingURL, selectedShopID )
 
-        _itemList.value = model01.pickItemList( AppBase.hetVerificationURL, selectedGroupID, selectedShopID )
-        _apiCondition.value = "FN99"
+        val pairValue = model01.pickItemList( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
+        _itemList.value = pairValue.second
+
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "pickItemList結果 = " + pairValue.first )
+
+        if( pairValue.first == "AL" ) { _apiCondition.value = "AL02" }
+        if( pairValue.first == "OK" ) { _apiCondition.value = "FN99" }
       } catch( e:Exception ) {
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "致命的エラー" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"
         e.printStackTrace()
       }
@@ -115,12 +120,12 @@ class HetVerification:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        val retString:String = model01.finishVerification( AppBase.hetVerificationURL, selectedGroupID, selectedShopID )
+        val retString:String = model01.finishVerification( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
 
         if( retString != "NG" ) _apiCondition.value = "FN01"
         if( retString == "NG" ) _apiCondition.value = "AL01"
       } catch( e:Exception ) {
-        if( BuildConfig.DEBUG ) Log.d( "APP-HetVerification", "致命的エラー" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"
         e.printStackTrace()
       }

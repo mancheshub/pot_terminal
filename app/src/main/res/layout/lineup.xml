@@ -187,22 +187,22 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu04" />
 
-  <Button
-    android:id="@+id/btn_menu08"
-    android:layout_width="135dp"
-    android:layout_height="50dp"
-    android:layout_marginStart="16dp"
-    android:width="150px"
-    android:height="150px"
-    android:focusableInTouchMode="true"
-    android:paddingStart="10sp"
-    android:paddingEnd="10sp"
-    android:text="棚卸し"
-    android:textSize="15sp"
-    android:textStyle="bold"
-    app:iconSize="17dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/btn_menu06" />
+    <Button
+      android:id="@+id/btn_menu08"
+      android:layout_width="135dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="16dp"
+      android:width="150px"
+      android:height="150px"
+      android:focusableInTouchMode="true"
+      android:paddingStart="10sp"
+      android:paddingEnd="10sp"
+      android:text="棚卸"
+      android:textSize="15sp"
+      android:textStyle="bold"
+      app:iconSize="17dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btn_menu06" />
 
   <TextView
     android:id="@+id/txt_view02"
@@ -227,41 +227,58 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/txt_view02" />
 
-  <Button
-    android:id="@+id/btn_menu09"
-    android:layout_width="135dp"
-    android:layout_height="50dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="3dp"
-    android:width="150px"
-    android:height="150px"
-    android:focusableInTouchMode="true"
-    android:paddingStart="10sp"
-    android:paddingEnd="10sp"
-    android:text="商品検品"
-    android:textSize="15sp"
-    android:textStyle="bold"
-    app:iconSize="17dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/div_line02" />
+    <Button
+      android:id="@+id/btn_menu09"
+      android:layout_width="135dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="3dp"
+      android:width="150px"
+      android:height="150px"
+      android:focusableInTouchMode="true"
+      android:paddingStart="10sp"
+      android:paddingEnd="10sp"
+      android:text="商品検品"
+      android:textSize="15sp"
+      android:textStyle="bold"
+      app:iconSize="17dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/div_line02" />
 
-  <Button
-    android:id="@+id/btn_menu12"
-    android:layout_width="135dp"
-    android:layout_height="50dp"
-    android:layout_marginEnd="16dp"
-    android:width="150px"
-    android:height="150px"
-    android:focusableInTouchMode="true"
-    android:paddingStart="10sp"
-    android:paddingEnd="10sp"
-    android:text="客注出荷棚出"
-    android:textSize="15sp"
-    android:textStyle="bold"
-    app:iconSize="17dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/btn_menu09" />
+    <Button
+      android:id="@+id/btn_menu12"
+      android:layout_width="135dp"
+      android:layout_height="50dp"
+      android:layout_marginEnd="16dp"
+      android:width="150px"
+      android:height="150px"
+      android:focusableInTouchMode="true"
+      android:paddingStart="10sp"
+      android:paddingEnd="10sp"
+      android:text="商品箱出"
+      android:textSize="15sp"
+      android:textStyle="bold"
+      app:iconSize="17dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/btn_menu09" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+      android:id="@+id/btn_menu13"
+      android:layout_width="135dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="16dp"
+      android:width="150px"
+      android:height="150px"
+      android:focusableInTouchMode="true"
+      android:paddingStart="10sp"
+      android:paddingEnd="10sp"
+      android:text="箱確認"
+      android:textSize="15sp"
+      android:textStyle="bold"
+      app:iconSize="17dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btn_menu09" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

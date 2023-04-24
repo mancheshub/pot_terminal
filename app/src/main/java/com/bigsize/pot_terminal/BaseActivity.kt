@@ -626,21 +626,31 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
           if( BuildConfig.DEBUG ) Log.d( "APP-DensoWaveBase", "読み取り生データ = " + this.data )
 
           val _data:String = this.data ?: ""
+          var readFlag:String = "OK"
 
           // クラス名に従ったコードが読めていなければエラーとします
 
-          if( componentName.shortClassName == ".ItemVerification" &&
+          if( componentName.shortClassName == ".BoxShipping" &&
               _data.substring( 0, 3 ) != "M-P" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
 
           if( componentName.shortClassName == ".ItemInspection" && _data.substring( 0, 1 ) != "a" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
 
           if( componentName.shortClassName == ".ExamLocation" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
+          if( componentName.shortClassName == ".BoxConfirm" && _data.substring( 0, 3 ) != "M-T" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
@@ -650,20 +660,22 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
               componentName.shortClassName == ".ShelfReplaceB" || componentName.shortClassName == ".ShelfReplaceS" ||
               componentName.shortClassName == ".Inventory" ) &&
             _data.substring( 0, 3 ) != "M-L" && _data.substring( 0, 3 ) != "M-C" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
 
           // スタッフ番号が不意にクリアされてしまった場合はエラーとします
 
-          if( AppBase.staffNO == "000" ) {
+          if( readFlag == "OK" && AppBase.staffNO == "000" ) {
             val intent = Intent( applicationContext, Failure::class.java )
             intent.putExtra( "MESSAGE", getString( R.string.err_communication02 ) )
             startActivity( intent )
-          } else {
+          } else if( readFlag == "OK" && AppBase.staffNO != "000" ) {
             if( _data.substring( 0, 3 ) == "M-P" ) _scanMultiItem.value = _data
             if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
             if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data
+            if( _data.substring( 0, 3 ) == "M-T" ) _scanBox.value = _data
             if( _data.substring( 0, 3 ) == "M-H" ) _scanItemM.value = _data
             if( _data.substring( 0, 1 ) == "a" ) _scanItemH.value = _data
           }

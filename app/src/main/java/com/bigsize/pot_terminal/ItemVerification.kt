@@ -74,7 +74,6 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     scanItemM.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "商品データ = " + scanItemM.value )
 
-
       readItem( scanItemM.value )
     })
 
@@ -121,8 +120,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       viewModel01.potDataArray = mutableListOf<PotDataModel01>()
 
       // 全データ数とPOTで読んだデータ数を更新します
-      viewModel01.cntRead.value = "0"
       viewModel01.cntTotal.value = "0"
+      viewModel01.cntRead.value = "0"
     }
 
     // ダイアログが表示されていれば閉じます
