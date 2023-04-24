@@ -9,6 +9,7 @@ import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.BoxShippingAPI
+import com.bigsize.pot_terminal.model.BoxConfirmAPI
 import com.bigsize.pot_terminal.model.PotDataModel01
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,6 +21,7 @@ import java.io.IOException
 
 class BoxShipping:ViewModel() {
   private var model01:BoxShippingAPI = BoxShippingAPI()
+  private var model02:BoxConfirmAPI = BoxConfirmAPI()
 
   // 全データ数とPOTで読んだデータ数
   public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
@@ -42,8 +44,12 @@ class BoxShipping:ViewModel() {
   private val _itemList:MutableLiveData<MutableList<PotDataModel01>> = MutableLiveData( mutableListOf() )
   public val itemList:LiveData<MutableList<PotDataModel01>> get() = _itemList
 
-  // 箱番号
+  // 今回決定した箱番号
   public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
+
+  // 前回決定した箱番号
+  private var _memBoxno:String = ""
+  public val memBoxno:String get() = _memBoxno
 
   // 現在選択している"伝発グループ・店舗"
   public var selectedGroupID:String = ""
@@ -96,15 +102,16 @@ class BoxShipping:ViewModel() {
 
       try {
         // 店舗の箱番号を取得します
-        txtBoxno.value = model01.pickBoxNO( AppBase.boxShippingURL, selectedShopID )
 
-        val pairValue = model01.pickItemList( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
-        _itemList.value = pairValue.second
+        val pairHash01 = model01.pickBoxNO( AppBase.boxShippingURL, selectedShopID )
+        txtBoxno.value = pairHash01.second
+        _memBoxno = pairHash01.second
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "pickItemList結果 = " + pairValue.first )
+        val pairHash02 = model01.pickItemList( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
+        _itemList.value = pairHash02.second
 
-        if( pairValue.first == "AL" ) { _apiCondition.value = "AL02" }
-        if( pairValue.first == "OK" ) { _apiCondition.value = "FN99" }
+        if( pairHash02.first == "AL" ) { _apiCondition.value = "AL02" }
+        if( pairHash02.first == "OK" ) { _apiCondition.value = "FN99" }
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"
@@ -112,18 +119,33 @@ class BoxShipping:ViewModel() {
       }
     }
   }
+
   /**
-   * 棚出しを完了します
+   * 箱出を完了します
    */
-  public fun finishVerification() {
+  public fun finishShipping() {
     viewModelScope.launch {
       _apiCondition.value = "ST"
 
       try {
-        val retString:String = model01.finishVerification( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
+        val pairHash01 = model01.finishShipping( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
 
-        if( retString != "NG" ) _apiCondition.value = "FN01"
-        if( retString == "NG" ) _apiCondition.value = "AL01"
+
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "RET = " + pairHash01.first )
+
+        // 箱出が正常に完了したら箱ラベルに商品が残っていないかをチェックします
+        if( pairHash01.first == "OK" ) {
+          if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "DDDD" )
+
+          val pairHash02 = model02.pickItemList( AppBase.boxConfirmURL, memBoxno )
+
+          if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "AAA = " + pairHash02.second.size )
+
+          if( pairHash02.second.size != 0 ) _apiCondition.value = "AL03"
+          if( pairHash02.second.size == 0 ) _apiCondition.value = "FN01"
+        }
+
+        if( pairHash01.first == "NG" ) _apiCondition.value = "AL01"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"

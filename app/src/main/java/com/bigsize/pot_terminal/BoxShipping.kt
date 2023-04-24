@@ -102,6 +102,13 @@ class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback
         var message:String = ""
         if( apiCondition == "AL01" ) message = getString( R.string.err_box_shipping02 )
         if( apiCondition == "AL02" ) message = getString( R.string.alt_box_shipping01 )
+        if( apiCondition == "AL03" ) message = getString( R.string.alt_box_shipping02 )
+
+        if( apiCondition == "AL03" ) {
+          // AL03の場合は完了後の処理だから店舗の棚出状況に変化があったので店舗データと商品データを再取得します
+          viewModel01.pickShopList()
+          viewModel01.pickItemList()
+        }
 
         claimSound( playSoundNG )
         claimVibration( AppBase.vibrationNG )
@@ -138,6 +145,9 @@ class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback
         viewModel01.pickItemList()
 
         // 完了ダイアログを表示します
+
+        claimSound( playSoundFN )
+        claimVibration( AppBase.vibrationFN )
 
         val dialog:MessageDialog = MessageDialog( "00", "完了", getString( R.string.msg_box_shipping01 ), "OK", "" )
         dialog.show( supportFragmentManager, "simple" )
@@ -177,20 +187,16 @@ class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback
     })
 
     viewModel01.itemList.observe( this, Observer<MutableList<PotDataModel01>> {
-      //if( ( viewModel01.itemList.value as MutableList<PotDataModel01> ).size != 0 ) {
+      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "商品データ内容更新" )
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "商品データ内容更新" )
+      // 全データ数とPOTで読んだデータ数を更新します
+      viewModel01.cntRead.value = "0"
+      viewModel01.cntTotal.value = ( ( viewModel01.itemList.value as MutableList<PotDataModel01> ).sumBy { it.amt_p.toInt() } ).toString()
 
-        // 全データ数とPOTで読んだデータ数を更新します
-        viewModel01.cntRead.value = "0"
-        viewModel01.cntTotal.value = ( ( viewModel01.itemList.value as MutableList<PotDataModel01> ).sumBy { it.amt_p.toInt() } ).toString()
+      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "全データ数 POTで読んだデータ数 = " + viewModel01.cntTotal.value + " " + viewModel01.cntRead.value  )
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "全データ数 POTで読んだデータ数 = " + viewModel01.cntTotal.value + " " + viewModel01.cntRead.value  )
-
-        // ListViewの内容を更新します
-        adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
-
-      //}
+      // ListViewの内容を更新します
+      adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
     })
 
     scanItemM.observe( this, Observer<String> {
@@ -203,7 +209,6 @@ class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback
 
     binding01.txtGroup.setOnItemClickListener( this )
     binding01.txtShop.setOnItemClickListener( this )
-
   }
 
   override fun onDestroy() {
@@ -287,7 +292,6 @@ class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback
       }
       else -> {}
     }
-
   }
 
   /**
@@ -319,7 +323,10 @@ class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback
       val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_box_shipping01 ), "OK", "" )
       dialog.show( supportFragmentManager, "simple" )
     } else {
-      // 商品情報の照合状況を更新します
+      claimSound( playSoundOK )
+      claimVibration( AppBase.vibrationOK )
+
+      // 商品情報の検品数を更新します
       viewModel01.updateItemList( position )
 
       // ListViewの内容を更新します
@@ -332,16 +339,7 @@ class BoxShipping:DensoWaveBase(),AdapterView.OnItemClickListener,DialogCallback
 
       // 終了したらその旨を表示します
       position = ( viewModel01.itemList.value as MutableList<PotDataModel01> ).indexOfFirst { it.amt_n.toInt() < it.amt_p.toInt() }
-      if( position == -1 ) {
-        claimSound( playSoundFN )
-        claimVibration( AppBase.vibrationFN )
-
-        // 棚出しを完了します
-        viewModel01.finishVerification()
-      } else {
-        claimSound( playSoundOK )
-        claimVibration( AppBase.vibrationOK )
-      }
+      if( position == -1 ) { viewModel01.finishShipping() }
     }
 
     return true

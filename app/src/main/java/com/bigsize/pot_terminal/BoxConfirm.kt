@@ -181,7 +181,7 @@ class BoxConfirm:DensoWaveBase(),DialogCallback {
     viewModel01.txtBoxno.value = scanBox.substring( 3 )
 
     // 箱番号から店舗名と商品を取得します
-    viewModel01.pickItem()
+    viewModel01.pickItemList()
 
     return true
   }

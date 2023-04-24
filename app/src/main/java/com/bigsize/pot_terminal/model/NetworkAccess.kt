@@ -27,10 +27,10 @@ class BoxConfirmAPI {
     .build()
 
   /**
-   * 箱番号から店舗名を取得します
+   * 箱ラベルから店舗名を取得します
    *
    * @param [accessURL] サーバプログラムのURL
-   * @param [boxno] 物理箱番号
+   * @param [boxno] 物理箱ラベル
    * @return 店舗名
    */
   public suspend fun pickShopname( accessURL:String, boxno:String ):Pair<String,String> {
@@ -59,13 +59,13 @@ class BoxConfirmAPI {
   }
 
   /**
-   * 箱番号からから商品を取得します
+   * 箱ラベルからから商品を取得します
    *
    * @param [accessURL] サーバプログラムのURL
-   * @param [boxno] 物理箱番号
+   * @param [boxno] 物理箱ラベル
    * @return 商品データ
    */
-  public suspend fun pickItem( accessURL:String, boxno:String ):Pair<String,MutableList<PotDataModel01>> {
+  public suspend fun pickItemList( accessURL:String, boxno:String ):Pair<String,MutableList<PotDataModel01>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "I" )
@@ -271,13 +271,13 @@ class BoxShippingAPI {
   }
 
   /**
-   * 店舗の箱番号を取得します
+   * 店舗の箱ラベルを取得します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [shopID] 店舗ID
-   * @return 箱番号データ
+   * @return 箱ラベルデータ
    */
-  public suspend fun pickBoxNO( accessURL:String, shopID:String ):String {
+  public suspend fun pickBoxNO( accessURL:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "B" )
@@ -297,9 +297,9 @@ class BoxShippingAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 
   /**
@@ -310,7 +310,7 @@ class BoxShippingAPI {
    * @param [shopID] 店舗ID
    * @return エラー状況
    */
-  public suspend fun finishVerification( accessURL:String, groupID:String, shopID:String ):String {
+  public suspend fun finishShipping( accessURL:String, groupID:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "U" )
       .add( "kind", "01" )
@@ -331,9 +331,9 @@ class BoxShippingAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 }
 

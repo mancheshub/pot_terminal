@@ -46,6 +46,7 @@
   <string name="err_box_shipping01">該当の商品がありません。</string>
   <string name="err_box_shipping02">棚状況更新に失敗しました。</string>
   <string name="alt_box_shipping01">仕分棚にない商品が含まれています。</string>
+  <string name="alt_box_shipping02">棚に商品が残っています。</string>
 
   <string name="msg_box_confirm01">照合が完了しました。</string>
   <string name="err_box_confirm01">該当の商品がありません。</string>

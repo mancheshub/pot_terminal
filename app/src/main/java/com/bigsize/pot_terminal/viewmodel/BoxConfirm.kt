@@ -37,7 +37,7 @@ class BoxConfirm: ViewModel() {
   /**
    * 箱番号から店舗名と商品を取得します
    */
-  public fun pickItem() {
+  public fun pickItemList() {
     viewModelScope.launch {
       _apiCondition.value = "ST"
 
@@ -47,7 +47,7 @@ class BoxConfirm: ViewModel() {
         txtShopname.value = pairValue01.second
 
         // 箱番号から商品を取得します
-        val pairValue02 = model01.pickItem( AppBase.boxConfirmURL, ( txtBoxno.value as String ) )
+        val pairValue02 = model01.pickItemList( AppBase.boxConfirmURL, ( txtBoxno.value as String ) )
         _itemList.value = pairValue02.second
 
         _apiCondition.value = "FN"
