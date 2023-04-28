@@ -96,7 +96,7 @@ class BoxConfirmAPI {
   }
 }
 
-class ExamLocationAPI {
+class LocationConfirmAPI {
   private val model01:AppUtility = AppUtility()
 
   private val httpClient = OkHttpClient.Builder()

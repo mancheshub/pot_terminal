@@ -255,7 +255,7 @@
       android:focusableInTouchMode="true"
       android:paddingStart="10sp"
       android:paddingEnd="10sp"
-      android:text="商品箱出"
+      android:text="照合箱出"
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
@@ -277,6 +277,23 @@
       android:textStyle="bold"
       app:iconSize="17dp"
       app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btn_menu09" />
+
+    <Button
+      android:id="@+id/btn_menu14"
+      android:layout_width="135dp"
+      android:layout_height="50dp"
+      android:layout_marginEnd="16dp"
+      android:width="150px"
+      android:height="150px"
+      android:focusableInTouchMode="true"
+      android:paddingStart="10sp"
+      android:paddingEnd="10sp"
+      android:text="箱出"
+      android:textSize="15sp"
+      android:textStyle="bold"
+      app:iconSize="17dp"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu09" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

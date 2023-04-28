@@ -6,13 +6,13 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.BoxConfirm" />
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.BoxHetShipping" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BoxConfirm">
+    tools:context=".BoxShipping">
 
     <ProgressBar
       android:id="@+id/prg_view01"
@@ -25,15 +25,60 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_group"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+      android:layout_width="0dp"
+      android:layout_height="45dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:focusedByDefault="false"
+      android:hint="伝発グループ"
+      android:textColorHint="?android:textColor"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/prg_view01">
+
+      <AutoCompleteTextView
+        android:id="@+id/txt_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoText="false"
+        android:editable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_shop"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+      android:layout_width="0dp"
+      android:layout_height="45dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:hint="店舗"
+      android:textColorHint="?android:textColor"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/lay_group">
+
+      <AutoCompleteTextView
+        android:id="@+id/txt_shop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
       android:id="@+id/txt_view04"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
       android:gravity="center_horizontal|center_vertical"
-      android:text="箱　ラ　ベ　ル　・　店　名"
+      android:text="箱　ラ　ベ　ル"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
+      app:layout_constraintTop_toBottomOf="@+id/lay_shop" />
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/lay_boxno"
@@ -42,10 +87,11 @@
       android:layout_height="40dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="8dp"
-      android:focusable="true"
-      android:focusableInTouchMode="true"
+      android:layout_marginEnd="16dp"
+      android:textColorHint="?android:textColor"
       app:errorEnabled="true"
       app:expandedHintEnabled="true"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/txt_view04">
 
@@ -59,31 +105,6 @@
         android:textColor="#000000"
         android:textSize="25sp"
         android:textStyle="bold" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/lay_shopname"
-      style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-      android:layout_width="0dp"
-      android:layout_height="40dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="16dp"
-      app:errorEnabled="true"
-      app:expandedHintEnabled="true"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/lay_boxno"
-      app:layout_constraintTop_toTopOf="@+id/lay_boxno">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/txt_shopname"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:ellipsize="end"
-        android:enabled="false"
-        android:singleLine="true"
-        android:text="@={viewmodel.txtShopname}"
-        android:textColor="#000000"
-        android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -140,10 +161,9 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
-      android:background="@drawable/border"
-      android:divider="#00000000"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

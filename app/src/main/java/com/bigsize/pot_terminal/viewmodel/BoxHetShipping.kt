@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
-class BoxShippingPage01:ViewModel() {
+class BoxHetShipping:ViewModel() {
   private var model01:BoxShippingAPI = BoxShippingAPI()
   private var model02:BoxConfirmAPI = BoxConfirmAPI()
 
@@ -29,28 +29,31 @@ class BoxShippingPage01:ViewModel() {
 
   // API通信状況
   // ST → 通信開始 ER → 通信エラー FN → 通信終了
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
   public val apiCondition:LiveData<String> get() = _apiCondition
 
   // 伝発グループリスト
-  private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
+  private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData( mutableListOf() )
   public val groupList:LiveData<MutableList<HashItem>> get() = _groupList
 
   // 店舗リスト
-  private val _shopList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
+  private val _shopList:MutableLiveData<MutableList<HashItem>> = MutableLiveData( mutableListOf() )
   public val shopList:LiveData<MutableList<HashItem>> get() = _shopList
 
   // 商品リスト
-  private val _itemList:MutableLiveData<MutableList<PotDataModel01>> = MutableLiveData()
+  private val _itemList:MutableLiveData<MutableList<PotDataModel01>> = MutableLiveData( mutableListOf() )
   public val itemList:LiveData<MutableList<PotDataModel01>> get() = _itemList
 
   // 今回決定した箱番号
   public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
 
-  // 現在選択している"伝発グループ・店舗・箱番号"
-  public var selectedGroupID:String = " "
-  public var selectedShopID:String = " "
-  public var selectedBoxID:String = " "
+  // 前回決定した箱番号
+  private var _memBoxno:String = ""
+  public val memBoxno:String get() = _memBoxno
+
+  // 現在選択している"伝発グループ・店舗"
+  public var selectedGroupID:String = ""
+  public var selectedShopID:String = ""
 
   init {}
 
@@ -102,7 +105,7 @@ class BoxShippingPage01:ViewModel() {
 
         val pairHash01 = model01.pickBoxNO( AppBase.boxShippingURL, selectedShopID )
         txtBoxno.value = pairHash01.second
-        selectedBoxID = pairHash01.second
+        _memBoxno = pairHash01.second
 
         // 商品データを取得します
 
@@ -131,7 +134,7 @@ class BoxShippingPage01:ViewModel() {
 
         // 箱出が正常に完了したら箱ラベルに商品が残っていないかをチェックします
         if( pairHash01.first == "OK" ) {
-          val pairHash02 = model02.pickItemList( AppBase.boxConfirmURL, selectedBoxID )
+          val pairHash02 = model02.pickItemList( AppBase.boxConfirmURL, memBoxno )
 
           if( pairHash02.second.size != 0 ) _apiCondition.value = "AL03"
           if( pairHash02.second.size == 0 ) _apiCondition.value = "FN01"

@@ -58,7 +58,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     // 上書きモードスイッチの初期値を設定します
     if( AppBase.deviceNO == AppBase.specialDeviceNO ) binding01.swhMode01.isChecked = true
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
     adapter01 = AD_ItemVerification( applicationContext, viewModel01.potDataArray )
     binding01.lstView01.adapter = adapter01

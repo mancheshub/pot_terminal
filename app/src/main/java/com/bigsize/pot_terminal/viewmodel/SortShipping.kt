@@ -23,7 +23,7 @@ class SortShipping:ViewModel() {
 
   // ソケット通信状況
   // 接続状態 → CONNECTED 接続エラー → CONNERROR 切断状態 → DISCONNECT
-  private val _socketCondition:MutableLiveData<String> = MutableLiveData( "" )
+  private val _socketCondition:MutableLiveData<String> = MutableLiveData()
   public val socketCondition:LiveData<String> get() = _socketCondition
 
   private val uuid = "00001101-0000-1000-8000-00805F9B34FB"
@@ -94,5 +94,5 @@ class SortShipping:ViewModel() {
     // ストリームでデータを送ります
     socket?.outputStream!!.write( buffer, 0, buffer.size )
   }
-
 }
+

@@ -57,7 +57,7 @@ class SortShipping:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickL
     supportActionBar?.title = "仕分出荷"
     supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
     adapter01 = AD_SortShipping( applicationContext, viewModel01.itemDataArray )
     binding01.lstView01.adapter = adapter01
@@ -69,31 +69,33 @@ class SortShipping:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickL
     // ■ 変更を補足します
 
     viewModel01.socketCondition.observe( this, Observer<String> {
-      if( ( viewModel01.socketCondition.value as String ) != "" ) {
+      it ?: return@Observer
 
-        if( ( viewModel01.socketCondition.value as String ) == "CONNECTED" ) {
-          claimSound( playSoundOK )
-          claimVibration( AppBase.vibrationOK )
+      // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
+      val socketCondition:String = viewModel01.socketCondition.value as String
 
-          val dialog:MessageDialog = MessageDialog( "00", "成功", getString( R.string.msg_bluetooth01 ), "OK", "" )
-          dialog.show( supportFragmentManager, "simple" )
-        }
+      if( socketCondition == "CONNECTED" ) {
+        claimSound( playSoundOK )
+        claimVibration( AppBase.vibrationOK )
 
-        if( ( viewModel01.socketCondition.value as String ) == "CONNERROR" ) {
-          claimSound( playSoundNG )
-          claimVibration( AppBase.vibrationNG )
+        val dialog:MessageDialog = MessageDialog( "00", "成功", getString( R.string.msg_bluetooth01 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
+      }
 
-          val dialog:MessageDialog = MessageDialog( "00", "失敗", getString( R.string.err_bluetooth03 ), "OK", "" )
-          dialog.show( supportFragmentManager, "simple" )
-        }
+      if( socketCondition == "CONNERROR" ) {
+        claimSound( playSoundNG )
+        claimVibration( AppBase.vibrationNG )
 
-        if( ( viewModel01.socketCondition.value as String ) == "DISCONNECT" ) {
-          claimSound( playSoundOK )
-          claimVibration( AppBase.vibrationOK )
+        val dialog:MessageDialog = MessageDialog( "00", "失敗", getString( R.string.err_bluetooth03 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
+      }
 
-          val dialog:MessageDialog = MessageDialog( "00", "成功", getString( R.string.msg_bluetooth02 ), "OK", "" )
-          dialog.show( supportFragmentManager, "simple" )
-        }
+      if( socketCondition == "DISCONNECT" ) {
+        claimSound( playSoundOK )
+        claimVibration( AppBase.vibrationOK )
+
+        val dialog:MessageDialog = MessageDialog( "00", "成功", getString( R.string.msg_bluetooth02 ), "OK", "" )
+        dialog.show( supportFragmentManager, "simple" )
       }
     })
 

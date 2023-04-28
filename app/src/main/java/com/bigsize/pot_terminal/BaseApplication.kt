@@ -31,13 +31,13 @@ class AppBase:Application() {
     )
 
     // Wifiの許容レベル - -50〜0まで
-    public val  permitWifiLevel:Int = -40
+    public val  permitWifiLevel:Int = -100
 
     // 特別動作する端末番号
     public val specialDeviceNO:String = "999"
 
     // 場所確認関連URL
-    public val examLocationURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=examLocation"
+    public val locationConfirmURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=locationConfirm"
 
     // POTデータ転送関連URL
     public val transferURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=potTransfer"

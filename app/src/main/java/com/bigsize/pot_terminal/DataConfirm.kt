@@ -43,13 +43,12 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
 
     binding01.viewmodel = viewModel01
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
     adapter01 = AD_DataConfirm( applicationContext, viewModel01.potDataArray )
     binding01.lstView01.adapter = adapter01
 
-    // ■ AutoCompleteTextViewアダプタをセットします
-
+    // ファイル名を抽出します
     var menuItems:MutableList<String> = mutableListOf()
     for( _item in AppBase.potDivision ) {
       menuItems.add( _item.name + " ( " + model01.countPotData( _item.division ).toString() + " 行 )" )

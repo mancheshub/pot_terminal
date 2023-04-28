@@ -20,7 +20,7 @@ class BoxConfirm: ViewModel() {
   public val txtShopname:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
 
   // 商品リスト
-  private val _itemList:MutableLiveData<MutableList<PotDataModel01>> = MutableLiveData( mutableListOf() )
+  private val _itemList:MutableLiveData<MutableList<PotDataModel01>> = MutableLiveData()
   public val itemList:LiveData<MutableList<PotDataModel01>> get() = _itemList
 
   // 全データ数とPOTで読んだデータ数
@@ -29,7 +29,7 @@ class BoxConfirm: ViewModel() {
 
   // API通信状況
   // ST → 通信開始 ER → 通信エラー FN → 通信終了
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
   public val apiCondition:LiveData<String> get() = _apiCondition
 
   init {}

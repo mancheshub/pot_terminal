@@ -4,6 +4,7 @@
   <string name="alt_wifi01">Wifiの電波が弱くなっています。Wifiを再設定してください。</string>
   <string name="err_communication01">通信エラーが発生しました。</string>
   <string name="err_communication02">スタッフ番号が取得できません。</string>
+  <string name="err_communication03">Activityインスタンスの取得に失敗しました。</string>
 
   <string name="msg_bluetooth01">接続しました。</string>
   <string name="msg_bluetooth02">切断しました。</string>
@@ -44,9 +45,9 @@
 
   <string name="msg_box_shipping01">照合が完了しました。</string>
   <string name="err_box_shipping01">該当の商品がありません。</string>
-  <string name="err_box_shipping02">棚状況更新に失敗しました。</string>
-  <string name="alt_box_shipping01">仕分棚にない商品が含まれています。</string>
-  <string name="alt_box_shipping02">棚に商品が残っています。</string>
+  <string name="err_box_shipping02">箱状況更新に失敗しました。</string>
+  <string name="alt_box_shipping01">仕分箱にない商品が含まれています。</string>
+  <string name="alt_box_shipping02">箱に商品が残っています。</string>
 
   <string name="msg_box_confirm01">照合が完了しました。</string>
   <string name="err_box_confirm01">該当の商品がありません。</string>

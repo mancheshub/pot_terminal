@@ -6,7 +6,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.ExamLocation" />
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.LocationConfirm" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

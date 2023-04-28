@@ -41,6 +41,7 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
     binding01.btnMenu11.setOnClickListener( this )
     binding01.btnMenu12.setOnClickListener( this )
     binding01.btnMenu13.setOnClickListener( this )
+    binding01.btnMenu14.setOnClickListener( this )
 
     binding01.btnMenu01.setOnFocusChangeListener( this )
     binding01.btnMenu02.setOnFocusChangeListener( this )
@@ -55,6 +56,7 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
     binding01.btnMenu11.setOnFocusChangeListener( this )
     binding01.btnMenu12.setOnFocusChangeListener( this )
     binding01.btnMenu13.setOnFocusChangeListener( this )
+    binding01.btnMenu14.setOnFocusChangeListener( this )
   }
 
   /**
@@ -69,7 +71,7 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
     }
 
     if( event.keyCode == KEY_001 ) startActivity( Intent( applicationContext, ItemVerification::class.java ) )
-    if( event.keyCode == KEY_002 ) startActivity( Intent( applicationContext, ExamLocation::class.java ) )
+    if( event.keyCode == KEY_002 ) startActivity( Intent( applicationContext, LocationConfirm::class.java ) )
     if( event.keyCode == KEY_003 ) startActivity( Intent( applicationContext, ShelfReceiving::class.java ) )
     if( event.keyCode == KEY_004 ) startActivity( Intent( applicationContext, ShelfShipping::class.java ) )
     if( event.keyCode == KEY_005 ) startActivity( Intent( applicationContext, ShelfReplaceS::class.java ) )
@@ -95,9 +97,10 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
       R.id.btn_menu08 -> { startActivity( Intent( applicationContext, Inventory::class.java ) ) }
       R.id.btn_menu09 -> { startActivity( Intent( applicationContext, ItemInspection::class.java ) ) }
       R.id.btn_menu10 -> { startActivity( Intent( applicationContext, SortShipping::class.java ) ) }
-      R.id.btn_menu11 -> { startActivity( Intent( applicationContext, ExamLocation::class.java ) ) }
-      R.id.btn_menu12 -> { startActivity( Intent( applicationContext, BoxShipping::class.java ) ) }
+      R.id.btn_menu11 -> { startActivity( Intent( applicationContext, LocationConfirm::class.java ) ) }
+      R.id.btn_menu12 -> { startActivity( Intent( applicationContext, BoxHetShipping::class.java ) ) }
       R.id.btn_menu13 -> { startActivity( Intent( applicationContext, BoxConfirm::class.java ) ) }
+      R.id.btn_menu14 -> { startActivity( Intent( applicationContext, BoxShipping::class.java ) ) }
     }
   }
 

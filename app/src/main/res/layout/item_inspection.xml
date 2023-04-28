@@ -12,7 +12,10 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ItemVerification">
+    tools:context=".ItemInspection"
+    android:descendantFocusability="afterDescendants"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <ProgressBar
       android:id="@+id/prg_view01"
@@ -32,7 +35,6 @@
       android:layout_height="45dp"
       android:layout_marginStart="16dp"
       android:layout_marginEnd="16dp"
-      android:focusedByDefault="false"
       android:hint="作業グループ"
       android:textColorHint="?android:textColor"
       app:layout_constraintEnd_toEndOf="parent"
@@ -66,6 +68,7 @@
         android:id="@+id/txt_shop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoText="false"
         android:editable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,6 +91,7 @@
         android:id="@+id/txt_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoText="false"
         android:editable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,6 +113,7 @@
         android:id="@+id/txt_print"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoText="false"
         android:editable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,9 +207,10 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
+      android:background="@drawable/border"
+      android:divider="#00000000"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

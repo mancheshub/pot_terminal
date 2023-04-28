@@ -60,7 +60,7 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
 
     binding01.viewmodel = viewModel01
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
     adapter01 = AD_DataTransfer( applicationContext, viewModel01.potFileArray )
     binding01.lstView01.adapter = adapter01
@@ -156,11 +156,7 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
     }
 
     // Wifi電波レベルが低下した場合
-
-    if( callbackType == "02" ) {
-      val intent = Intent( Settings.Panel.ACTION_WIFI )
-      startActivityForResult( intent, 0 )
-    }
+    if( callbackType == "02" ) startActivityForResult( Intent( Settings.Panel.ACTION_WIFI ), 0 )
   }
 
   /**

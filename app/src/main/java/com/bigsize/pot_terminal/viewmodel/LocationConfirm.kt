@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.model.ExamLocationAPI
+import com.bigsize.pot_terminal.model.LocationConfirmAPI
 import com.bigsize.pot_terminal.model.PotDataModel02
 import com.bigsize.pot_terminal.model.PotDataModel04
 import kotlinx.coroutines.launch
 
-class ExamLocation: ViewModel() {
-  private var model01:ExamLocationAPI = ExamLocationAPI()
+class LocationConfirm: ViewModel() {
+  private var model01:LocationConfirmAPI = LocationConfirmAPI()
 
   // 商品と商品名
   public val txtCd:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
@@ -27,12 +27,12 @@ class ExamLocation: ViewModel() {
   public var memSz:String = ""
 
   // ロケーションリスト
-  private val _locationList:MutableLiveData<MutableList<PotDataModel04>> = MutableLiveData( mutableListOf() )
+  private val _locationList:MutableLiveData<MutableList<PotDataModel04>> = MutableLiveData()
   public val locationList:LiveData<MutableList<PotDataModel04>> get() = _locationList
 
   // API通信状況
   // ST → 通信開始 ER → 通信エラー FN → 通信終了
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
   public val apiCondition:LiveData<String> get() = _apiCondition
 
   init {}
@@ -47,11 +47,11 @@ class ExamLocation: ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        if( isClear == "NON" ) _locationList.value = model01.pickLocation( AppBase.examLocationURL, memCd, memCn, memSz )
+        if( isClear == "NON" ) _locationList.value = model01.pickLocation( AppBase.locationConfirmURL, memCd, memCn, memSz )
         if( isClear == "YES" ) _locationList.value = mutableListOf()
         _apiCondition.value = "FN"
       } catch( e:Exception ) {
-        if( BuildConfig.DEBUG ) Log.d( "APP-ExamLocation", "致命的エラー" )
+        if( BuildConfig.DEBUG ) Log.d( "APP-LocationConfirm", "致命的エラー" )
         _apiCondition.value = "ER"
         e.printStackTrace()
       }

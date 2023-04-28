@@ -27,19 +27,19 @@ class ItemInspection:ViewModel() {
 
   // API通信状況
   // ST → 通信開始 ER → 通信エラー FN → 通信終了 SI_*** → 他人スタッフ***が検品中
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
   public val apiCondition:LiveData<String> get() = _apiCondition
 
   // 作業グループリスト
-  private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData( mutableListOf() )
+  private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
   public val groupList:LiveData<MutableList<HashItem>> get() = _groupList
 
   // 店舗リスト
-  private val _shopList:MutableLiveData<MutableList<HashItem>> = MutableLiveData( mutableListOf() )
+  private val _shopList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
   public val shopList:LiveData<MutableList<HashItem>> get() = _shopList
 
   // 商品リスト
-  private val _itemList:MutableLiveData<MutableList<PotDataModel03>> = MutableLiveData( mutableListOf() )
+  private val _itemList:MutableLiveData<MutableList<PotDataModel03>> = MutableLiveData()
   public val itemList:LiveData<MutableList<PotDataModel03>> get() = _itemList
 
   // 箱リスト
@@ -49,19 +49,19 @@ class ItemInspection:ViewModel() {
     HashItem( "08", "箱08" ), HashItem( "09", "箱09" ), HashItem( "10", "箱10" ), HashItem( "11", "箱11" ),
     HashItem( "12", "箱12" ), HashItem( "13", "箱13" ), HashItem( "14", "箱14" ), HashItem( "15", "箱15" ),
     HashItem( "16", "箱16" ), HashItem( "17", "箱17" ), HashItem( "18", "箱18" ), HashItem( "19", "箱19" ),
-    HashItem( "20", "箱20" ), HashItem( "", "" ),
+    HashItem( "20", "箱20" ), HashItem( "", " " ),
   )
 
   // 印刷機リスト
   public val printList:List<HashItem> = mutableListOf(
-    HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "", "" ),
+    HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "", " " ),
   )
 
   // 現在選択している"作業グループ・店舗・箱・印刷機"
-  public var selectedGroupID:String = ""
-  public var selectedShopID:String = ""
-  public var selectedBoxID:String = ""
-  public var selectedPrintID:String = ""
+  public var selectedGroupID:String = " "
+  public var selectedShopID:String = " "
+  public var selectedBoxID:String = " "
+  public var selectedPrintID:String = " "
 
   // 確定処理実行判断フラグ - 店舗のSCMラベルが発行されている場合に警告表示する判定に利用します
   public var isExecute03:String = ""

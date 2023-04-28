@@ -68,15 +68,15 @@ class BoxConfirm:DensoWaveBase(),DialogCallback {
 
     binding01.viewmodel = viewModel01
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
-    adapter01 = AD_BoxConfirm( applicationContext, ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
+    adapter01 = AD_BoxConfirm( applicationContext, mutableListOf() )
     binding01.lstView01.adapter = adapter01
 
     // ■ 変更を補足します
 
     viewModel01.apiCondition.observe( this, Observer<String> {
-      if( ( viewModel01.apiCondition.value as String ) != "" ) {
+      it ?: return@Observer
 
       var regex:Regex? = null
 
@@ -107,11 +107,10 @@ class BoxConfirm:DensoWaveBase(),DialogCallback {
       if( regex.containsMatchIn( apiCondition ) == true ) {
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
       }
-
-      }
     })
 
     viewModel01.itemList.observe( this, Observer<MutableList<PotDataModel01>> {
+      it ?: return@Observer
       if( BuildConfig.DEBUG ) Log.d( "APP-BoxConfirm", "商品データ内容更新" )
 
       // 全データ数とPOTで読んだデータ数を更新します
@@ -120,7 +119,7 @@ class BoxConfirm:DensoWaveBase(),DialogCallback {
 
       if( BuildConfig.DEBUG ) Log.d( "APP-BoxConfirm", "全データ数 POTで読んだデータ数 = " + viewModel01.cntTotal.value + " " + viewModel01.cntRead.value  )
 
-      // ListViewの内容を更新します
+      // アダプタデータを更新します
       adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
     })
 
@@ -148,11 +147,7 @@ class BoxConfirm:DensoWaveBase(),DialogCallback {
    */
   override fun fromMessageDialog( callbackType:String ) {
     // Wifi電波レベルが低下した場合
-
-    if( callbackType == "04" ) {
-      val intent = Intent( Settings.Panel.ACTION_WIFI )
-      startActivityForResult( intent, 0 )
-    }
+    if( callbackType == "04" ) startActivityForResult( Intent( Settings.Panel.ACTION_WIFI ), 0 )
   }
 
   /**
@@ -223,7 +218,7 @@ class BoxConfirm:DensoWaveBase(),DialogCallback {
       // 商品情報の検品数を更新します
       viewModel01.updateItemList( position )
 
-      // ListViewの内容を更新します
+      // アダプタデータを更新します
       adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
 
       // POTで読んだデータ数を更新します
