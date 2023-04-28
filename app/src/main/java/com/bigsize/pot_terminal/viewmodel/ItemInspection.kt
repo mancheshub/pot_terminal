@@ -79,7 +79,9 @@ class ItemInspection:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _groupList.value = model01.pickGroupList( AppBase.itemInspectionURL )
+        val pairHash01 = model01.pickGroupList( AppBase.itemInspectionURL )
+        _groupList.value = pairHash01.second
+
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "致命的エラー" )
@@ -97,7 +99,9 @@ class ItemInspection:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _shopList.value = model01.pickShopList( AppBase.itemInspectionURL, selectedGroupID )
+        val pairHash01 = model01.pickShopList( AppBase.itemInspectionURL, selectedGroupID )
+        _shopList.value = pairHash01.second
+
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "致命的エラー" )
@@ -124,7 +128,11 @@ class ItemInspection:ViewModel() {
         var apiExclusive:String = "999"
 
         // 検品状態を確認します
-        if( flagExclusive == "exeExclusive" ) apiExclusive = model01.updateSituation( AppBase.itemInspectionURL, "SI-check", selectedGroupID, selectedShopID, AppBase.staffNO )
+        if( flagExclusive == "exeExclusive" ) {
+          val pairHash01 = model01.updateSituation( AppBase.itemInspectionURL, "SI-check", selectedGroupID, selectedShopID, AppBase.staffNO )
+          apiExclusive = pairHash01.second
+        }
+
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "検品スタッフ = " + apiExclusive )
 
         // 自分が検品した店舗もしくは誰も検品していない店舗の場合のみ処理します
@@ -133,9 +141,13 @@ class ItemInspection:ViewModel() {
 
         if( apiExclusive == "999" ) {
           // 検品開始状態とします
-          if( flagExclusive == "exeExclusive" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-start", selectedGroupID, selectedShopID, AppBase.staffNO )
+          if( flagExclusive == "exeExclusive" ) {
+            val pairHash02 = model01.updateSituation( AppBase.itemInspectionURL, "SI-start", selectedGroupID, selectedShopID, AppBase.staffNO )
+          }
 
-          _itemList.value = model01.pickItemList( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          // 商品データを取得します
+          val pairHash03 =model01.pickItemList( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          _itemList.value = pairHash03.second
 
           _apiCondition.value = "FN99"
         } else {
@@ -166,7 +178,8 @@ class ItemInspection:ViewModel() {
         // - 自身が担当者でない場合は isExecute01 == "0"  となるのでエラー画面をActivityから出力します
         // - 自身が担当者である場合は isExecute01 != "0"  となるのでそのままクリア処理を実施します
         if( kind == "01" && isExecute01 == "" ) {
-          isExecute01 = model01.pickSICondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID, AppBase.staffNO )
+          val pairHash01 = model01.pickSICondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID, AppBase.staffNO )
+          isExecute01 = pairHash01.second
         }
 
         // 確定ボタンが押されたときは isExecute03 == "" となっているからSCMラベル印刷状況を調査します
@@ -175,17 +188,18 @@ class ItemInspection:ViewModel() {
         // - SCMラベルが印刷されていない場合は isExecute03 == "0" となるのでそのまま確定処理を実施します
 
         if( kind == "03" && isExecute03 == "" ) {
-          isExecute03 = model01.pickSMCondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          val pairHash02 = model01.pickSMCondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          isExecute03 = pairHash02.second
         }
 
         if( ( kind == "01" && isExecute01 != "0" ) || kind == "02" || ( kind == "03" && isExecute03 == "0" ) ) {
           model01.deceded( AppBase.itemInspectionURL, kind, selectedGroupID, selectedShopID, selectedBoxID, selectedPrintID, ( itemList.value as MutableList<PotDataModel03> ) )
 
           // 検品完了状態とします
-          if( kind == "03" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID, AppBase.staffNO )
+          if( kind == "03" ) { val pairHash03 = model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID, AppBase.staffNO ) }
 
           // 検品取消状態とします
-          if( kind == "01" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO )
+          if( kind == "01" ) { val pairHash04 = model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO ) }
 
           _apiCondition.value = "FN" + kind
         } else {

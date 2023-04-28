@@ -13,14 +13,6 @@ class PotDataModel04( var cd:String, var cn:String, var sz:String, var cs:String
  * -- APIとのデータ交換フォーマット
  */
 
-// 一行データ交換モデル
-
-@Serializable
-data class APITextModel(
-  val status:String,
-  val text:String,
-)
-
 @Serializable
 data class APILineModel(
   val status:String,

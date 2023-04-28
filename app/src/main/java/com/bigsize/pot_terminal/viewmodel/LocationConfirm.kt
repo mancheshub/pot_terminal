@@ -47,7 +47,11 @@ class LocationConfirm: ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        if( isClear == "NON" ) _locationList.value = model01.pickLocation( AppBase.locationConfirmURL, memCd, memCn, memSz )
+        if( isClear == "NON" ) {
+          val pairValue01 = model01.pickLocation( AppBase.locationConfirmURL, memCd, memCn, memSz )
+          _locationList.value = pairValue01.second
+        }
+
         if( isClear == "YES" ) _locationList.value = mutableListOf()
         _apiCondition.value = "FN"
       } catch( e:Exception ) {

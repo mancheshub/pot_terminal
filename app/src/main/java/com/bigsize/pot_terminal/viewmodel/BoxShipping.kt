@@ -62,7 +62,9 @@ class BoxShippingPage01:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _groupList.value = model01.pickGroupList( AppBase.boxShippingURL )
+        val pairHash01 = model01.pickGroupList( AppBase.boxShippingURL )
+        _groupList.value = pairHash01.second
+
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
@@ -80,7 +82,9 @@ class BoxShippingPage01:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _shopList.value = model01.pickShopList( AppBase.boxShippingURL, selectedGroupID )
+        val pairHash01 = model01.pickShopList( AppBase.boxShippingURL, selectedGroupID )
+        _shopList.value = pairHash01.second
+
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
@@ -99,13 +103,11 @@ class BoxShippingPage01:ViewModel() {
 
       try {
         // 店舗の箱番号を取得します
-
         val pairHash01 = model01.pickBoxNO( AppBase.boxShippingURL, selectedShopID )
         txtBoxno.value = pairHash01.second
         selectedBoxID = pairHash01.second
 
         // 商品データを取得します
-
         val pairHash02 = model01.pickItemList( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
         _itemList.value = pairHash02.second
 
@@ -159,4 +161,10 @@ class BoxShippingPage01:ViewModel() {
     // ViewModelを更新します
     ( _itemList.value as MutableList<PotDataModel01> ).set( position, potData )
   }
+}
+
+class BoxShippingPage02:ViewModel() {
+}
+
+class BoxShippingPage03:ViewModel() {
 }

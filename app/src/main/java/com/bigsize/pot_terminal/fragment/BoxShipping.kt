@@ -17,7 +17,6 @@ import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BoxShipping
 import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.PotDataModel01
-import com.bigsize.pot_terminal.adapter.BoxHetShipping
 import com.bigsize.pot_terminal.databinding.BoxShippingPage01Binding
 import com.bigsize.pot_terminal.model.AppUtility
 import com.bigsize.pot_terminal.model.HashItem
@@ -36,6 +35,8 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener {
   private lateinit var adapter03:ArrayAdapter<String>
 
   private val model01:AppUtility = AppUtility()
+
+  private var dialogERR:MessageDialog? = null
 
   override fun onCreateView( inflater:LayoutInflater, container:ViewGroup?, savedInstanceState:Bundle? ):View? {
     return inflater.inflate( R.layout.box_shipping_page01, container, false )
@@ -283,6 +284,9 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener {
 
     var position:Int = 0
 
+    // ダイアログが表示されていれば閉じます
+    dialogERR?.dismiss()
+
     var cd:String = model01.convertTrueCd( scanItem.substring( 3, 13 ).toInt().toString() );
     var cn:String = scanItem.substring( 14, 16 );
     var sz:String = scanItem.substring( 17, 21 ).replace( " ", "" );
@@ -298,8 +302,8 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener {
       activity01.claimSound( activity01.playSoundNG )
       activity01.claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_box_shipping01 ), "OK", "" )
-      dialog.show( parentFragmentManager, "simple" )
+      dialogERR = MessageDialog( "00", "", getString( R.string.err_box_shipping01 ), "OK", "" )
+      dialogERR?.show( parentFragmentManager, "simple" )
     } else {
       activity01.claimSound( activity01.playSoundOK )
       activity01.claimVibration( AppBase.vibrationOK )

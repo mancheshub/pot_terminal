@@ -105,7 +105,6 @@ class LocationConfirmAPI {
     .readTimeout( 30, TimeUnit.SECONDS )
     .build()
 
-
   /**
    * 品番・色番・サイズから商品のロケーションを取得します
    *
@@ -116,7 +115,7 @@ class LocationConfirmAPI {
    *
    * @return ロケーションデータ
    */
-  public suspend fun pickLocation( accessURL:String, cd:String, cn:String, sz:String ):MutableList<PotDataModel04> {
+  public suspend fun pickLocation( accessURL:String, cd:String, cn:String, sz:String ):Pair<String,MutableList<PotDataModel04>> {
     val formBody = FormBody.Builder()
       .add( "cd", cd )
       .add( "cn", cn )
@@ -136,9 +135,8 @@ class LocationConfirmAPI {
       }
     }
 
+    val tempList:MutableList<PotDataModel04> = mutableListOf()
     val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
-
-    var tempList:MutableList<PotDataModel04> = mutableListOf()
 
     apiResponseBody.itemArray.forEach {
       val location:String = it.ssb + it.ssh + it.ssf + "-" + it.sss + "-" + it.sst + "-" + it.sso
@@ -146,7 +144,7 @@ class LocationConfirmAPI {
       tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.cs, it.itn, location, it.ssa ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 }
 
@@ -165,7 +163,7 @@ class BoxShippingAPI {
    * @param [accessURL] サーバプログラムのURL
    * @return 伝発グループデータ
    */
-  public suspend fun pickGroupList( accessURL:String ):MutableList<HashItem> {
+  public suspend fun pickGroupList( accessURL:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "G" )
@@ -184,14 +182,14 @@ class BoxShippingAPI {
       }
     }
 
-    var tempList:MutableList<HashItem> = mutableListOf()
+    val tempList:MutableList<HashItem> = mutableListOf()
     val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -201,7 +199,7 @@ class BoxShippingAPI {
    * @param [groupID] 伝発グループID
    * @return 店舗データ
    */
-  public suspend fun pickShopList( accessURL:String, groupID:String ):MutableList<HashItem> {
+  public suspend fun pickShopList( accessURL:String, groupID:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "S" )
@@ -228,7 +226,7 @@ class BoxShippingAPI {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -352,7 +350,7 @@ class ItemInspectionAPI {
    * @param [accessURL] サーバプログラムのURL
    * @return 作業グループデータ
    */
-  public suspend fun pickGroupList( accessURL:String ):MutableList<HashItem> {
+  public suspend fun pickGroupList( accessURL:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "G" )
@@ -371,14 +369,14 @@ class ItemInspectionAPI {
       }
     }
 
-    var tempList:MutableList<HashItem> = mutableListOf()
+    val tempList:MutableList<HashItem> = mutableListOf()
     val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -388,7 +386,7 @@ class ItemInspectionAPI {
    * @param [groupID] 作業グループID
    * @return 店舗データ
    */
-  public suspend fun pickShopList( accessURL:String, groupID:String ):MutableList<HashItem> {
+  public suspend fun pickShopList( accessURL:String, groupID:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "S" )
@@ -415,7 +413,7 @@ class ItemInspectionAPI {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -426,7 +424,7 @@ class ItemInspectionAPI {
    * @param [shopID] 店舗ID
    * @return 店舗データ
    */
-  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):MutableList<PotDataModel03> {
+  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):Pair<String,MutableList<PotDataModel03>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "I" )
@@ -454,7 +452,7 @@ class ItemInspectionAPI {
       tempList.add( PotDataModel03( model01.eightdigitsCd(it.cd), it.cn, it.sz, it.asn21, it.asn22, it.asn23, it.asn24, it.asn25, it.asn53, it.bf0, it.asn30_n.toInt().toString(), it.asn30_p.toInt().toString() ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -466,7 +464,7 @@ class ItemInspectionAPI {
    * @param [staffID] スタッフID
    * @return 店舗データ
    */
-  public suspend fun pickSICondition( accessURL:String, groupID:String, shopID:String, staffID:String ):String {
+  public suspend fun pickSICondition( accessURL:String, groupID:String, shopID:String, staffID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "SI" )
@@ -488,9 +486,9 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 
   /**
@@ -501,7 +499,7 @@ class ItemInspectionAPI {
    * @param [shopID] 店舗ID
    * @return 店舗データ
    */
-  public suspend fun pickSMCondition( accessURL:String, groupID:String, shopID:String ):String {
+  public suspend fun pickSMCondition( accessURL:String, groupID:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "SCM" )
@@ -522,9 +520,9 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 
   /**
@@ -575,7 +573,7 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 
   /**
@@ -588,7 +586,7 @@ class ItemInspectionAPI {
    * @param [staffID] スタッフID
    * @return 排他結果
    */
-  public suspend fun updateSituation( accessURL:String, kind:String, groupID:String, shopID:String, staffID:String ):String {
+  public suspend fun updateSituation( accessURL:String, kind:String, groupID:String, shopID:String, staffID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "U" )
       .add( "kind", kind )
@@ -610,11 +608,10 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
-
 }
 
 class DataTransferAPI {
@@ -660,7 +657,7 @@ class DataTransferAPI {
       }
     }
 
-    val apiResponse:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 
   /**
@@ -701,7 +698,7 @@ class DataTransferAPI {
       }
     }
 
-    val apiResponse:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 
   /**
@@ -740,6 +737,6 @@ class DataTransferAPI {
       }
     }
 
-    val apiResponse:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 }
