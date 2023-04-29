@@ -8,27 +8,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.HashItem
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.OutputStream
-import java.util.*
+import java.util.UUID
 
 class SortShipping:ViewModel() {
   private lateinit var device:BluetoothDevice
 
   private var socket:BluetoothSocket? = null
   private var outStream:OutputStream? = null
+  private val uuid = "00001101-0000-1000-8000-00805F9B34FB"
 
   // ソケット通信状況
-  // 接続状態 → CONNECTED 接続エラー → CONNERROR 切断状態 → DISCONNECT
   private val _socketCondition:MutableLiveData<String> = MutableLiveData()
   public val socketCondition:LiveData<String> get() = _socketCondition
 
-  private val uuid = "00001101-0000-1000-8000-00805F9B34FB"
-
-  // デバイス名・MACアドレス・入力データ
+  // デバイス名・MACアドレス
   public val txtName:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
   public val txtAddress:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
 
@@ -95,4 +92,3 @@ class SortShipping:ViewModel() {
     socket?.outputStream!!.write( buffer, 0, buffer.size )
   }
 }
-

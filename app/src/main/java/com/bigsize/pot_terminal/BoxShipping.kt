@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
-import com.wada811.databinding.dataBinding
+import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.bigsize.pot_terminal.DensoWaveBase
+import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.model.DialogCallback
+import com.bigsize.pot_terminal.model.ScanCallback
 import com.bigsize.pot_terminal.model.MessageDialog
-import com.bigsize.pot_terminal.databinding.BoxShippingBinding
 import com.bigsize.pot_terminal.model.PotDataModel01
+import com.bigsize.pot_terminal.databinding.BoxShippingBinding
 import com.bigsize.pot_terminal.adapter.BoxShipping as AD_BoxShipping
 
 class BoxShipping:DensoWaveBase(),DialogCallback {
@@ -58,6 +59,24 @@ class BoxShipping:DensoWaveBase(),DialogCallback {
       if( position == 1 ) tab.text = "ｷｬﾝｾﾙ箱出"
       if( position == 2 ) tab.text = "先送箱出"
     }.attach()
+
+    // ◾️ スキャナイベントを補足します
+
+    scanBox.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "箱データ = " + scanBox.value )
+
+      val myFragment:ScanCallback = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
+
+      myFragment.readBox( scanBox.value )
+    })
+
+    scanItemM.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "商品データ = " + scanItemM.value )
+
+      val myFragment:ScanCallback = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
+
+      myFragment.readItem( scanItemM.value )
+    })
   }
 
   override fun onDestroy() {

@@ -5,19 +5,17 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.BoxConfirmBinding
-import com.bigsize.pot_terminal.model.*
-import com.densowave.bhtsdk.barcode.BarcodeScannerSettings
 import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.adapter.BoxConfirm as AD_BoxConfirm
+import com.bigsize.pot_terminal.model.AppUtility
+import com.bigsize.pot_terminal.model.MessageDialog
+import com.bigsize.pot_terminal.model.DialogCallback
+import com.bigsize.pot_terminal.model.PotDataModel01
+import com.bigsize.pot_terminal.databinding.BoxConfirmBinding
 import com.bigsize.pot_terminal.viewmodel.BoxConfirm as VM_BoxConfirm
+import com.bigsize.pot_terminal.adapter.BoxConfirm as AD_BoxConfirm
 
 class BoxConfirm:DensoWaveBase(),DialogCallback {
   private val binding01:BoxConfirmBinding by dataBinding()
@@ -172,10 +170,13 @@ class BoxConfirm:DensoWaveBase(),DialogCallback {
     claimSound( playSoundOK )
     claimVibration( AppBase.vibrationOK )
 
-    // 今回読んだ箱番号を表示します
+    // 今回読んだ箱ラベルを表示します
     viewModel01.txtBoxno.value = scanBox.substring( 3 )
 
-    // 箱番号から店舗名と商品を取得します
+    // 今回読んだ箱ラベルを記録します
+    viewModel01.inputedBoxno = scanBox.substring( 3 )
+
+    // 箱ラベルから店舗名と商品を取得します
     viewModel01.pickItemList()
 
     return true

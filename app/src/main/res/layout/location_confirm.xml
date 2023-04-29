@@ -86,7 +86,7 @@
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/lay_sz"
       style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-      android:layout_width="50dp"
+      android:layout_width="60dp"
       android:layout_height="40dp"
       android:layout_marginEnd="8dp"
       app:errorEnabled="true"

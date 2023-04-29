@@ -4,23 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
-import com.bigsize.pot_terminal.databinding.EntranceBinding
+import com.wada811.databinding.dataBinding
+import com.bigsize.pot_terminal.model.AppUtility
+import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.model.DeviceNODialog
 import com.bigsize.pot_terminal.model.MessageDialog
 import com.bigsize.pot_terminal.model.DialogCallback
-import com.bigsize.pot_terminal.model.AppUtility
-import com.bigsize.pot_terminal.model.FileOperation
+import com.bigsize.pot_terminal.databinding.EntranceBinding
 import com.bigsize.pot_terminal.viewmodel.Entrance
-import com.wada811.databinding.dataBinding
 
 class Entrance:DensoWaveBase(),DialogCallback {
   private val binding01:EntranceBinding by dataBinding()

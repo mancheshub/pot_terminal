@@ -4,16 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
-import androidx.appcompat.app.AppCompatActivity
-import com.bigsize.pot_terminal.databinding.ShelfReplaceBBinding
+import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.model.AppUtility
 import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.model.PotDataModel02
-import com.wada811.databinding.dataBinding
+import com.bigsize.pot_terminal.databinding.ShelfReplaceBBinding
 import com.bigsize.pot_terminal.viewmodel.ShelfReplaceB as VM_ShelfReplaceB
 
 class ShelfReplaceB:DensoWaveBase() {
@@ -92,25 +89,25 @@ class ShelfReplaceB:DensoWaveBase() {
     claimVibration( AppBase.vibrationOK )
 
     // すでに出棚と入棚が読まれていた場合はクリアします
-    if( viewModel01.memLocation01 != "" && viewModel01.memLocation02 != "" ) {
-      viewModel01.memLocation01 = ""
-      viewModel01.memBox = ""
-      viewModel01.memLocation02 = ""
+    if( viewModel01.inputedLocation01 != "" && viewModel01.inputedLocation02 != "" ) {
+      viewModel01.inputedLocation01 = ""
+      viewModel01.inputedBox = ""
+      viewModel01.inputedLocation02 = ""
       viewModel01.txtLocation01.value = ""
       viewModel01.txtBox.value = ""
       viewModel01.txtLocation02.value = ""
     }
 
-    if( viewModel01.memLocation01 == "" && viewModel01.memLocation02 == "" ) {
+    if( viewModel01.inputedLocation01 == "" && viewModel01.inputedLocation02 == "" ) {
       // 出棚記録用データを作成します
-      viewModel01.memLocation01 = scanShelf.substring( 3 )
+      viewModel01.inputedLocation01 = scanShelf.substring( 3 )
 
-      var ssb = viewModel01.memLocation01.substring( 0, 1 );
-      var ssh = viewModel01.memLocation01.substring( 1, 2 );
-      var ssf = viewModel01.memLocation01.substring( 2, 4 );
-      var sss = viewModel01.memLocation01.substring( 4, 7 );
-      var sst = viewModel01.memLocation01.substring( 7, 8 );
-      var sso = viewModel01.memLocation01.substring( 8 );
+      var ssb = viewModel01.inputedLocation01.substring( 0, 1 );
+      var ssh = viewModel01.inputedLocation01.substring( 1, 2 );
+      var ssf = viewModel01.inputedLocation01.substring( 2, 4 );
+      var sss = viewModel01.inputedLocation01.substring( 4, 7 );
+      var sst = viewModel01.inputedLocation01.substring( 7, 8 );
+      var sso = viewModel01.inputedLocation01.substring( 8 );
 
       // 出棚表示用データを作成します
       viewModel01.txtLocation01.value = ssb + ssh + ssf + "-" + sss + "-" + sst + "-" + sso
@@ -118,16 +115,16 @@ class ShelfReplaceB:DensoWaveBase() {
       return true
     }
 
-    if( viewModel01.memLocation01 != "" && viewModel01.memLocation02 == "" ) {
+    if( viewModel01.inputedLocation01 != "" && viewModel01.inputedLocation02 == "" ) {
       // 入棚記録用データを作成します
-      viewModel01.memLocation02 = scanShelf.substring( 3 )
+      viewModel01.inputedLocation02 = scanShelf.substring( 3 )
 
-      var ssb = viewModel01.memLocation02.substring( 0, 1 );
-      var ssh = viewModel01.memLocation02.substring( 1, 2 );
-      var ssf = viewModel01.memLocation02.substring( 2, 4 );
-      var sss = viewModel01.memLocation02.substring( 4, 7 );
-      var sst = viewModel01.memLocation02.substring( 7, 8 );
-      var sso = viewModel01.memLocation02.substring( 8 );
+      var ssb = viewModel01.inputedLocation02.substring( 0, 1 );
+      var ssh = viewModel01.inputedLocation02.substring( 1, 2 );
+      var ssf = viewModel01.inputedLocation02.substring( 2, 4 );
+      var sss = viewModel01.inputedLocation02.substring( 4, 7 );
+      var sst = viewModel01.inputedLocation02.substring( 7, 8 );
+      var sso = viewModel01.inputedLocation02.substring( 8 );
 
       // 入棚表示用データを作成します
       viewModel01.txtLocation02.value = ssb + ssh + ssf + "-" + sss + "-" + sst + "-" + sso
@@ -154,10 +151,10 @@ class ShelfReplaceB:DensoWaveBase() {
     claimVibration( AppBase.vibrationOK )
 
     // 入物記録用データを作成します
-    viewModel01.memBox = scanBox.substring( 3 )
+    viewModel01.inputedBox = scanBox.substring( 3 )
 
     // 出棚表示用データを作成します
-    viewModel01.txtBox.value = viewModel01.memBox
+    viewModel01.txtBox.value = viewModel01.inputedBox
 
     return true
   }
@@ -178,9 +175,9 @@ class ShelfReplaceB:DensoWaveBase() {
     execDataSave()
 
     // クリアします
-    viewModel01.memLocation01 = ""
-    viewModel01.memBox = ""
-    viewModel01.memLocation02 = ""
+    viewModel01.inputedLocation01 = ""
+    viewModel01.inputedBox = ""
+    viewModel01.inputedLocation02 = ""
     viewModel01.txtLocation01.value = ""
     viewModel01.txtBox.value = ""
     viewModel01.txtLocation02.value = ""
@@ -203,23 +200,23 @@ class ShelfReplaceB:DensoWaveBase() {
     binding01.layBox.error = null
     binding01.layLocation02.error = null
 
-    if( msgError02 == "" && execSubject == "02" && viewModel01.memLocation01 == "" ) {
+    if( msgError02 == "" && execSubject == "02" && viewModel01.inputedLocation01 == "" ) {
       msgError01 = getString( R.string.err_shelf_replace_b02 )
     }
 
-    if( msgError02 == "" && execSubject == "01" && viewModel01.memLocation01 != "" && viewModel01.memBox == "" ) {
+    if( msgError02 == "" && execSubject == "01" && viewModel01.inputedLocation01 != "" && viewModel01.inputedBox == "" ) {
       msgError02 = getString( R.string.err_shelf_replace_b01 )
     }
 
-    if( msgError01 == "" && execSubject == "03" && viewModel01.memLocation01 == "" ) {
+    if( msgError01 == "" && execSubject == "03" && viewModel01.inputedLocation01 == "" ) {
       msgError01 = getString( R.string.err_shelf_replace_b02 )
     }
 
-    if( msgError02 == "" && execSubject == "03" && viewModel01.memBox == "" ) {
+    if( msgError02 == "" && execSubject == "03" && viewModel01.inputedBox == "" ) {
       msgError02 = getString( R.string.err_shelf_replace_b01 )
     }
 
-    if( msgError03 == "" && execSubject == "03" && viewModel01.memLocation02 == "" ) {
+    if( msgError03 == "" && execSubject == "03" && viewModel01.inputedLocation02 == "" ) {
       msgError03 = getString( R.string.err_shelf_replace_b03 )
     }
 
@@ -247,8 +244,8 @@ class ShelfReplaceB:DensoWaveBase() {
 
     // 箱を含む出棚を作成します
 
-    var location01:String = viewModel01.memLocation01.substring( 0, 8 ) + viewModel01.memBox.substring( 0 )
-    var location02:String = viewModel01.memLocation02.substring( 0, 8 ) + viewModel01.memBox.substring( 0 )
+    var location01:String = viewModel01.inputedLocation01.substring( 0, 8 ) + viewModel01.inputedBox.substring( 0 )
+    var location02:String = viewModel01.inputedLocation02.substring( 0, 8 ) + viewModel01.inputedBox.substring( 0 )
 
     dataArray.add( PotDataModel02(
       AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,

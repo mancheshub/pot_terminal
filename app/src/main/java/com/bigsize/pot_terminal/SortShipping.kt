@@ -14,22 +14,16 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.SortShippingBinding
+import java.nio.charset.StandardCharsets
 import com.bigsize.pot_terminal.model.DialogCallback
 import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.MessageDialog
 import com.wada811.databinding.dataBinding
-import java.nio.charset.StandardCharsets
-import com.bigsize.pot_terminal.adapter.SortShipping as AD_SortShipping
+import com.bigsize.pot_terminal.databinding.SortShippingBinding
 import com.bigsize.pot_terminal.viewmodel.SortShipping as VM_SortShipping
+import com.bigsize.pot_terminal.adapter.SortShipping as AD_SortShipping
 
 class SortShipping:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickListener,DialogCallback {
   private val binding01:SortShippingBinding by dataBinding()

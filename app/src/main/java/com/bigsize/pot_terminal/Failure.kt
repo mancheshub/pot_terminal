@@ -3,10 +3,7 @@ package com.bigsize.pot_terminal
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 
 class Failure:DensoWaveBase(),View.OnClickListener {
   override fun onCreate( savedInstanceState:Bundle? ) {

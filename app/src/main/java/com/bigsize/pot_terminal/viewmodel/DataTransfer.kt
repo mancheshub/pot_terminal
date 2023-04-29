@@ -13,12 +13,15 @@ import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.model.PotDivision
 import kotlinx.coroutines.launch
 import java.io.File
-import java.nio.file.Paths
 
 class DataTransfer:ViewModel() {
   private var model01:FileOperation = FileOperation()
   private var model02:AppUtility = AppUtility()
   private var model03:DataTransferAPI = DataTransferAPI()
+
+  // API通信状況
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  public val apiCondition:LiveData<String> get() = _apiCondition
 
   // チェックしたデータ数
   public val cntCheck:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
@@ -28,10 +31,6 @@ class DataTransfer:ViewModel() {
 
   // POTファイル
   public var potFileArray:MutableList<PotDivision> = mutableListOf<PotDivision>()
-
-  // API通信状況
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
-  public val apiCondition:LiveData<String> get() = _apiCondition
 
   init { initPOTData() }
 

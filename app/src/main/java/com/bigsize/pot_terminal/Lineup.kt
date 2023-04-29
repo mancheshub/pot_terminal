@@ -6,8 +6,8 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
-import com.bigsize.pot_terminal.databinding.LineupBinding
 import com.wada811.databinding.dataBinding
+import com.bigsize.pot_terminal.databinding.LineupBinding
 
 class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
   private val binding01:LineupBinding by dataBinding()

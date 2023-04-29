@@ -458,7 +458,7 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
           // クラス名に従ったコードが読めていなければエラーとします
 
           if( componentName.shortClassName == ".BoxShipping" &&
-              _data.substring( 0, 3 ) != "M-P" && _data.substring( 0, 3 ) != "M-H" ) {
+              _data.substring( 0, 3 ) != "M-P" && _data.substring( 0, 3 ) != "M-T" && _data.substring( 0, 3 ) != "M-H" ) {
             readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )

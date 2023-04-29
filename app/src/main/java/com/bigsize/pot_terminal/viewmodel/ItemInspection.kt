@@ -10,25 +10,20 @@ import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.ItemInspectionAPI
 import com.bigsize.pot_terminal.model.PotDataModel03
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 class ItemInspection:ViewModel() {
   private var model01:ItemInspectionAPI = ItemInspectionAPI()
 
+  // API通信状況
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  public val apiCondition:LiveData<String> get() = _apiCondition
+
   // 全データ数とPOTで読んだデータ数
   public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
   public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
-
-  // API通信状況
-  // ST → 通信開始 ER → 通信エラー FN → 通信終了 SI_*** → 他人スタッフ***が検品中
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
-  public val apiCondition:LiveData<String> get() = _apiCondition
 
   // 作業グループリスト
   private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
@@ -57,7 +52,7 @@ class ItemInspection:ViewModel() {
     HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "", " " ),
   )
 
-  // 現在選択している"作業グループ・店舗・箱・印刷機"
+  // 選択した"作業グループ・店舗・箱・印刷機"
   public var selectedGroupID:String = " "
   public var selectedShopID:String = " "
   public var selectedBoxID:String = " "

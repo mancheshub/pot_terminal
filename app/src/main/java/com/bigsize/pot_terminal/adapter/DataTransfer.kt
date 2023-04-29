@@ -10,7 +10,6 @@ import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.LiveData
-import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDivision
 import com.bigsize.pot_terminal.databinding.DataTransferListview01Binding

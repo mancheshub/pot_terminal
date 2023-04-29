@@ -15,25 +15,24 @@ import kotlinx.coroutines.launch
 class LocationConfirm: ViewModel() {
   private var model01:LocationConfirmAPI = LocationConfirmAPI()
 
+  // API通信状況
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  public val apiCondition:LiveData<String> get() = _apiCondition
+
   // 商品と商品名
   public val txtCd:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
   public val txtCn:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
   public val txtSz:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
   public val txtItn:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
 
-  // 現在入力されている商品
-  public var memCd:String = ""
-  public var memCn:String = ""
-  public var memSz:String = ""
+  // 入力した商品
+  public var inputedCd:String = ""
+  public var inputedCn:String = ""
+  public var inputedSz:String = ""
 
   // ロケーションリスト
   private val _locationList:MutableLiveData<MutableList<PotDataModel04>> = MutableLiveData()
   public val locationList:LiveData<MutableList<PotDataModel04>> get() = _locationList
-
-  // API通信状況
-  // ST → 通信開始 ER → 通信エラー FN → 通信終了
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
-  public val apiCondition:LiveData<String> get() = _apiCondition
 
   init {}
 
@@ -48,7 +47,7 @@ class LocationConfirm: ViewModel() {
 
       try {
         if( isClear == "NON" ) {
-          val pairValue01 = model01.pickLocation( AppBase.locationConfirmURL, memCd, memCn, memSz )
+          val pairValue01 = model01.pickLocation( AppBase.locationConfirmURL, inputedCd, inputedCn, inputedSz )
           _locationList.value = pairValue01.second
         }
 

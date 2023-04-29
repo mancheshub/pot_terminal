@@ -5,12 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bigsize.pot_terminal.AppBase
-import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.model.HashItem
-import com.bigsize.pot_terminal.model.BoxShippingAPI
-import com.bigsize.pot_terminal.model.BoxConfirmAPI
-import com.bigsize.pot_terminal.model.PotDataModel01
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
@@ -18,19 +12,25 @@ import kotlinx.serialization.json.Json
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
+import com.bigsize.pot_terminal.AppBase
+import com.bigsize.pot_terminal.BuildConfig
+import com.bigsize.pot_terminal.model.HashItem
+import com.bigsize.pot_terminal.model.BoxShippingAPI
+import com.bigsize.pot_terminal.model.BoxConfirmAPI
+import com.bigsize.pot_terminal.model.PotDataModel01
+import com.bigsize.pot_terminal.model.PotDataModel05
 
 class BoxShippingPage01:ViewModel() {
   private var model01:BoxShippingAPI = BoxShippingAPI()
   private var model02:BoxConfirmAPI = BoxConfirmAPI()
 
+  // API通信状況
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  public val apiCondition:LiveData<String> get() = _apiCondition
+
   // 全データ数とPOTで読んだデータ数
   public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
   public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
-
-  // API通信状況
-  // ST → 通信開始 ER → 通信エラー FN → 通信終了
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
-  public val apiCondition:LiveData<String> get() = _apiCondition
 
   // 伝発グループリスト
   private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
@@ -44,10 +44,10 @@ class BoxShippingPage01:ViewModel() {
   private val _itemList:MutableLiveData<MutableList<PotDataModel01>> = MutableLiveData()
   public val itemList:LiveData<MutableList<PotDataModel01>> get() = _itemList
 
-  // 今回決定した箱番号
+  // 今回決定した箱ラベル
   public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
 
-  // 現在選択している"伝発グループ・店舗・箱番号"
+  // 選択した"伝発グループ・店舗・箱ラベル"
   public var selectedGroupID:String = " "
   public var selectedShopID:String = " "
   public var selectedBoxID:String = " "
@@ -102,7 +102,7 @@ class BoxShippingPage01:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        // 店舗の箱番号を取得します
+        // 店舗の箱ラベルを取得します
         val pairHash01 = model01.pickBoxNO( AppBase.boxShippingURL, selectedShopID )
         txtBoxno.value = pairHash01.second
         selectedBoxID = pairHash01.second
@@ -164,7 +164,205 @@ class BoxShippingPage01:ViewModel() {
 }
 
 class BoxShippingPage02:ViewModel() {
+  private var model01:BoxShippingAPI = BoxShippingAPI()
+  private var model02:BoxConfirmAPI = BoxConfirmAPI()
+
+  // API通信状況
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  public val apiCondition:LiveData<String> get() = _apiCondition
+
+  // 全データ数とPOTで読んだデータ数
+  public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
+  public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
+
+  // 商品リスト
+  private val _itemList:MutableLiveData<MutableList<PotDataModel05>> = MutableLiveData()
+  public val itemList:LiveData<MutableList<PotDataModel05>> get() = _itemList
+
+  // 箱ラベルと店舗名
+  public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
+  public val txtShopname:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
+
+  // 入力した箱ラベル
+  public var inputedBoxno:String = ""
+
+  init {}
+
+  /**
+   * キャンセル商品データを取得します
+   */
+  public fun pickItemList() {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        val pairHash01 = model01.pickCancelItemList( AppBase.boxShippingURL )
+        _itemList.value = pairHash01.second
+
+        _apiCondition.value = "FN99"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * 箱ラベルから店舗名を取得します
+   */
+  public fun pickShopName() {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        // 箱ラベルから店舗名を取得します
+        val pairValue01 = model02.pickShopname( AppBase.boxConfirmURL, inputedBoxno )
+        txtShopname.value = pairValue01.second
+
+        _apiCondition.value = "FN99"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxConfirm", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * キャンセル箱出を完了します
+   *
+   * @param [i_id] 明細番号
+   */
+  public fun finishShipping( i_id:String ) {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        val pairHash01 = model01.finishCancelShipping( AppBase.boxShippingURL, i_id )
+
+        _apiCondition.value = "FN01"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * 商品情報の検品数を更新します
+   *
+   * @param [position] 商品情報の位置
+   */
+  public fun updateItemList( position:Int ) {
+    // 該当位置のSKUの数量を増やします
+    var potData:PotDataModel05 = ( _itemList.value as MutableList<PotDataModel05> )[position]
+    potData.amt_n = (potData.amt_n.toInt()+1).toString()
+
+    // ViewModelを更新します
+    ( _itemList.value as MutableList<PotDataModel05> ).set( position, potData )
+  }
 }
 
 class BoxShippingPage03:ViewModel() {
+  private var model01:BoxShippingAPI = BoxShippingAPI()
+  private var model02:BoxConfirmAPI = BoxConfirmAPI()
+
+  // API通信状況
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  public val apiCondition:LiveData<String> get() = _apiCondition
+
+  // 全データ数とPOTで読んだデータ数
+  public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
+  public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
+
+  // 商品リスト
+  private val _itemList:MutableLiveData<MutableList<PotDataModel05>> = MutableLiveData()
+  public val itemList:LiveData<MutableList<PotDataModel05>> get() = _itemList
+
+  // 箱ラベルと店舗名
+  public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
+  public val txtShopname:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
+
+  // 入力した箱ラベル
+  public var inputedBoxno:String = ""
+
+  init {}
+
+  /**
+   * 先送商品データを取得します
+   */
+  public fun pickItemList() {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        val pairHash01 = model01.pickPostponeItemList( AppBase.boxShippingURL )
+        _itemList.value = pairHash01.second
+
+        _apiCondition.value = "FN99"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * 箱ラベルから店舗名を取得します
+   */
+  public fun pickShopName() {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        // 箱ラベルから店舗名を取得します
+        val pairValue01 = model02.pickShopname( AppBase.boxConfirmURL, inputedBoxno )
+        txtShopname.value = pairValue01.second
+
+        _apiCondition.value = "FN99"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxConfirm", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * 先送箱出を完了します
+   *
+   * @param [i_id] 明細番号
+   */
+  public fun finishShipping( i_id:String ) {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        val pairHash01 = model01.finishPostponeShipping( AppBase.boxShippingURL, i_id )
+
+        _apiCondition.value = "FN01"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * 商品情報の検品数を更新します
+   *
+   * @param [position] 商品情報の位置
+   */
+  public fun updateItemList( position:Int ) {
+    // 該当位置のSKUの数量を増やします
+    var potData:PotDataModel05 = ( _itemList.value as MutableList<PotDataModel05> )[position]
+    potData.amt_n = (potData.amt_n.toInt()+1).toString()
+
+    // ViewModelを更新します
+    ( _itemList.value as MutableList<PotDataModel05> ).set( position, potData )
+  }
 }

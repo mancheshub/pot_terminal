@@ -8,9 +8,6 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.LiveData
-import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDataModel04
 import com.bigsize.pot_terminal.databinding.LocationConfirmListview01Binding

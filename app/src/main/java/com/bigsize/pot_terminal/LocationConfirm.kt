@@ -8,14 +8,16 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.LocationConfirmBinding
-import com.bigsize.pot_terminal.model.*
 import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.adapter.LocationConfirm as AD_LocationConfirm
+import com.bigsize.pot_terminal.model.AppUtility
+import com.bigsize.pot_terminal.model.DialogCallback
+import com.bigsize.pot_terminal.model.MessageDialog
+import com.bigsize.pot_terminal.model.PotDataModel04
+import com.bigsize.pot_terminal.databinding.LocationConfirmBinding
 import com.bigsize.pot_terminal.viewmodel.LocationConfirm as VM_LocationConfirm
+import com.bigsize.pot_terminal.adapter.LocationConfirm as AD_LocationConfirm
 
 class LocationConfirm:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionListener,DialogCallback {
   private val binding01:LocationConfirmBinding by dataBinding()
@@ -159,9 +161,9 @@ class LocationConfirm:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActi
     claimVibration( AppBase.vibrationOK )
 
     // 今回読んだ商品を記録します
-    viewModel01.memCd = viewModel01.txtCd.value.toString()
-    viewModel01.memCn = ""
-    viewModel01.memSz = ""
+    viewModel01.inputedCd = viewModel01.txtCd.value.toString()
+    viewModel01.inputedCn = ""
+    viewModel01.inputedSz = ""
 
     // 品番・色番・サイズから商品のロケーションを取得します
     viewModel01.pickLocation( "NON" )
@@ -206,9 +208,9 @@ class LocationConfirm:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActi
     viewModel01.txtSz.value = scanItem.substring( 17, 21 ).replace( " ", "" )
 
     // 今回読んだ商品を記録します
-    viewModel01.memCd = scanItem.substring( 3, 13 )
-    viewModel01.memCn = scanItem.substring( 14, 16 )
-    viewModel01.memSz = scanItem.substring( 17, 21 ).replace( " ", "" )
+    viewModel01.inputedCd = scanItem.substring( 3, 13 )
+    viewModel01.inputedCn = scanItem.substring( 14, 16 )
+    viewModel01.inputedSz = scanItem.substring( 17, 21 ).replace( " ", "" )
 
     // 品番・色番・サイズから商品のロケーションを取得します
     viewModel01.pickLocation( "NON" )

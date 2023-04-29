@@ -11,20 +11,159 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".BoxShipping"
+    android:descendantFocusability="afterDescendants"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <TextView
-      android:id="@+id/text01"
+      android:id="@+id/txt_view04"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="ページ03"
-      android:textSize="40sp"
+      android:layout_marginEnd="16dp"
+      android:text="読んだ箱ラベル"
       android:textStyle="bold"
-      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_boxno"
+      style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+      android:layout_width="0dp"
+      android:layout_height="40dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:focusable="true"
+      android:focusableInTouchMode="true"
+      app:errorEnabled="true"
+      app:expandedHintEnabled="true"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/txt_view04">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_boxno"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:enabled="false"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@={viewmodel.txtBoxno}"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_shopname"
+      style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+      android:layout_width="0dp"
+      android:layout_height="40dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="16dp"
+      app:errorEnabled="true"
+      app:expandedHintEnabled="true"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/lay_boxno"
+      app:layout_constraintTop_toTopOf="@+id/lay_boxno">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_shopname"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:ellipsize="end"
+        android:enabled="false"
+        android:singleLine="true"
+        android:text="@={viewmodel.txtShopname}"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+      android:id="@+id/txt_view05"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:text="先送箱出する商品"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/cnt_total" />
+
+    <ProgressBar
+      android:id="@+id/prg_view01"
+      style="?android:attr/progressBarStyleHorizontal"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:indeterminate="true"
+      android:visibility="invisible"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
-    
+
+    <TextView
+      android:id="@+id/txt_view01"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="全"
+      app:layout_constraintEnd_toStartOf="@+id/cnt_total"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <TextView
+      android:id="@+id/cnt_total"
+      android:layout_width="60dp"
+      android:layout_height="45dp"
+      android:layout_marginTop="8dp"
+      android:gravity="center|center_vertical"
+      android:text="@{viewmodel.cntTotal}"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toStartOf="@+id/txt_view02"
+      app:layout_constraintTop_toBottomOf="@+id/lay_boxno" />
+
+    <TextView
+      android:id="@+id/txt_view02"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="件中"
+      app:layout_constraintEnd_toStartOf="@+id/cnt_read"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <TextView
+      android:id="@+id/cnt_read"
+      android:layout_width="60dp"
+      android:layout_height="45dp"
+      android:gravity="center|center_vertical"
+      android:text="@{viewmodel.cntRead}"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toStartOf="@+id/txt_view03"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <TextView
+      android:id="@+id/txt_view03"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:layout_marginEnd="16dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="件"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <ListView
+      android:id="@+id/lst_view01"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      android:background="@drawable/border"
+      android:divider="#00000000"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/txt_view05" />
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

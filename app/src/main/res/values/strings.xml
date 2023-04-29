@@ -46,6 +46,8 @@
   <string name="msg_box_shipping01">照合が完了しました。</string>
   <string name="err_box_shipping01">該当の商品がありません。</string>
   <string name="err_box_shipping02">箱状況更新に失敗しました。</string>
+  <string name="err_box_shipping03">箱QRを読んでください。</string>
+  <string name="err_box_shipping04">該当の箱がありません。</string>
   <string name="alt_box_shipping01">仕分箱にない商品が含まれています。</string>
   <string name="alt_box_shipping02">箱に商品が残っています。</string>
 

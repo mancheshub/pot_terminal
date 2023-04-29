@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
-import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.R
-import com.bigsize.pot_terminal.databinding.SortShippingListview01Binding
 import com.bigsize.pot_terminal.model.HashItem
+import com.bigsize.pot_terminal.databinding.SortShippingListview01Binding
 
 class SortShipping( val context:Context?, var itemDataArray:MutableList<HashItem> ):BaseAdapter() {
   private val inflater = LayoutInflater.from( context )

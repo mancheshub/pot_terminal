@@ -17,6 +17,17 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
+    <TextView
+      android:id="@+id/txt_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      android:text="照合箱出する商品"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/cnt_total" />
+
     <ProgressBar
       android:id="@+id/prg_view01"
       style="?android:attr/progressBarStyleHorizontal"
@@ -171,7 +182,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/cnt_total" />
+      app:layout_constraintTop_toBottomOf="@+id/txt_view" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

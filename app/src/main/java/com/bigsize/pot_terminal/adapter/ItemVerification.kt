@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.BaseAdapter
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDataModel01

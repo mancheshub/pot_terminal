@@ -8,14 +8,11 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.LiveData
-import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDataModel01
-import com.bigsize.pot_terminal.databinding.BoxConfirmListview01Binding
 import com.bigsize.pot_terminal.model.PotDataModel03
 import com.bigsize.pot_terminal.model.PotDivision
+import com.bigsize.pot_terminal.databinding.BoxConfirmListview01Binding
 
 class BoxConfirm(val context:Context?,var itemList:MutableList<PotDataModel01> ):BaseAdapter() {
   private val inflater = LayoutInflater.from( context )

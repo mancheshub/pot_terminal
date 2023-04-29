@@ -6,18 +6,19 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.DataTransferBinding
+import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.model.DialogCallback
 import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.model.MessageDialog
-import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.adapter.DataTransfer as AD_DataTransfer
+import com.bigsize.pot_terminal.databinding.DataTransferBinding
 import com.bigsize.pot_terminal.viewmodel.DataTransfer as VM_DataTransfer
-
+import com.bigsize.pot_terminal.adapter.DataTransfer as AD_DataTransfer
 
 class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
   private val binding01:DataTransferBinding by dataBinding()
@@ -73,7 +74,7 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
     })
 
     viewModel01.apiCondition.observe( this, Observer<String> {
-      if( ( viewModel01.apiCondition.value as String ) != "" ) {
+      it ?: return@Observer
 
       // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
       val apiCondition:String = viewModel01.apiCondition.value as String
@@ -113,8 +114,6 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
 
         val dialog:MessageDialog = MessageDialog( "00", "転送完了", getString( R.string.msg_data_transfer02 ), "OK", "" )
         dialog.show( supportFragmentManager, "simple" )
-      }
-
       }
     })
 

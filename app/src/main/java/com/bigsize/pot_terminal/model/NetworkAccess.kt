@@ -269,6 +269,76 @@ class BoxShippingAPI {
   }
 
   /**
+   * キャンセル商品情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @return 商品データ
+   */
+  public suspend fun pickCancelItemList( accessURL:String ):Pair<String,MutableList<PotDataModel05>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "C" )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel05> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, it.sss, it.sst, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
+   * 先送商品情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @return 商品データ
+   */
+  public suspend fun pickPostponeItemList( accessURL:String ):Pair<String,MutableList<PotDataModel05>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "P" )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel05> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, it.sss, it.sst, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
    * 店舗の箱ラベルを取得します
    *
    * @param [accessURL] サーバプログラムのURL
@@ -301,7 +371,7 @@ class BoxShippingAPI {
   }
 
   /**
-   * 棚出しを完了します
+   * 照合棚出しを完了します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [groupID] 伝発グループID
@@ -314,6 +384,70 @@ class BoxShippingAPI {
       .add( "kind", "01" )
       .add( "groupID", groupID )
       .add( "shopID", shopID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+
+  /**
+   * キャンセル棚出しを完了します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [i_id] 明細番号
+   * @return エラー状況
+   */
+  public suspend fun finishCancelShipping( accessURL:String, i_id:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "U" )
+      .add( "kind", "02" )
+      .add( "i_id", i_id )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+
+  /**
+   * 先送棚出しを完了します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [i_id] 明細番号
+   * @return エラー状況
+   */
+  public suspend fun finishPostponeShipping( accessURL:String, i_id:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "U" )
+      .add( "kind", "03" )
+      .add( "i_id", i_id )
       .build()
 
     val request = Request.Builder()
