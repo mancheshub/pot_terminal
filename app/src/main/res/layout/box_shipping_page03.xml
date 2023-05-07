@@ -12,10 +12,8 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BoxShipping"
-    android:descendantFocusability="afterDescendants"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    tools:context=".BoxShippingPage03"
+    android:descendantFocusability="afterDescendants">
 
     <TextView
       android:id="@+id/txt_view04"
@@ -34,8 +32,6 @@
       android:layout_height="40dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="8dp"
-      android:focusable="true"
-      android:focusableInTouchMode="true"
       app:errorEnabled="true"
       app:expandedHintEnabled="true"
       app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +41,7 @@
         android:id="@+id/txt_boxno"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background='@{viewmodel.bkgBoxno == "A" ? @color/box_labelA : viewmodel.bkgBoxno == "B" ? @color/box_labelB : viewmodel.bkgBoxno == "C" ? @color/box_labelC : viewmodel.bkgBoxno == "D" ? @color/box_labelD : viewmodel.bkgBoxno == "E" ? @color/box_labelE : @color/box_labelN}'
         android:enabled="false"
         android:gravity="center_horizontal|center_vertical"
         android:text="@={viewmodel.txtBoxno}"
@@ -77,17 +74,6 @@
         android:textColor="#000000"
         android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-      android:id="@+id/txt_view05"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="16dp"
-      android:text="先送箱出する商品"
-      android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/cnt_total" />
 
     <ProgressBar
       android:id="@+id/prg_view01"
@@ -154,7 +140,6 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
       android:background="@drawable/border"
@@ -162,7 +147,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/txt_view05" />
+      app:layout_constraintTop_toBottomOf="@+id/cnt_total" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,13 +6,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.BoxConfirm" />
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.BoxOperationPage01" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BoxConfirm">
+    tools:context=".BoxOperationPage01"
+    android:descendantFocusability="afterDescendants">
 
     <ProgressBar
       android:id="@+id/prg_view01"
@@ -29,10 +30,11 @@
       android:id="@+id/txt_view04"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
       android:gravity="center_horizontal|center_vertical"
-      android:text="箱　ラ　ベ　ル　・　店　名"
+      android:text="読んだ箱ラベル"
+      android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -42,8 +44,6 @@
       android:layout_height="40dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="8dp"
-      android:focusable="true"
-      android:focusableInTouchMode="true"
       app:errorEnabled="true"
       app:expandedHintEnabled="true"
       app:layout_constraintStart_toStartOf="parent"
@@ -53,12 +53,14 @@
         android:id="@+id/txt_boxno"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background='@{viewmodel.bkgBoxno == "A" ? @color/box_labelA : viewmodel.bkgBoxno == "B" ? @color/box_labelB : viewmodel.bkgBoxno == "C" ? @color/box_labelC : viewmodel.bkgBoxno == "D" ? @color/box_labelD : viewmodel.bkgBoxno == "E" ? @color/box_labelE : @color/box_labelN}'
         android:enabled="false"
         android:gravity="center_horizontal|center_vertical"
         android:text="@={viewmodel.txtBoxno}"
         android:textColor="#000000"
         android:textSize="25sp"
         android:textStyle="bold" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

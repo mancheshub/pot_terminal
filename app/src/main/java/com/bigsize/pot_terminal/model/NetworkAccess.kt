@@ -17,7 +17,7 @@ import okhttp3.Request
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class BoxConfirmAPI {
+class BoxOperationAPI {
   private val model01:AppUtility = AppUtility()
 
   private val httpClient = OkHttpClient.Builder()
@@ -27,13 +27,13 @@ class BoxConfirmAPI {
     .build()
 
   /**
-   * 箱ラベルから店舗名を取得します
+   * 箱ラベルの情報を取得します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [boxno] 物理箱ラベル
    * @return 店舗名
    */
-  public suspend fun pickShopname( accessURL:String, boxno:String ):Pair<String,String> {
+  public suspend fun pickBoxInfomation( accessURL:String, boxno:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "S" )
@@ -94,6 +94,40 @@ class BoxConfirmAPI {
 
     return Pair( apiResponseBody.status, tempList )
   }
+
+  /**
+   * 箱付替を完了します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [boxno01] 付替前箱ラベル
+   * @param [boxno02] 付替後箱ラベル
+   * @return エラー状況
+   */
+  public suspend fun finishReplace( accessURL:String, boxno01:String, boxno02:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "U" )
+      .add( "kind", "01" )
+      .add( "boxno01", boxno01 )
+      .add( "boxno02", boxno02 )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
 }
 
 class LocationConfirmAPI {
@@ -145,6 +179,52 @@ class LocationConfirmAPI {
     }
 
     return Pair( apiResponseBody.status, tempList )
+  }
+}
+
+class BoxReceivingAPI {
+  private val model01:AppUtility = AppUtility()
+
+  private val httpClient = OkHttpClient.Builder()
+    .connectTimeout( 10, TimeUnit.SECONDS )
+    .writeTimeout( 10, TimeUnit.SECONDS )
+    .readTimeout( 30, TimeUnit.SECONDS )
+    .build()
+
+  /**
+   * 箱ラベルを決定します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [cd] 品番
+   * @param [cn] 色番
+   * @param [sz] サイズ
+   * @return 箱ラベルデータ
+   */
+  public suspend fun pickBoxNO( accessURL:String, cd:String, cn:String, sz:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "B" )
+      .add( "cd", cd )
+      .add( "cn", cn )
+      .add( "sz", sz )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 }
 
@@ -297,7 +377,7 @@ class BoxShippingAPI {
     val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
-      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, it.sss, it.sst, "0", it.ssa ) )
+      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, "0", it.ssa ) )
     }
 
     return Pair( apiResponseBody.status, tempList )
@@ -332,7 +412,7 @@ class BoxShippingAPI {
     val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
-      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, it.sss, it.sst, "0", it.ssa ) )
+      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, "0", it.ssa ) )
     }
 
     return Pair( apiResponseBody.status, tempList )
@@ -371,7 +451,7 @@ class BoxShippingAPI {
   }
 
   /**
-   * 照合棚出しを完了します
+   * 照合箱出を完了します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [groupID] 伝発グループID
@@ -405,7 +485,7 @@ class BoxShippingAPI {
   }
 
   /**
-   * キャンセル棚出しを完了します
+   * キャンセル箱出を完了します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [i_id] 明細番号
@@ -437,7 +517,7 @@ class BoxShippingAPI {
   }
 
   /**
-   * 先送棚出しを完了します
+   * 先送箱出を完了します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [i_id] 明細番号

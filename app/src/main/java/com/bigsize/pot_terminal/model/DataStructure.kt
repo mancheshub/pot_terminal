@@ -4,11 +4,12 @@ import kotlinx.serialization.Serializable
 
 class PotDivision( var name:String , var division:String, var fileName:String, var amt:String, var isChecked:Boolean ) {}
 class HashItem( var id:String, var item:String ) {}
+class AssortHistory( var cd:String, var cn:String, var sz:String, var boxno:String ) {}
 class PotDataModel01( var cd:String, var cn:String, var sz:String, var amt_n:String, var amt_p:String ) {}
 class PotDataModel02( var deviceNO:String, var date:String, var time:String, var staffNO:String, var mode:String, var cd:String, var cn:String, var sz:String, var location01:String, var location02:String, var amt:String, var isChecked:Boolean  ) {}
 class PotDataModel03( var cd:String, var cn:String, var sz:String, var hcd:String, var hcn:String, var hcz:String, var asn24:String, var asn25:String, var asn53:String, var bf0:String, var amt_n:String, var amt_p:String ) {}
 class PotDataModel04( var cd:String, var cn:String, var sz:String, var cs:String, var itn:String, var location:String, var amt:String ) {}
-class PotDataModel05( var i_id:String, var cd:String, var cn:String, var sz:String, var boxno:String, var colorR:String, var colorG:String, var colorB:String, var amt_n:String, var amt_p:String ) {}
+class PotDataModel05( var i_id:String, var cd:String, var cn:String, var sz:String, var boxno:String, var color:String, var amt_n:String, var amt_p:String ) {}
 
 /**
  * -- APIとのデータ交換フォーマット

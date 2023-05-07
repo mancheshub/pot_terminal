@@ -145,7 +145,7 @@ class BoxShippingPage02( val context:Context?, var itemList:MutableList<PotDataM
     binding01.sz.setTextColor( Color.BLACK )
 
     // 箱ラベルの背景色を設定します
-    binding01.boxno.setBackgroundColor( Color.rgb( potData.colorR.toInt(), potData.colorG.toInt(), potData.colorB.toInt() ) )
+    binding01.boxno.setBackgroundColor( Color.parseColor( potData.color ) )
 
     // 照合途中・照合完了の場合は背景色を変更します
     itemView.setBackgroundResource( R.drawable.border )
@@ -215,7 +215,7 @@ class BoxShippingPage03( val context:Context?, var itemList:MutableList<PotDataM
     binding01.sz.setTextColor( Color.BLACK )
 
     // 箱ラベルの背景色を設定します
-    binding01.boxno.setBackgroundColor( Color.rgb( potData.colorR.toInt(), potData.colorG.toInt(), potData.colorB.toInt() ) )
+    binding01.boxno.setBackgroundColor( Color.parseColor( potData.color ) )
 
     // 照合途中・照合完了の場合は背景色を変更します
     itemView.setBackgroundResource( R.drawable.border )

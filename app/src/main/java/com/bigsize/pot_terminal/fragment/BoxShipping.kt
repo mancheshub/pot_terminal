@@ -215,6 +215,9 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
     // 空の伝発グループが選択されたとします
     viewModel01.selectedGroupID = " "
 
+    // 箱ラベル背景色をクリアします
+    viewModel01.bkgBoxno.value = "N"
+
     // 伝発グループが選択されたら店舗データを取得します
     viewModel01.pickShopList()
 
@@ -225,12 +228,6 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
 
     // 伝発グループ変更により店舗データがクリアされたので商品データを再取得します
     viewModel01.pickItemList()
-  }
-
-  override fun onPause() {
-    super.onPause()
-
-    binding01.lstView01.adapter = null
   }
 
   override fun onDestroyView() {
@@ -478,11 +475,8 @@ class BoxShippingPage02:Fragment(),ScanCallback {
     // ダイアログが表示されていれば閉じます
     dialogERR?.dismiss()
 
-    // 今回読んだ箱ラベルを表示します
-    viewModel01.txtBoxno.value = scanBox.substring( 3 )
-
     // 該当商品を検索します
-    position = ( viewModel01.itemList.value as MutableList<PotDataModel05> ).indexOfFirst { it.boxno == viewModel01.txtBoxno.value && it.amt_n.toInt() < it.amt_p.toInt() }
+    position = ( viewModel01.itemList.value as MutableList<PotDataModel05> ).indexOfFirst { it.boxno == scanBox.substring( 3 ) && it.amt_n.toInt() < it.amt_p.toInt() }
 
     if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "検索位置 = " + position.toString() )
 
@@ -496,11 +490,21 @@ class BoxShippingPage02:Fragment(),ScanCallback {
       activity01.claimSound( activity01.playSoundOK )
       activity01.claimVibration( AppBase.vibrationOK )
 
+      // 今回読んだ箱ラベルを表示します
+      viewModel01.txtBoxno.value = scanBox.substring( 3 )
+
+      // 箱ラベル背景色を決定します
+      if( scanBox.substring( 3, 4 ) == "A" ) viewModel01.bkgBoxno.value = "A"
+      if( scanBox.substring( 3, 4 ) == "B" ) viewModel01.bkgBoxno.value = "B"
+      if( scanBox.substring( 3, 4 ) == "C" ) viewModel01.bkgBoxno.value = "C"
+      if( scanBox.substring( 3, 4 ) == "D" ) viewModel01.bkgBoxno.value = "D"
+      if( scanBox.substring( 3, 4 ) == "E" ) viewModel01.bkgBoxno.value = "E"
+
       // 今回読んだ箱ラベルを記録します
       viewModel01.inputedBoxno = scanBox.substring( 3 )
 
-      // 箱ラベルから店舗名を取得します
-      viewModel01.pickShopName()
+      // 箱ラベルの情報を取得します
+      viewModel01.pickBoxInfomation()
     }
 
     return true
@@ -727,11 +731,8 @@ class BoxShippingPage03:Fragment(),ScanCallback {
     // ダイアログが表示されていれば閉じます
     dialogERR?.dismiss()
 
-    // 今回読んだ箱ラベルを表示します
-    viewModel01.txtBoxno.value = scanBox.substring( 3 )
-
     // 該当商品を検索します
-    position = ( viewModel01.itemList.value as MutableList<PotDataModel05> ).indexOfFirst { it.boxno == viewModel01.txtBoxno.value && it.amt_n.toInt() < it.amt_p.toInt() }
+    position = ( viewModel01.itemList.value as MutableList<PotDataModel05> ).indexOfFirst { it.boxno == scanBox.substring( 3 ) && it.amt_n.toInt() < it.amt_p.toInt() }
 
     if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "検索位置 = " + position.toString() )
 
@@ -745,11 +746,21 @@ class BoxShippingPage03:Fragment(),ScanCallback {
       activity01.claimSound( activity01.playSoundOK )
       activity01.claimVibration( AppBase.vibrationOK )
 
+      // 今回読んだ箱ラベルを表示します
+      viewModel01.txtBoxno.value = scanBox.substring( 3 )
+
+      // 箱ラベル背景色を決定します
+      if( scanBox.substring( 3, 4 ) == "A" ) viewModel01.bkgBoxno.value = "A"
+      if( scanBox.substring( 3, 4 ) == "B" ) viewModel01.bkgBoxno.value = "B"
+      if( scanBox.substring( 3, 4 ) == "C" ) viewModel01.bkgBoxno.value = "C"
+      if( scanBox.substring( 3, 4 ) == "D" ) viewModel01.bkgBoxno.value = "D"
+      if( scanBox.substring( 3, 4 ) == "E" ) viewModel01.bkgBoxno.value = "E"
+
       // 今回読んだ箱ラベルを記録します
       viewModel01.inputedBoxno = scanBox.substring( 3 )
 
-      // 箱ラベルから店舗名を取得します
-      viewModel01.pickShopName()
+      // 箱ラベルの情報を取得します
+      viewModel01.pickBoxInfomation()
     }
 
     return true
@@ -846,7 +857,7 @@ class BoxShippingPage03:Fragment(),ScanCallback {
       activity01.claimSound( activity01.playSoundNG )
       activity01.claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "00", "エラー", getString( R.string.err_box_shipping03 ), "OK", "" )
+      val dialog:MessageDialog = MessageDialog( "00", "エラー", msgError01, "OK", "" )
       dialog.show( parentFragmentManager, "simple" )
 
       return false

@@ -10,7 +10,26 @@
     android:layout_height="match_parent"
     tools:context=".Lineup">
 
-  <TextView
+    <Button
+      android:id="@+id/btn_menu14"
+      android:layout_width="135dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="16dp"
+      android:width="150px"
+      android:height="150px"
+      android:backgroundTint="@drawable/button_state02"
+      android:focusableInTouchMode="true"
+      android:paddingStart="10sp"
+      android:paddingEnd="10sp"
+      android:text="商品仕分"
+      android:textColor="@color/button_state"
+      android:textSize="15sp"
+      android:textStyle="bold"
+      app:iconSize="17dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/div_line02" />
+
+    <TextView
     android:id="@+id/txt_view01"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -48,6 +67,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/div_line01" />
 
@@ -65,6 +86,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/btn_menu01" />
 
@@ -82,6 +105,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu06" />
 
@@ -99,6 +124,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu01" />
 
@@ -116,6 +143,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu01" />
 
@@ -133,6 +162,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu02" />
 
@@ -150,6 +181,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu02" />
 
@@ -167,6 +200,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu04" />
 
@@ -184,6 +219,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu04" />
 
@@ -201,6 +238,8 @@
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
+      android:textColor="@color/button_state"
+      android:backgroundTint="@drawable/button_state01"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_menu06" />
 
@@ -231,19 +270,20 @@
       android:id="@+id/btn_menu09"
       android:layout_width="135dp"
       android:layout_height="50dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="3dp"
+      android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
+      android:backgroundTint="@drawable/button_state02"
       android:focusableInTouchMode="true"
       android:paddingStart="10sp"
       android:paddingEnd="10sp"
       android:text="商品検品"
+      android:textColor="@color/button_state"
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/div_line02" />
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/btn_menu13" />
 
     <Button
       android:id="@+id/btn_menu12"
@@ -252,15 +292,17 @@
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
+      android:backgroundTint="@drawable/button_state02"
       android:focusableInTouchMode="true"
       android:paddingStart="10sp"
       android:paddingEnd="10sp"
       android:text="商品箱出"
+      android:textColor="@color/button_state"
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/btn_menu09" />
+      app:layout_constraintTop_toTopOf="@+id/btn_menu14" />
 
     <Button
       android:id="@+id/btn_menu13"
@@ -269,15 +311,17 @@
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"
+      android:backgroundTint="@drawable/button_state02"
       android:focusableInTouchMode="true"
       android:paddingStart="10sp"
       android:paddingEnd="10sp"
-      android:text="箱確認"
+      android:text="箱操作"
+      android:textColor="@color/button_state"
       android:textSize="15sp"
       android:textStyle="bold"
       app:iconSize="17dp"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/btn_menu09" />
+      app:layout_constraintTop_toBottomOf="@+id/btn_menu14" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

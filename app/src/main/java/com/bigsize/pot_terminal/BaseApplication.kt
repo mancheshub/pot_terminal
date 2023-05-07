@@ -9,6 +9,11 @@ import com.bigsize.pot_terminal.model.PotDivision
 
 class AppBase:Application() {
   companion object {
+    // アクセス先FQDN
+    // 社内LAN : t-hightech-jp.corp.bigsize.com
+    // ｴﾐｭﾚｰﾀｰ : 10.0.2.2
+    private val fqdnURL:String = "t-hightech-jp.corp.bigsize.com"
+
     // Applicationインスタンス
     public lateinit var app:Application
 
@@ -37,19 +42,22 @@ class AppBase:Application() {
     public val specialDeviceNO:String = "999"
 
     // 場所確認関連URL
-    public val locationConfirmURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=locationConfirm"
+    public val locationConfirmURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=locationConfirm"
 
     // POTデータ転送関連URL
-    public val transferURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=potTransfer"
+    public val transferURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=potTransfer"
 
     // 商品照合関連URL
-    public val itemInspectionURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=itemInspection"
+    public val itemInspectionURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=itemInspection"
+
+    // 商品仕分関連URL
+    public val boxReceivingURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=boxReceiving"
 
     // 商品箱出関連URL
-    public val boxShippingURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=boxShipping"
+    public val boxShippingURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=boxShipping"
 
-    // 棚確認関連URL
-    public val boxConfirmURL:String = "http://d-hightech-jp.corp.bigsize.com/api.php?at=potTerminal&st=boxConfirm"
+    // 棚操作関連URL
+    public val boxOperationURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=boxOperation"
 
     // 正常読取した場合のブザーとバイブレーションのレベル
     public val buzzerOK:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "20", "resDuration" to "0" )

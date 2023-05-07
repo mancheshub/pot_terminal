@@ -187,7 +187,7 @@ open class CommonBase:AppCompatActivity() {
 
     // フラグメント対応していないアクティビティに限ってonResume()時にサウンド＆バイブレーションを発動します
 
-    if( componentName.shortClassName != ".BoxShipping" ) {
+    if( componentName.shortClassName != ".BoxShipping" && componentName.shortClassName != ".BoxOperation" ) {
       claimSound( playSoundOK )
       claimVibration( AppBase.vibrationOK )
     }
@@ -464,6 +464,12 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
             claimVibration( AppBase.vibrationAR )
           }
 
+          if( componentName.shortClassName == ".BoxReceiving" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
           if( componentName.shortClassName == ".ItemInspection" && _data.substring( 0, 1 ) != "a" ) {
             readFlag = "NG"
             claimSound( playSoundAR )
@@ -476,7 +482,7 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
             claimVibration( AppBase.vibrationAR )
           }
 
-          if( componentName.shortClassName == ".BoxConfirm" && _data.substring( 0, 3 ) != "M-T" && _data.substring( 0, 3 ) != "M-H" ) {
+          if( componentName.shortClassName == ".BoxOperation" && _data.substring( 0, 3 ) != "M-T" && _data.substring( 0, 3 ) != "M-H" ) {
             readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )

@@ -47,8 +47,8 @@ class LocationConfirm: ViewModel() {
 
       try {
         if( isClear == "NON" ) {
-          val pairValue01 = model01.pickLocation( AppBase.locationConfirmURL, inputedCd, inputedCn, inputedSz )
-          _locationList.value = pairValue01.second
+          val pairHash01 = model01.pickLocation( AppBase.locationConfirmURL, inputedCd, inputedCn, inputedSz )
+          _locationList.value = pairHash01.second
         }
 
         if( isClear == "YES" ) _locationList.value = mutableListOf()

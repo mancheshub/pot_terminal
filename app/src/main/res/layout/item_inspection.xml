@@ -13,9 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ItemInspection"
-    android:descendantFocusability="afterDescendants"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:descendantFocusability="afterDescendants">
 
     <ProgressBar
       android:id="@+id/prg_view01"

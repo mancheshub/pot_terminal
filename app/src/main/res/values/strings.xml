@@ -51,8 +51,14 @@
   <string name="alt_box_shipping01">仕分箱にない商品が含まれています。</string>
   <string name="alt_box_shipping02">箱に商品が残っています。</string>
 
-  <string name="msg_box_confirm01">照合が完了しました。</string>
-  <string name="err_box_confirm01">該当の商品がありません。</string>
+  <string name="err_box_receiving01">仕分け済みか仕分け対象ではありません。</string>
+  <string name="msg_box_receiving01">仕分が完了しました。</string>
+
+  <string name="msg_box_operation01">照合が完了しました。</string>
+  <string name="msg_box_operation02">箱付替が完了しました。</string>
+  <string name="alt_box_operation01">付替後の箱に商品が残っているため付替できません。</string>
+  <string name="err_box_operation01">該当の商品がありません。</string>
+  <string name="err_box_operation02">箱QRを読んでください。</string>
 
   <string name="msg_item_inspection01">クリアしました。</string>
   <string name="msg_item_inspection02">箱確定しました。</string>

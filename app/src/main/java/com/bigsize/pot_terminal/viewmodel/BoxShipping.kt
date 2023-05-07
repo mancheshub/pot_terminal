@@ -1,5 +1,6 @@
 package com.bigsize.pot_terminal.viewmodel
 
+import android.graphics.Color
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,13 +17,13 @@ import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.BoxShippingAPI
-import com.bigsize.pot_terminal.model.BoxConfirmAPI
+import com.bigsize.pot_terminal.model.BoxOperationAPI
 import com.bigsize.pot_terminal.model.PotDataModel01
 import com.bigsize.pot_terminal.model.PotDataModel05
 
 class BoxShippingPage01:ViewModel() {
   private var model01:BoxShippingAPI = BoxShippingAPI()
-  private var model02:BoxConfirmAPI = BoxConfirmAPI()
+  private var model02:BoxOperationAPI = BoxOperationAPI()
 
   // API通信状況
   private val _apiCondition:MutableLiveData<String> = MutableLiveData()
@@ -44,8 +45,9 @@ class BoxShippingPage01:ViewModel() {
   private val _itemList:MutableLiveData<MutableList<PotDataModel01>> = MutableLiveData()
   public val itemList:LiveData<MutableList<PotDataModel01>> get() = _itemList
 
-  // 今回決定した箱ラベル
+  // 箱ラベルと箱ラベル背景色
   public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
+  public val bkgBoxno:MutableLiveData<String> by lazy { MutableLiveData( "N" ) }
 
   // 選択した"伝発グループ・店舗・箱ラベル"
   public var selectedGroupID:String = " "
@@ -104,8 +106,24 @@ class BoxShippingPage01:ViewModel() {
       try {
         // 店舗の箱ラベルを取得します
         val pairHash01 = model01.pickBoxNO( AppBase.boxShippingURL, selectedShopID )
+
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "箱ラベル = " + pairHash01.second )
+
+        // 箱ラベルを表示します
         txtBoxno.value = pairHash01.second
-        selectedBoxID = pairHash01.second
+
+        // 箱ラベル背景色を決定します
+        if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "A" ) bkgBoxno.value = "A"
+        if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "B" ) bkgBoxno.value = "B"
+        if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "C" ) bkgBoxno.value = "C"
+        if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "D" ) bkgBoxno.value = "D"
+        if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "E" ) bkgBoxno.value = "E"
+
+        // 店舗の商品がD85に入っていた場合はpairHash01.secondが"A10 D85"のようになるためこの文字列から"A10"のみを抽出します
+        val boxnoArray = pairHash01.second.split(" ").map { it.trim() }
+
+        // 店舗の箱ラベルを記録します
+        selectedBoxID = boxnoArray[0]
 
         // 商品データを取得します
         val pairHash02 = model01.pickItemList( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
@@ -133,7 +151,7 @@ class BoxShippingPage01:ViewModel() {
 
         // 箱出が正常に完了したら箱ラベルに商品が残っていないかをチェックします
         if( pairHash01.first == "OK" ) {
-          val pairHash02 = model02.pickItemList( AppBase.boxConfirmURL, selectedBoxID )
+          val pairHash02 = model02.pickItemList( AppBase.boxOperationURL, selectedBoxID )
 
           if( pairHash02.second.size != 0 ) _apiCondition.value = "AL03"
           if( pairHash02.second.size == 0 ) _apiCondition.value = "FN01"
@@ -165,7 +183,7 @@ class BoxShippingPage01:ViewModel() {
 
 class BoxShippingPage02:ViewModel() {
   private var model01:BoxShippingAPI = BoxShippingAPI()
-  private var model02:BoxConfirmAPI = BoxConfirmAPI()
+  private var model02:BoxOperationAPI = BoxOperationAPI()
 
   // API通信状況
   private val _apiCondition:MutableLiveData<String> = MutableLiveData()
@@ -179,8 +197,9 @@ class BoxShippingPage02:ViewModel() {
   private val _itemList:MutableLiveData<MutableList<PotDataModel05>> = MutableLiveData()
   public val itemList:LiveData<MutableList<PotDataModel05>> get() = _itemList
 
-  // 箱ラベルと店舗名
+  // 箱ラベルと箱ラベル背景色と店舗名
   public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
+  public val bkgBoxno:MutableLiveData<String> by lazy { MutableLiveData( "N" ) }
   public val txtShopname:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
 
   // 入力した箱ラベル
@@ -209,16 +228,18 @@ class BoxShippingPage02:ViewModel() {
   }
 
   /**
-   * 箱ラベルから店舗名を取得します
+   * 箱ラベルの情報を取得します
    */
-  public fun pickShopName() {
+  public fun pickBoxInfomation() {
     viewModelScope.launch {
       _apiCondition.value = "ST"
 
       try {
-        // 箱ラベルから店舗名を取得します
-        val pairValue01 = model02.pickShopname( AppBase.boxConfirmURL, inputedBoxno )
-        txtShopname.value = pairValue01.second
+        // 箱ラベルの情報を取得します
+        val pairHash01 = model02.pickBoxInfomation( AppBase.boxOperationURL, inputedBoxno )
+
+        // 店舗名を設定します
+        txtShopname.value = pairHash01.second
 
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
@@ -267,7 +288,7 @@ class BoxShippingPage02:ViewModel() {
 
 class BoxShippingPage03:ViewModel() {
   private var model01:BoxShippingAPI = BoxShippingAPI()
-  private var model02:BoxConfirmAPI = BoxConfirmAPI()
+  private var model02:BoxOperationAPI = BoxOperationAPI()
 
   // API通信状況
   private val _apiCondition:MutableLiveData<String> = MutableLiveData()
@@ -281,8 +302,9 @@ class BoxShippingPage03:ViewModel() {
   private val _itemList:MutableLiveData<MutableList<PotDataModel05>> = MutableLiveData()
   public val itemList:LiveData<MutableList<PotDataModel05>> get() = _itemList
 
-  // 箱ラベルと店舗名
+  // 箱ラベルと箱ラベル背景色と店舗名
   public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
+  public val bkgBoxno:MutableLiveData<String> by lazy { MutableLiveData( "N" ) }
   public val txtShopname:MutableLiveData<String> by lazy { MutableLiveData<String>( "" ) }
 
   // 入力した箱ラベル
@@ -311,16 +333,18 @@ class BoxShippingPage03:ViewModel() {
   }
 
   /**
-   * 箱ラベルから店舗名を取得します
+   * 箱ラベルの情報を取得します
    */
-  public fun pickShopName() {
+  public fun pickBoxInfomation() {
     viewModelScope.launch {
       _apiCondition.value = "ST"
 
       try {
-        // 箱ラベルから店舗名を取得します
-        val pairValue01 = model02.pickShopname( AppBase.boxConfirmURL, inputedBoxno )
-        txtShopname.value = pairValue01.second
+        // 箱ラベルの情報を取得します
+        val pairHash01 = model02.pickBoxInfomation( AppBase.boxOperationURL, inputedBoxno )
+
+        // 店舗名を設定します
+        txtShopname.value = pairHash01.second
 
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
