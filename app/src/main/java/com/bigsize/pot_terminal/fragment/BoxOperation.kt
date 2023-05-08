@@ -130,6 +130,9 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
     viewModel01.txtShopname.value = ""
     viewModel01.bkgBoxno.value = "N"
 
+    // 入力した箱ラベルをクリアします
+    viewModel01.inputedBoxno = ""
+
     // 全データ数とPOTで読んだデータ数を更新します
     viewModel01.cntTotal.value = "0"
     viewModel01.cntRead.value = "0"
@@ -465,6 +468,9 @@ class BoxOperationPage02:Fragment(),ScanCallback {
    * @return 処理結果
    */
   override fun readItem( scanItem:String? ):Boolean {
+    activity01.claimSound( activity01.playSoundNG )
+    activity01.claimVibration( AppBase.vibrationNG )
+
     return true
   }
 }

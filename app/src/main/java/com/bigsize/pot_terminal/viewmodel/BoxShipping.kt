@@ -113,13 +113,14 @@ class BoxShippingPage01:ViewModel() {
         txtBoxno.value = pairHash01.second
 
         // 箱ラベル背景色を決定します
+        bkgBoxno.value = "N"
         if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "A" ) bkgBoxno.value = "A"
         if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "B" ) bkgBoxno.value = "B"
         if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "C" ) bkgBoxno.value = "C"
         if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "D" ) bkgBoxno.value = "D"
         if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "E" ) bkgBoxno.value = "E"
 
-        // 店舗の商品がD85に入っていた場合はpairHash01.secondが"A10 D85"のようになるためこの文字列から"A10"のみを抽出します
+        // 店舗の商品がE131に入っていた場合はpairHash01.secondが"A10 E131"のようになるためこの文字列から"A10"のみを抽出します
         val boxnoArray = pairHash01.second.split(" ").map { it.trim() }
 
         // 店舗の箱ラベルを記録します

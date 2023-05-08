@@ -448,6 +448,14 @@ class BoxShippingPage02:Fragment(),ScanCallback {
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
+    // 箱ラベルと店舗名と箱ラベル背景色をクリアします
+    viewModel01.txtBoxno.value = ""
+    viewModel01.txtShopname.value = ""
+    viewModel01.bkgBoxno.value = "N"
+
+    // 入力した箱ラベルをクリアします
+    viewModel01.inputedBoxno = ""
+
     // キャンセル商品データを取得します
     viewModel01.pickItemList()
   }
@@ -703,6 +711,14 @@ class BoxShippingPage03:Fragment(),ScanCallback {
 
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
+
+    // 箱ラベルと店舗名と箱ラベル背景色をクリアします
+    viewModel01.txtBoxno.value = ""
+    viewModel01.txtShopname.value = ""
+    viewModel01.bkgBoxno.value = "N"
+
+    // 入力した箱ラベルをクリアします
+    viewModel01.inputedBoxno = ""
 
     // 先送商品データを取得します
     viewModel01.pickItemList()
