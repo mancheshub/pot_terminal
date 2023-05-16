@@ -210,7 +210,7 @@ class LocationConfirm:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActi
     // 今回読んだ商品を記録します
     viewModel01.inputedCd = scanItem.substring( 3, 13 )
     viewModel01.inputedCn = scanItem.substring( 14, 16 )
-    viewModel01.inputedSz = scanItem.substring( 17, 21 ).replace( " ", "" )
+    viewModel01.inputedSz = scanItem.substring( 17, 21 )
 
     // 品番・色番・サイズから商品のロケーションを取得します
     viewModel01.pickLocation( "NON" )

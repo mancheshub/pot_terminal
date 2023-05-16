@@ -60,6 +60,12 @@
   <string name="err_box_operation01">該当の商品がありません。</string>
   <string name="err_box_operation02">箱QRを読んでください。</string>
 
+  <string name="msg_collation_receiving01">照合が完了しました。</string>
+  <string name="err_collation_receiving01">該当の商品がありません。</string>
+  <string name="err_collation_receiving02">商品QRを読んでください。</string>
+  <string name="err_collation_receiving03">棚QRを読んでください。</string>
+  <string name="err_collation_receiving04">階と単位を選択してください。</string>
+
   <string name="msg_item_inspection01">クリアしました。</string>
   <string name="msg_item_inspection02">箱確定しました。</string>
   <string name="msg_item_inspection03">SCMラベルを印字しました。</string>
@@ -72,6 +78,7 @@
   <string name="err_item_inspection03">箱確定するデータがありません。</string>
   <string name="err_item_inspection04">確定するデータがありません。</string>
   <string name="err_item_inspection05">他人が担当するデータをクリアできません。</string>
+  <string name="err_item_inspection06">クリアするデータがありません。</string>
 
   <string name="msg_data_confirm01">削除しますがよろしいですか？</string>
   <string name="msg_data_confirm02">削除しました。</string>

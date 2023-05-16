@@ -47,7 +47,7 @@ class LocationConfirm( val context:Context?, var itemList:MutableList<PotDataMod
 
     binding01.text01.setTextColor( Color.BLACK )
     binding01.text02.setTextColor( Color.BLACK )
-    binding01.amt.setTextColor( Color.BLACK )
+    binding01.amtP.setTextColor( Color.BLACK )
     binding01.cd.setTextColor( Color.BLACK )
     binding01.cn.setTextColor( Color.BLACK )
     binding01.sz.setTextColor( Color.BLACK )

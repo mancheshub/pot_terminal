@@ -186,6 +186,9 @@ class Inventory:DensoWaveBase() {
 
     if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "記録した商品 = " + viewModel01.inputedItem )
 
+    // 数量を入力可能とします
+    binding01.edtAmt.isEnabled = true
+
     return true
   }
 
@@ -220,6 +223,9 @@ class Inventory:DensoWaveBase() {
     viewModel01.edtAmt.value = ""
 
     binding01.edtAmt.requestFocus()
+
+    // 数量を入力不可とします
+    binding01.edtAmt.isEnabled = false
 
     return true
   }

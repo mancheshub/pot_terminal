@@ -33,6 +33,7 @@
     <activity android:name=".DataConfirm" />
     <activity android:name=".DataTransfer" />
     <activity android:name=".ItemInspection" />
+    <activity android:name=".CollationReceiving" />
     <activity android:name=".SortShipping" />
     <activity android:name=".LocationConfirm" android:windowSoftInputMode="stateAlwaysHidden" />
     <activity android:name=".BoxReceiving" />

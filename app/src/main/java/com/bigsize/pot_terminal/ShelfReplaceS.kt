@@ -226,6 +226,9 @@ class ShelfReplaceS:DensoWaveBase() {
     // 表示用データを作成します
     viewModel01.txtItem.value = cd + "  " + cn + "  " + sz
 
+    // 数量を入力可能とします
+    binding01.edtAmt.isEnabled = true
+
     return true
   }
 
@@ -253,6 +256,9 @@ class ShelfReplaceS:DensoWaveBase() {
     viewModel01.inputedItem = ""
     viewModel01.txtItem.value = ""
     viewModel01.edtAmt.value = ""
+
+    // 数量を入力不可とします
+    binding01.edtAmt.isEnabled = false
 
     return true
   }

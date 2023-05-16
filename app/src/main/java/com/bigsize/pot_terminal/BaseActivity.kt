@@ -187,7 +187,7 @@ open class CommonBase:AppCompatActivity() {
 
     // フラグメント対応していないアクティビティに限ってonResume()時にサウンド＆バイブレーションを発動します
 
-    if( componentName.shortClassName != ".BoxShipping" && componentName.shortClassName != ".BoxOperation" ) {
+    if( componentName.shortClassName != ".BoxShipping" && componentName.shortClassName != ".BoxOperation" && componentName.shortClassName != ".CollationReceiving" ) {
       claimSound( playSoundOK )
       claimVibration( AppBase.vibrationOK )
     }

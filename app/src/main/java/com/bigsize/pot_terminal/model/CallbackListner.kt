@@ -5,6 +5,11 @@ interface DialogCallback {
 }
 
 interface ScanCallback {
+  fun readShelf( scanShelf:String? ):Boolean
   fun readBox( scanBox:String? ):Boolean
   fun readItem( scanItem:String? ):Boolean
+}
+
+interface KeyCallback {
+  fun enterEvent():Boolean
 }

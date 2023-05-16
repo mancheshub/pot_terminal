@@ -18,6 +18,8 @@ import com.bigsize.pot_terminal.adapter.BoxOperation as AD_BoxOperation
 class BoxOperation:DensoWaveBase(),DialogCallback {
   private val binding01:BoxOperationBinding by dataBinding()
 
+  private lateinit var myFragment:ScanCallback
+
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
 
@@ -54,7 +56,7 @@ class BoxOperation:DensoWaveBase(),DialogCallback {
 
     binding01.pagView01.adapter = AD_BoxOperation( supportFragmentManager, lifecycle )
 
-    TabLayoutMediator( binding01.layTab01, binding01.pagView01 ) { tab,position ->
+    TabLayoutMediator( binding01.layTab01, binding01.pagView01 ) { tab, position ->
       if( position == 0 ) tab.text = "箱確認"
       if( position == 1 ) tab.text = "箱付替"
     }.attach()
@@ -64,16 +66,14 @@ class BoxOperation:DensoWaveBase(),DialogCallback {
     scanBox.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "箱データ = " + scanBox.value )
 
-      val myFragment:ScanCallback = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
-
+      myFragment = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
       myFragment.readBox( scanBox.value )
     })
 
     scanItemM.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "商品データ = " + scanItemM.value )
 
-      val myFragment:ScanCallback = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
-
+      myFragment = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
       myFragment.readItem( scanItemM.value )
     })
   }

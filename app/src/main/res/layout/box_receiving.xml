@@ -129,9 +129,8 @@
       android:layout_width="20dp"
       android:layout_height="250dp"
       android:layout_marginStart="16dp"
-      android:text="　"
       android:background='@{viewmodel.bkgBand == "LEFT" ? @color/band_YS : @color/band_NS}'
-      app:layout_constraintBottom_toBottomOf="@+id/textView"
+      android:text="　"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/txt_boxno" />
 
@@ -155,7 +154,6 @@
       android:layout_marginEnd="16dp"
       android:text="　"
       android:background='@{viewmodel.bkgBand == "RIGHT" ? @color/band_YS : @color/band_NS}'
-      app:layout_constraintBottom_toBottomOf="@+id/textView"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/txt_boxno" />
 

@@ -17,8 +17,8 @@ import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.MessageDialog
 import com.bigsize.pot_terminal.model.PotDataModel03
 import com.bigsize.pot_terminal.databinding.ItemInspectionBinding
-import com.bigsize.pot_terminal.adapter.ItemInspection as AD_ItemInspection
 import com.bigsize.pot_terminal.viewmodel.ItemInspection as VM_ItemInspection
+import com.bigsize.pot_terminal.adapter.ItemInspection as AD_ItemInspection
 
 class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickListener,DialogCallback {
   private val binding01:ItemInspectionBinding by dataBinding()
@@ -29,6 +29,8 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
   private lateinit var adapter03:ArrayAdapter<String>
   private lateinit var adapter04:ArrayAdapter<String>
   private lateinit var adapter05:ArrayAdapter<String>
+
+  private var dialogERR:MessageDialog? = null
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
@@ -68,9 +70,11 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
 
     // ■ アダプタを初期化します
 
-    adapter03 = ArrayAdapter( applicationContext, R.layout.item_inspection_popup02, mutableListOf( " " ) )
+    adapter02 = ArrayAdapter( applicationContext, R.layout.item_inspection_popup01, mutableListOf() )
+    binding01.txtGroup.setAdapter( adapter02 )
+
+    adapter03 = ArrayAdapter( applicationContext, R.layout.item_inspection_popup02, mutableListOf() )
     binding01.txtShop.setAdapter( adapter03 )
-    binding01.txtShop.setText( " ", false )
 
     adapter01 = AD_ItemInspection( applicationContext, mutableListOf() )
     binding01.lstView01.adapter = adapter01
@@ -166,13 +170,17 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
 
         if( apiCondition == "FN01" ) {
-          // クリアしたら空白の店舗データが選択されたとします
-          binding01.txtShop.setText( " ", false )
-          viewModel01.selectedShopID = " "
-
-          // クリアしたら箱01が選択されたとします
-          binding01.txtBox.setText( "箱01", false )
+          // 選択した"作業グループ・店舗"をクリアします
+          viewModel01.selectedGroupID = ""
+          viewModel01.selectedShopID = ""
           viewModel01.selectedBoxID = "01"
+          viewModel01.selectedPrintID = "01"
+
+          // "作業グループ・店舗・箱・印刷機"の選択をクリアします
+          binding01.txtGroup.setText( "", false )
+          binding01.txtShop.setText( "", false )
+          binding01.txtBox.setText( "箱01", false )
+          binding01.txtPrint.setText( "印刷機01", false )
         }
 
         if( apiCondition == "FN02" ) {
@@ -228,9 +236,9 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       for( _item in viewModel01.groupList.value as MutableList<HashItem> ) { menuItems.add( _item.item ) }
 
       // アダプタデータを更新します
-      adapter02 = ArrayAdapter( applicationContext, R.layout.item_inspection_popup01, menuItems )
-      binding01.txtGroup.setAdapter( adapter02 )
-      binding01.txtGroup.setText( " ", false )
+      adapter02.clear()
+      adapter02.addAll( menuItems )
+      adapter02.notifyDataSetChanged()
     })
 
     viewModel01.shopList.observe( this, Observer<MutableList<HashItem>> {
@@ -343,17 +351,15 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         // 作業グループが選択されたら店舗データを取得します
         viewModel01.pickShopList()
 
-        // 作業グループを切り替えたら空白の店舗データが選択されたとします
-        binding01.txtShop.setText( " ", false )
-        viewModel01.selectedShopID = " "
-
-        // 作業グループを切り替えたら箱01が選択されたとします
-        binding01.txtBox.setText( "箱01", false )
+        // 選択した"店舗・箱・印刷機"をクリアします
+        viewModel01.selectedShopID = ""
         viewModel01.selectedBoxID = "01"
-
-        // 作業グループを切り替えたら印刷機01が選択されたとします
-        binding01.txtPrint.setText( "印刷機01", false )
         viewModel01.selectedPrintID = "ELS_FEL_P01"
+
+        // "店舗・箱・印刷機"の選択をクリアします
+        binding01.txtShop.setText( " ", false )
+        binding01.txtBox.setText( "箱01", false )
+        binding01.txtPrint.setText( "印刷機01", false )
 
         // 作業グループ変更により店舗データがクリアされたので商品データを再取得します
         viewModel01.pickItemList( "nonExclusive" )
@@ -439,6 +445,9 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
 
     var position:Int = 0
 
+    // ダイアログが表示されていれば閉じます
+    dialogERR?.dismiss()
+
     var hcd:String = scanItem.substring( 1, 11 );
     var hcn:String = scanItem.substring( 11, 13 );
     var hcz:String = scanItem.substring( 13, 16 );
@@ -454,8 +463,8 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
       claimSound( playSoundNG )
       claimVibration( AppBase.vibrationNG )
 
-      val dialog:MessageDialog = MessageDialog( "00", "", getString( R.string.err_item_inspection02 ), "OK", "" )
-      dialog.show( supportFragmentManager, "simple" )
+      dialogERR = MessageDialog( "00", "", getString( R.string.err_item_inspection02 ), "OK", "" )
+      dialogERR?.show( supportFragmentManager, "simple" )
     } else {
       claimSound( playSoundOK )
       claimVibration( AppBase.vibrationOK )
@@ -530,6 +539,16 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
     }
 
     var itemList:MutableList<PotDataModel03>? = viewModel01.itemList.value
+
+    if( kind == "01" && ( itemList == null || itemList.size == 0 || itemList.sumBy { it.amt_n.toInt() } == 0 ) ) {
+      claimSound( playSoundNG )
+      claimVibration( AppBase.vibrationNG )
+
+      val dialog:MessageDialog = MessageDialog( "00", "エラー", getString( R.string.err_item_inspection06 ), "OK", "" )
+      dialog.show( supportFragmentManager, "simple" )
+
+      return false
+    }
 
     if( kind == "02" && ( itemList == null || itemList.size == 0 || itemList.sumBy { it.amt_n.toInt() } == 0 ) ) {
       claimSound( playSoundNG )

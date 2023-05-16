@@ -59,9 +59,11 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
 
     // ■ アダプタを初期化します
 
-    adapter03 = ArrayAdapter( context!!, R.layout.box_shipping_page01_popup02, mutableListOf( " " ) )
+    adapter02 = ArrayAdapter( context!!, R.layout.box_shipping_page01_popup01, mutableListOf() )
+    binding01.txtGroup.setAdapter( adapter02 )
+
+    adapter03 = ArrayAdapter( context!!, R.layout.box_shipping_page01_popup02, mutableListOf() )
     binding01.txtShop.setAdapter( adapter03 )
-    binding01.txtShop.setText( " ", false )
 
     adapter01 = AD_BoxShippingPage01( context!!, mutableListOf() )
     binding01.lstView01.adapter = adapter01
@@ -156,9 +158,9 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
       for( _item in viewModel01.groupList.value as MutableList<HashItem> ) { menuItems.add( _item.item ) }
 
       // アダプタデータを更新します
-      adapter02 = ArrayAdapter( context!!, R.layout.box_shipping_page01_popup01, menuItems )
-      binding01.txtGroup.setAdapter( adapter02 )
-      binding01.txtGroup.setText( " ", false )
+      adapter02.clear()
+      adapter02.addAll( menuItems )
+      adapter02.notifyDataSetChanged()
     })
 
     viewModel01.shopList.observe( this, Observer<MutableList<HashItem>> {
@@ -209,25 +211,31 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
+    // "伝発グループ・店舗"の選択をクリアします
+    binding01.txtGroup.setText( "", false )
+    binding01.txtShop.setText( "", false )
+
+    // "箱ラベル・箱ラベル背景色"の表示をクリアします
+    viewModel01.txtBoxno.value = ""
+    viewModel01.bkgBoxno.value = "N"
+
     // 伝発グループデータを取得します
     viewModel01.pickGroupList()
-
-    // 空の伝発グループが選択されたとします
-    viewModel01.selectedGroupID = " "
-
-    // 箱ラベル背景色をクリアします
-    viewModel01.bkgBoxno.value = "N"
 
     // 伝発グループが選択されたら店舗データを取得します
     viewModel01.pickShopList()
 
-    // 伝発グループを切り替えたら空白の店舗データが選択されたとします
-    binding01.txtShop.setText( " ", false )
-    viewModel01.selectedShopID = " "
-    viewModel01.selectedBoxID = " "
-
     // 伝発グループ変更により店舗データがクリアされたので商品データを再取得します
     viewModel01.pickItemList()
+  }
+
+  override fun onPause() {
+    super.onPause()
+
+    // 選択した"伝発グループ・店舗・箱ラベル"をクリアします
+    viewModel01.selectedGroupID = ""
+    viewModel01.selectedShopID = ""
+    viewModel01.selectedBoxno = ""
   }
 
   override fun onDestroyView() {
@@ -265,10 +273,16 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
         // 伝発グループが選択されたら店舗データを取得します
         viewModel01.pickShopList()
 
-        // 伝発グループを切り替えたら空白の店舗データが選択されたとします
+        // 選択した"店舗・箱ラベル"をクリアします
+        viewModel01.selectedShopID = ""
+        viewModel01.selectedBoxno = ""
+
+        // 店舗の選択をクリアします
         binding01.txtShop.setText( " ", false )
-        viewModel01.selectedShopID = " "
-        viewModel01.selectedBoxID = " "
+
+        // "箱ラベル・箱ラベル背景色"の表示をクリアします
+        viewModel01.txtBoxno.value = ""
+        viewModel01.bkgBoxno.value = "N"
 
         // 伝発グループ変更により店舗データがクリアされたので商品データを再取得します
         viewModel01.pickItemList()
@@ -291,6 +305,14 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
       else -> {}
     }
   }
+
+  /**
+   * 棚を読んだ時の処理を定義します
+   *
+   * @param [scanShelf] 読み取った棚QRデータ
+   * @return 処理結果
+   */
+  override fun readShelf( scanShelf:String? ):Boolean { return true }
 
   /**
    * 箱を読んだ時の処理を定義します
@@ -448,16 +470,20 @@ class BoxShippingPage02:Fragment(),ScanCallback {
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
-    // 箱ラベルと店舗名と箱ラベル背景色をクリアします
+    // "箱ラベル・店舗名・箱ラベル背景色"の表示をクリアします
     viewModel01.txtBoxno.value = ""
     viewModel01.txtShopname.value = ""
     viewModel01.bkgBoxno.value = "N"
 
-    // 入力した箱ラベルをクリアします
-    viewModel01.inputedBoxno = ""
-
     // キャンセル商品データを取得します
     viewModel01.pickItemList()
+  }
+
+  override fun onPause() {
+    super.onPause()
+
+    // 入力した箱ラベルをクリアします
+    viewModel01.inputedBoxno = ""
   }
 
   override fun onDestroyView() {
@@ -465,6 +491,14 @@ class BoxShippingPage02:Fragment(),ScanCallback {
 
     binding01.lstView01.adapter = null
   }
+
+  /**
+   * 棚を読んだ時の処理を定義します
+   *
+   * @param [scanShelf] 読み取った棚QRデータ
+   * @return 処理結果
+   */
+  override fun readShelf( scanShelf:String? ):Boolean { return true }
 
   /**
    * 箱を読んだ時の処理を定義します
@@ -712,16 +746,20 @@ class BoxShippingPage03:Fragment(),ScanCallback {
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
-    // 箱ラベルと店舗名と箱ラベル背景色をクリアします
+    // "箱ラベル・店舗名・箱ラベル背景色"の表示をクリアします
     viewModel01.txtBoxno.value = ""
     viewModel01.txtShopname.value = ""
     viewModel01.bkgBoxno.value = "N"
 
-    // 入力した箱ラベルをクリアします
-    viewModel01.inputedBoxno = ""
-
     // 先送商品データを取得します
     viewModel01.pickItemList()
+  }
+
+  override fun onPause() {
+    super.onPause()
+
+    // 入力した箱ラベルをクリアします
+    viewModel01.inputedBoxno = ""
   }
 
   override fun onDestroyView() {
@@ -729,6 +767,14 @@ class BoxShippingPage03:Fragment(),ScanCallback {
 
     binding01.lstView01.adapter = null
   }
+
+  /**
+   * 棚を読んだ時の処理を定義します
+   *
+   * @param [scanShelf] 読み取った棚QRデータ
+   * @return 処理結果
+   */
+  override fun readShelf( scanShelf:String? ):Boolean { return true }
 
   /**
    * 箱を読んだ時の処理を定義します

@@ -50,9 +50,9 @@ class BoxShippingPage01:ViewModel() {
   public val bkgBoxno:MutableLiveData<String> by lazy { MutableLiveData( "N" ) }
 
   // 選択した"伝発グループ・店舗・箱ラベル"
-  public var selectedGroupID:String = " "
-  public var selectedShopID:String = " "
-  public var selectedBoxID:String = " "
+  public var selectedGroupID:String = ""
+  public var selectedShopID:String = ""
+  public var selectedBoxno:String = ""
 
   init {}
 
@@ -124,7 +124,7 @@ class BoxShippingPage01:ViewModel() {
         val boxnoArray = pairHash01.second.split(" ").map { it.trim() }
 
         // 店舗の箱ラベルを記録します
-        selectedBoxID = boxnoArray[0]
+        selectedBoxno = boxnoArray[0]
 
         // 商品データを取得します
         val pairHash02 = model01.pickItemList( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
@@ -152,7 +152,7 @@ class BoxShippingPage01:ViewModel() {
 
         // 箱出が正常に完了したら箱ラベルに商品が残っていないかをチェックします
         if( pairHash01.first == "OK" ) {
-          val pairHash02 = model02.pickItemList( AppBase.boxOperationURL, selectedBoxID )
+          val pairHash02 = model02.pickItemList( AppBase.boxOperationURL, selectedBoxno )
 
           if( pairHash02.second.size != 0 ) _apiCondition.value = "AL03"
           if( pairHash02.second.size == 0 ) _apiCondition.value = "FN01"
@@ -263,7 +263,7 @@ class BoxShippingPage02:ViewModel() {
       try {
         val pairHash01 = model01.finishCancelShipping( AppBase.boxShippingURL, i_id )
 
-        _apiCondition.value = "FN01"
+        _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"
@@ -368,7 +368,7 @@ class BoxShippingPage03:ViewModel() {
       try {
         val pairHash01 = model01.finishPostponeShipping( AppBase.boxShippingURL, i_id )
 
-        _apiCondition.value = "FN01"
+        _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"

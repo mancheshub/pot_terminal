@@ -6,24 +6,27 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import androidx.lifecycle.Observer
+import com.bigsize.pot_terminal.adapter.DataConfirm
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.model.DialogCallback
 import com.bigsize.pot_terminal.model.ScanCallback
+import com.bigsize.pot_terminal.model.KeyCallback
 import com.bigsize.pot_terminal.model.MessageDialog
 import com.bigsize.pot_terminal.model.PotDataModel01
-import com.bigsize.pot_terminal.databinding.BoxShippingBinding
-import com.bigsize.pot_terminal.adapter.BoxShipping as AD_BoxShipping
+import com.bigsize.pot_terminal.databinding.CollationReceivingBinding
+import com.bigsize.pot_terminal.adapter.CollationReceiving as AD_CollationReceiving
 
-class BoxShipping:DensoWaveBase(),DialogCallback {
-  private val binding01:BoxShippingBinding by dataBinding()
+class CollationReceiving:DensoWaveBase(),DialogCallback {
+  private val binding01:CollationReceivingBinding by dataBinding()
 
-  private lateinit var myFragment:ScanCallback
+  private lateinit var myFragment01:ScanCallback
+  private lateinit var myFragment02:KeyCallback
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
 
-    setContentView( R.layout.box_shipping )
+    setContentView( R.layout.collation_receiving )
 
     // ■ スキャナを設定します
 
@@ -33,7 +36,7 @@ class BoxShipping:DensoWaveBase(),DialogCallback {
 
     val rssi:Int = statusWifi.checkWifi()
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "電波強度 = " + rssi )
+    if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", "電波強度 = " + rssi )
 
     if( rssi < AppBase.permitWifiLevel ) {
       claimSound( playSoundNG )
@@ -49,33 +52,40 @@ class BoxShipping:DensoWaveBase(),DialogCallback {
 
     // ■ ActionBarを設定します
 
-    supportActionBar?.title = "商品箱出"
+    supportActionBar?.title = "一覧入庫"
     supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     // ■ アダプタを初期化します
 
-    binding01.pagView01.adapter = AD_BoxShipping( supportFragmentManager, lifecycle )
+    binding01.pagView01.adapter = AD_CollationReceiving( supportFragmentManager, lifecycle )
 
     TabLayoutMediator( binding01.layTab01, binding01.pagView01 ) { tab, position ->
-      if( position == 0 ) tab.text = "照合箱出"
-      if( position == 1 ) tab.text = "ｷｬﾝｾﾙ箱出"
-      if( position == 2 ) tab.text = "先送箱出"
+      if( position == 0 ) tab.text = "返品入庫"
+      if( position == 1 ) tab.text = "Fｷｬﾝｾﾙ入庫"
+      if( position == 2 ) tab.text = "Mｷｬﾝｾﾙ入庫"
     }.attach()
 
     // ◾️ スキャナイベントを補足します
 
-    scanBox.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "箱データ = " + scanBox.value )
+    scanShelf.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", "棚データ = " + scanShelf.value )
 
-      myFragment = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
-      myFragment.readBox( scanBox.value )
+      myFragment01 = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
+      myFragment01.readShelf( scanShelf.value )
+    })
+
+    scanBox.observe( this, Observer<String> {
+      if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", "箱データ = " + scanBox.value )
+
+      myFragment01 = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
+      myFragment01.readBox( scanBox.value )
     })
 
     scanItemM.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "商品データ = " + scanItemM.value )
+      if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", "商品データ = " + scanItemM.value )
 
-      myFragment = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
-      myFragment.readItem( scanItemM.value )
+      myFragment01 = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as ScanCallback
+      myFragment01.readItem( scanItemM.value )
     })
   }
 
@@ -99,6 +109,13 @@ class BoxShipping:DensoWaveBase(),DialogCallback {
   override fun dispatchKeyEvent( event:KeyEvent ):Boolean {
     if( event.action != KeyEvent.ACTION_UP ) return super.dispatchKeyEvent( event )
     if( event.keyCode == KEY_F03 ) finish()
+
+    if( event.keyCode == KEY_ENT ) {
+      try {
+        myFragment02 = supportFragmentManager.findFragmentByTag( "f" + binding01.pagView01.currentItem ) as KeyCallback
+        val retFlag:Boolean = myFragment02.enterEvent()
+      } catch( e:ClassCastException ) {}
+    }
 
     return super.dispatchKeyEvent( event )
   }

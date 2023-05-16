@@ -161,6 +161,10 @@ class ShelfReceiving:DensoWaveBase() {
     if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "前回の商品 = " + viewModel01.inputedItem )
 
     if( AppBase.deviceNO == AppBase.specialDeviceNO && viewModel01.inputedItem != "" ) {
+      // 入力チェックを行います
+      if( inputCheck( "05" ) == false ) return false
+
+      // POTデータを作成します
       execDataSave( "1" )
     }
 
@@ -178,9 +182,10 @@ class ShelfReceiving:DensoWaveBase() {
 
     if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "deviceNO specialDeviceNO = " + AppBase.deviceNO + " " + AppBase.specialDeviceNO )
 
-    if( AppBase.deviceNO != AppBase.specialDeviceNO ) {
-      viewModel01.edtAmt.value = "1"
-    }
+    if( AppBase.deviceNO != AppBase.specialDeviceNO ) viewModel01.edtAmt.value = "1"
+
+    // 数量を入力可能とします
+    binding01.edtAmt.isEnabled = true
 
     return true
   }
@@ -213,6 +218,9 @@ class ShelfReceiving:DensoWaveBase() {
       viewModel01.inputedLocation = ""
       viewModel01.txtLocation.value = ""
     }
+
+    // 数量を入力不可とします
+    binding01.edtAmt.isEnabled = false
 
     return true
   }
@@ -250,12 +258,16 @@ class ShelfReceiving:DensoWaveBase() {
       msgError03 = getString( R.string.err_edt_amt04 )
     }
 
-    if( msgError01 == "" && execSubject == "04" && viewModel01.inputedLocation == "" ) {
+    if( msgError01 == "" && ( execSubject == "03" || execSubject == "04" ) && viewModel01.inputedLocation == "" ) {
       msgError01 = getString( R.string.err_shelf_receiving01 )
     }
 
     if( msgError02== "" && execSubject == "04" && viewModel01.inputedItem == "" ) {
       msgError02 = getString( R.string.err_shelf_receiving02 )
+    }
+
+    if( msgError01 == "" && execSubject == "05" && viewModel01.inputedLocation == "" ) {
+      msgError01 = getString( R.string.err_shelf_receiving01 )
     }
 
     if( msgError01 != "" || msgError02 != "" || msgError03 != "" ) {

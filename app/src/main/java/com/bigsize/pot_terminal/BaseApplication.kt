@@ -10,6 +10,7 @@ import com.bigsize.pot_terminal.model.PotDivision
 class AppBase:Application() {
   companion object {
     // アクセス先FQDN
+    // 本番 : hightech.bigsize.co.jp
     // 社内LAN : t-hightech-jp.corp.bigsize.com
     // ｴﾐｭﾚｰﾀｰ : 10.0.2.2
     private val fqdnURL:String = "t-hightech-jp.corp.bigsize.com"
@@ -46,6 +47,9 @@ class AppBase:Application() {
 
     // POTデータ転送関連URL
     public val transferURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=potTransfer"
+
+    // 一覧入庫関連URL
+    public val collationReceivingURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=collationReceiving"
 
     // 商品照合関連URL
     public val itemInspectionURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=itemInspection"

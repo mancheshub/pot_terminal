@@ -42,6 +42,7 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
     binding01.btnMenu12.setOnClickListener( this )
     binding01.btnMenu13.setOnClickListener( this )
     binding01.btnMenu14.setOnClickListener( this )
+    binding01.btnMenu15.setOnClickListener( this )
 
     binding01.btnMenu01.setOnFocusChangeListener( this )
     binding01.btnMenu02.setOnFocusChangeListener( this )
@@ -57,6 +58,7 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
     binding01.btnMenu12.setOnFocusChangeListener( this )
     binding01.btnMenu13.setOnFocusChangeListener( this )
     binding01.btnMenu14.setOnFocusChangeListener( this )
+    binding01.btnMenu15.setOnFocusChangeListener( this )
   }
 
   /**
@@ -101,6 +103,7 @@ class Lineup:DensoWaveBase(),View.OnClickListener,View.OnFocusChangeListener {
       R.id.btn_menu12 -> { startActivity( Intent( applicationContext, BoxShipping::class.java ) ) }
       R.id.btn_menu13 -> { startActivity( Intent( applicationContext, BoxOperation::class.java ) ) }
       R.id.btn_menu14 -> { startActivity( Intent( applicationContext, BoxReceiving::class.java ) ) }
+      R.id.btn_menu15 -> { startActivity( Intent( applicationContext, CollationReceiving::class.java ) ) }
     }
   }
 

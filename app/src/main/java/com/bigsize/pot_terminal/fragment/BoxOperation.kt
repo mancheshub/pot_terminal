@@ -125,20 +125,22 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
-    // 箱ラベルと店舗名と箱ラベル背景色をクリアします
+    // "箱ラベル・店舗名・箱ラベル背景色・全データ数・POTで読んだデータ数"の表示をクリアします
     viewModel01.txtBoxno.value = ""
     viewModel01.txtShopname.value = ""
     viewModel01.bkgBoxno.value = "N"
-
-    // 入力した箱ラベルをクリアします
-    viewModel01.inputedBoxno = ""
-
-    // 全データ数とPOTで読んだデータ数を更新します
     viewModel01.cntTotal.value = "0"
     viewModel01.cntRead.value = "0"
 
     // アダプタデータを更新します
     adapter01.refreshItem( mutableListOf<PotDataModel01>() )
+  }
+
+  override fun onPause() {
+    super.onPause()
+
+    // 入力した箱ラベルをクリアします
+    viewModel01.inputedBoxno = ""
   }
 
   override fun onDestroyView() {
@@ -154,6 +156,14 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
     // Wifi電波レベルが低下した場合
     if( callbackType == "04" ) startActivityForResult( Intent( Settings.Panel.ACTION_WIFI ), 0 )
   }
+
+  /**
+   * 棚を読んだ時の処理を定義します
+   *
+   * @param [scanShelf] 読み取った棚QRデータ
+   * @return 処理結果
+   */
+  override fun readShelf( scanShelf:String? ):Boolean { return true }
 
   /**
    * 箱を読んだ時の処理を定義します
@@ -386,18 +396,24 @@ class BoxOperationPage02:Fragment(),ScanCallback {
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
-    // 箱ラベルと箱ラベル背景色をクリアします
+    // "箱ラベル・箱ラベル背景色・全データ数"の表示をクリアします
     viewModel01.txtBoxno01.value = ""
     viewModel01.txtBoxno02.value = ""
     viewModel01.bkgBoxno01.value = "N"
     viewModel01.bkgBoxno02.value = "N"
-
-    // 全データ数を更新します
     viewModel01.cntTotal.value = "0"
 
     // アダプタデータを更新します
     adapter01.refreshItem( mutableListOf<PotDataModel01>() )
   }
+
+  /**
+   * 棚を読んだ時の処理を定義します
+   *
+   * @param [scanShelf] 読み取った棚QRデータ
+   * @return 処理結果
+   */
+  override fun readShelf( scanShelf:String? ):Boolean { return true }
 
   /**
    * 箱を読んだ時の処理を定義します
@@ -468,6 +484,8 @@ class BoxOperationPage02:Fragment(),ScanCallback {
    * @return 処理結果
    */
   override fun readItem( scanItem:String? ):Boolean {
+    if( scanItem == null ) return false
+
     activity01.claimSound( activity01.playSoundNG )
     activity01.claimVibration( AppBase.vibrationNG )
 

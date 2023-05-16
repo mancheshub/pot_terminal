@@ -48,7 +48,7 @@ class SortShipping:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickL
 
     // ■ ActionBarを設定します
 
-    supportActionBar?.title = "仕分出荷"
+    supportActionBar?.title = "仕分梱包"
     supportActionBar?.setDisplayHomeAsUpEnabled( true )
 
     // ■ アダプタを初期化します

@@ -174,6 +174,9 @@ class ShelfShipping:DensoWaveBase() {
     // 今回読んだ商品を表示します
     viewModel01.txtItem.value = cd + "  " + cn + "  " + sz
 
+    // 数量を入力可能とします
+    binding01.edtAmt.isEnabled = true
+
     return true
   }
 
@@ -198,6 +201,9 @@ class ShelfShipping:DensoWaveBase() {
     // 商品と数量の表示をクリアします
     viewModel01.txtItem.value = ""
     viewModel01.edtAmt.value = ""
+
+    // 数量を入力不可とします
+    binding01.edtAmt.isEnabled = false
 
     return true
   }
@@ -231,7 +237,7 @@ class ShelfShipping:DensoWaveBase() {
       msgError03 = getString( R.string.err_edt_amt03 )
     }
 
-    if( msgError01 == "" && execSubject == "04" && viewModel01.inputedLocation == "" ) {
+    if( msgError01 == "" && ( execSubject == "03" || execSubject == "04" ) && viewModel01.inputedLocation == "" ) {
       msgError01 = getString( R.string.err_shelf_shipping01 )
     }
 

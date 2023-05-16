@@ -127,12 +127,10 @@
         android:id="@+id/edt_amt"
         android:layout_width="match_parent"
         android:layout_height="65dp"
+        android:enabled="false"
         android:inputType="number"
         android:text="@={viewmodel.edtAmt}"
-        android:textSize="23sp">
-
-        <requestFocus />
-      </com.google.android.material.textfield.TextInputEditText>
+        android:textSize="23sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
