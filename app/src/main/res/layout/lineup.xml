@@ -36,7 +36,7 @@
     <Button
       android:id="@+id/btn_menu01"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="3dp"
       android:width="150px"
@@ -56,7 +56,7 @@
     <Button
       android:id="@+id/btn_menu11"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
@@ -75,7 +75,7 @@
     <Button
       android:id="@+id/btn_menu02"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"
@@ -94,7 +94,7 @@
     <Button
       android:id="@+id/btn_menu03"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
@@ -113,7 +113,7 @@
     <Button
       android:id="@+id/btn_menu04"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"
@@ -132,7 +132,7 @@
     <Button
       android:id="@+id/btn_menu05"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
@@ -151,7 +151,7 @@
     <Button
       android:id="@+id/btn_menu06"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"
@@ -170,7 +170,7 @@
     <Button
       android:id="@+id/btn_menu07"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
@@ -189,7 +189,7 @@
     <Button
       android:id="@+id/btn_menu08"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"
@@ -208,7 +208,7 @@
     <Button
       android:id="@+id/btn_menu15"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
@@ -250,7 +250,7 @@
     <Button
       android:id="@+id/btn_menu14"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"
@@ -269,7 +269,7 @@
     <Button
       android:id="@+id/btn_menu12"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
@@ -288,7 +288,7 @@
     <Button
       android:id="@+id/btn_menu13"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"
@@ -307,7 +307,7 @@
     <Button
       android:id="@+id/btn_menu09"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginEnd="16dp"
       android:width="150px"
       android:height="150px"
@@ -350,7 +350,7 @@
     <Button
       android:id="@+id/btn_menu10"
       android:layout_width="135dp"
-      android:layout_height="45dp"
+      android:layout_height="43dp"
       android:layout_marginStart="16dp"
       android:width="150px"
       android:height="150px"

@@ -129,6 +129,10 @@ class BoxOperationPage02:ViewModel() {
           // 箱付替を完了します
           val pairHash02 = model01.finishReplace( AppBase.boxOperationURL, inputedBoxno01, inputedBoxno02 )
 
+          // 付替後の箱ラベルから商品を取得します
+          val pairHash03 = model01.pickItemList( AppBase.boxOperationURL, inputedBoxno02 )
+          _itemList.value = pairHash03.second
+
           _apiCondition.value = "FN"
         }
       } catch( e:Exception ) {

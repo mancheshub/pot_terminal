@@ -368,7 +368,6 @@ class BoxOperationPage02:Fragment(),ScanCallback {
     })
 
     viewModel01.itemList.observe( this, Observer<MutableList<PotDataModel01>> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "AAAA" )
       it ?: return@Observer
       if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "商品データ内容更新" )
 
