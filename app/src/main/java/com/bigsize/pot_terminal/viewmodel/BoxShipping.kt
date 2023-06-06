@@ -121,7 +121,7 @@ class BoxShippingPage01:ViewModel() {
         if( pairHash01.second != "" && pairHash01.second.substring( 0, 1 ) == "E" ) bkgBoxno.value = "E"
 
         // 店舗の商品がE131に入っていた場合はpairHash01.secondが"A10 E131"のようになるためこの文字列から"A10"のみを抽出します
-        val boxnoArray = pairHash01.second.split(" ").map { it.trim() }
+        val boxnoArray = pairHash01.second.split("   ").map { it.trim() }
 
         // 店舗の箱ラベルを記録します
         selectedBoxno = boxnoArray[0]

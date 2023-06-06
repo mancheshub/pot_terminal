@@ -49,7 +49,7 @@ class ItemInspection:ViewModel() {
 
   // 印刷機リスト
   public val printList:List<HashItem> = mutableListOf(
-    HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "", " " ),
+    HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "ELS_FEL_P03", "印刷機03" ), HashItem( "", " " ),
   )
 
   // 選択した"作業グループ・店舗・箱・印刷機"
