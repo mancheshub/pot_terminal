@@ -334,7 +334,7 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogERR?.dismiss()
+    dialogERR?.dismiss(); dialogERR = null;
 
     var cd:String = model01.convertTrueCd( scanItem.substring( 3, 13 ).toInt().toString() );
     var cn:String = scanItem.substring( 14, 16 );
@@ -515,7 +515,7 @@ class BoxShippingPage02:Fragment(),ScanCallback {
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogERR?.dismiss()
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 該当商品を検索します
     position = ( viewModel01.itemList.value as MutableList<PotDataModel05> ).indexOfFirst { it.boxno == scanBox.substring( 3 ) && it.amt_n.toInt() < it.amt_p.toInt() }
@@ -567,7 +567,7 @@ class BoxShippingPage02:Fragment(),ScanCallback {
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogERR?.dismiss()
+    dialogERR?.dismiss(); dialogERR = null;
 
     var cd:String = model01.convertTrueCd( scanItem.substring( 3, 13 ).toInt().toString() );
     var cn:String = scanItem.substring( 14, 16 );
@@ -791,7 +791,7 @@ class BoxShippingPage03:Fragment(),ScanCallback {
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogERR?.dismiss()
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 該当商品を検索します
     position = ( viewModel01.itemList.value as MutableList<PotDataModel05> ).indexOfFirst { it.boxno == scanBox.substring( 3 ) && it.amt_n.toInt() < it.amt_p.toInt() }
@@ -843,7 +843,7 @@ class BoxShippingPage03:Fragment(),ScanCallback {
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogERR?.dismiss()
+    dialogERR?.dismiss(); dialogERR = null;
 
     var cd:String = model01.convertTrueCd( scanItem.substring( 3, 13 ).toInt().toString() );
     var cn:String = scanItem.substring( 14, 16 );

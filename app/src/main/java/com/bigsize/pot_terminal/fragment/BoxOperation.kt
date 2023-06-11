@@ -215,8 +215,8 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
     if( inputCheck( "02" ) == false ) return false
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     var cd:String = scanItem.substring( 3, 13 );
     var cn:String = scanItem.substring( 14, 16 );

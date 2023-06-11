@@ -79,6 +79,7 @@
   <string name="err_item_inspection04">確定するデータがありません。</string>
   <string name="err_item_inspection05">他人が担当するデータをクリアできません。</string>
   <string name="err_item_inspection06">クリアするデータがありません。</string>
+  <string name="err_item_inspection07">数量以上に読まれました。</string>
 
   <string name="msg_data_confirm01">削除しますがよろしいですか？</string>
   <string name="msg_data_confirm02">削除しました。</string>

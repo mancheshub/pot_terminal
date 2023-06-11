@@ -186,7 +186,7 @@ class BoxOperationAPI {
   }
 
   /**
-   * 箱ラベルからから商品を取得します
+   * 箱ラベルから商品を取得します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [boxno] 物理箱ラベル

@@ -278,8 +278,8 @@ class BoxReceiving:DensoWaveBase(),View.OnClickListener,DialogCallback {
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 今回読んだ商品を表示します
     viewModel01.txtCd.value = model01.eightdigitsCd( scanItem.substring( 3, 13 ) )

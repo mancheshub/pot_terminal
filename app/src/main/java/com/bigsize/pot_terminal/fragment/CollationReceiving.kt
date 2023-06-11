@@ -317,8 +317,8 @@ class CollationReceivingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCa
     if( inputCheck( "01" ) == false ) return false
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 今回読んだロケーションと照合対象のロケーションの完全版を作成します
     var fullLocation01:String = scanShelf.substring( 3 )
@@ -376,8 +376,8 @@ class CollationReceivingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCa
     if( inputCheck( "02" ) == false ) return false
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 今回読んだロケーションと照合対象のロケーションの完全版を作成します
     var fullLocation01:String = viewModel01.inputedLocation.substring( 0, 8 ) + scanBox.substring( 3 )
@@ -434,8 +434,8 @@ class CollationReceivingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCa
     if( inputCheck( "03" ) == false ) return false
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 入力したロケーションをクリアします
     viewModel01.inputedLocation = ""
@@ -835,8 +835,8 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
     if( inputCheck( "01" ) == false ) return false
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 今回読んだロケーションと照合対象のロケーションの完全版を作成します
     var fullLocation01:String = scanShelf.substring( 3 )
@@ -892,8 +892,8 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
     if( inputCheck( "02" ) == false ) return false
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 今回読んだロケーションと照合対象のロケーションの完全版を作成します
     var fullLocation01:String = viewModel01.inputedLocation.substring( 0, 8 ) + scanBox.substring( 3 )
@@ -950,8 +950,8 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
     if( inputCheck( "03" ) == false ) return false
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     // 入力したロケーションをクリアします
     viewModel01.inputedLocation = ""

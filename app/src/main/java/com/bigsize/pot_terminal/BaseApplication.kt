@@ -11,9 +11,9 @@ class AppBase:Application() {
   companion object {
     // アクセス先FQDN
     // 本番 : hightech.bigsize.co.jp
-    // 社内LAN : t-hightech-jp.corp.bigsize.com
+    // 社内LAN : ot-hightech-jp.corp.bigsize.com
     // ｴﾐｭﾚｰﾀｰ : 10.0.2.2
-    private val fqdnURL:String = "t-hightech-jp.corp.bigsize.com"
+    private val fqdnURL:String = "ot-hightech-jp.corp.bigsize.com"
 
     // Applicationインスタンス
     public lateinit var app:Application

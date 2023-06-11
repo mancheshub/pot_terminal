@@ -125,8 +125,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     }
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     var ii:Int = 0
     var indexNO:Int = 0
@@ -178,8 +178,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     var cd:String = scanItem.substring( 3, 13 );
     var cn:String = scanItem.substring( 14, 16 );

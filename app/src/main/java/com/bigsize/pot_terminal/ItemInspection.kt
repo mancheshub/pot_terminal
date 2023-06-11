@@ -446,7 +446,7 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogERR?.dismiss()
+    dialogERR?.dismiss(); dialogERR = null;
 
     var hcd:String = scanItem.substring( 1, 11 );
     var hcn:String = scanItem.substring( 11, 13 );
@@ -454,16 +454,33 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
 
     if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "は品番 は色番 はサイズ = " + hcd + " " + hcn + " " + hcz )
 
-    // 該当商品を検索します
-    position = ( viewModel01.itemList.value as MutableList<PotDataModel03> ).indexOfFirst { it.hcd == hcd && it.hcn == hcn && it.hcz == hcz && it.amt_n.toInt() < it.amt_p.toInt() }
+    // 該当商品が検品対象であるかをチェックします
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "検索位置 = " + position.toString() )
+    position = ( viewModel01.itemList.value as MutableList<PotDataModel03> ).indexOfFirst { it.hcd == hcd && it.hcn == hcn && it.hcz == hcz }
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "検索位置(検品対象チェック) = " + position.toString() )
 
     if( position == -1 ) {
       claimSound( playSoundNG )
       claimVibration( AppBase.vibrationNG )
 
       dialogERR = MessageDialog( "00", "", getString( R.string.err_item_inspection02 ), "OK", "" )
+      dialogERR?.show( supportFragmentManager, "simple" )
+
+      return true
+    }
+
+    // 該当商品の数量をチェックします
+
+    position = ( viewModel01.itemList.value as MutableList<PotDataModel03> ).indexOfFirst { it.hcd == hcd && it.hcn == hcn && it.hcz == hcz && it.amt_n.toInt() < it.amt_p.toInt() }
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "検索位置(数量チェック) = " + position.toString() )
+
+    if( position == -1 ) {
+      claimSound( playSoundNG )
+      claimVibration( AppBase.vibrationNG )
+
+      dialogERR = MessageDialog( "00", "", getString( R.string.err_item_inspection07 ), "OK", "" )
       dialogERR?.show( supportFragmentManager, "simple" )
     } else {
       claimSound( playSoundOK )
