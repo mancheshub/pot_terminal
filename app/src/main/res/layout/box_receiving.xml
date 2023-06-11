@@ -6,7 +6,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.ExamLocation" />
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.BoxReceiving" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,10 +29,10 @@
       android:id="@+id/txt_view01"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="16dp"
-      android:text="調査する商品"
+      android:layout_marginStart="16dp"
+      android:text="読んだ商品"
       android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -43,8 +43,6 @@
       android:layout_marginStart="16dp"
       android:layout_marginTop="8dp"
       android:layout_marginEnd="8dp"
-      android:focusable="true"
-      android:focusableInTouchMode="true"
       app:errorEnabled="true"
       app:expandedHintEnabled="true"
       app:layout_constraintEnd_toStartOf="@+id/lay_cn"
@@ -55,7 +53,7 @@
         android:id="@+id/txt_cd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:enabled="true"
+        android:enabled="false"
         android:inputType="textEmailAddress"
         android:text="@={viewmodel.txtCd}"
         android:textColor="#000000"
@@ -86,12 +84,12 @@
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/lay_sz"
       style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-      android:layout_width="50dp"
+      android:layout_width="60dp"
       android:layout_height="40dp"
       android:layout_marginEnd="8dp"
       app:errorEnabled="true"
       app:expandedHintEnabled="true"
-      app:layout_constraintEnd_toStartOf="@+id/exe_button01"
+      app:layout_constraintEnd_toStartOf="@+id/cnt_read2"
       app:layout_constraintTop_toTopOf="@+id/lay_cd">
 
       <com.google.android.material.textfield.TextInputEditText
@@ -104,67 +102,93 @@
         android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/lay_itn"
-      style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-      android:layout_width="0dp"
-      android:layout_height="40dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="16dp"
-      app:errorEnabled="true"
-      app:expandedHintEnabled="true"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/lay_cd">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/txt_itn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:ellipsize="end"
-        android:enabled="false"
-        android:singleLine="true"
-        android:text="@={viewmodel.txtItn}"
-        android:textColor="#000000"
-        android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-      android:id="@+id/exe_button01"
-      android:layout_width="50dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="5dp"
-      android:layout_marginEnd="16dp"
-      android:text="削除"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/txt_view01" />
-
     <TextView
       android:id="@+id/txt_view02"
-      android:layout_width="wrap_content"
+      android:layout_width="45dp"
       android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
       android:layout_marginEnd="16dp"
-      android:text="ロケーション"
+      android:gravity="center"
+      android:text="回数"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/lay_itn" />
+      app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
 
-    <ListView
-      android:id="@+id/lst_view01"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
+    <TextView
+      android:id="@+id/cnt_read2"
+      android:layout_width="45dp"
+      android:layout_height="40dp"
       android:layout_marginEnd="16dp"
-      android:layout_marginBottom="16dp"
-      android:background="@drawable/border"
-      app:layout_constraintBottom_toBottomOf="parent"
+      android:gravity="center|center_vertical"
+      android:text="@{viewmodel.cntRead}"
+      android:textSize="20sp"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintTop_toTopOf="@+id/lay_cd" />
+
+    <TextView
+      android:id="@+id/bnd_view01"
+      android:layout_width="20dp"
+      android:layout_height="250dp"
+      android:layout_marginStart="16dp"
+      android:background='@{viewmodel.bkgBand == "LEFT" ? @color/band_YS : @color/band_NS}'
+      android:text="　"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/txt_view02" />
+      app:layout_constraintTop_toTopOf="@+id/txt_boxno" />
+
+    <TextView
+      android:id="@+id/txt_boxno"
+      android:layout_width="0dp"
+      android:layout_height="250dp"
+      android:gravity="center"
+      android:text="@{viewmodel.txtBoxno}"
+      android:textSize="130sp"
+      android:background='@{viewmodel.bkgBoxno == "A" ? @color/box_labelA : viewmodel.bkgBoxno == "B" ? @color/box_labelB : viewmodel.bkgBoxno == "C" ? @color/box_labelC : viewmodel.bkgBoxno == "D" ? @color/box_labelD : viewmodel.bkgBoxno == "E" ? @color/box_labelE : @color/box_labelM}'
+      app:layout_constraintBottom_toTopOf="@+id/btn_history02"
+      app:layout_constraintEnd_toStartOf="@+id/bnd_view02"
+      app:layout_constraintStart_toEndOf="@+id/bnd_view01"
+      app:layout_constraintTop_toBottomOf="@+id/lay_cd" />
+
+    <TextView
+      android:id="@+id/bnd_view02"
+      android:layout_width="20dp"
+      android:layout_height="250dp"
+      android:layout_marginEnd="16dp"
+      android:text="　"
+      android:background='@{viewmodel.bkgBand == "RIGHT" ? @color/band_YS : @color/band_NS}'
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/txt_boxno" />
+
+    <Button
+      android:id="@+id/btn_history01"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:text="履歴01回前"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/btn_history02"
+      app:layout_constraintTop_toTopOf="@+id/btn_history02" />
+
+    <Button
+      android:id="@+id/btn_history02"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:text="履歴02回前"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/btn_history01"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/btn_history03" />
+
+    <Button
+      android:id="@+id/btn_history03"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:text="履歴03回前"
+      app:layout_constraintEnd_toStartOf="@+id/btn_history02"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/btn_history02" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

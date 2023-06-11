@@ -10,36 +10,31 @@ import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.ItemInspectionAPI
 import com.bigsize.pot_terminal.model.PotDataModel03
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 class ItemInspection:ViewModel() {
   private var model01:ItemInspectionAPI = ItemInspectionAPI()
 
+  // API通信状況
+  private val _apiCondition:MutableLiveData<String> = MutableLiveData()
+  public val apiCondition:LiveData<String> get() = _apiCondition
+
   // 全データ数とPOTで読んだデータ数
   public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
   public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
 
-  // API通信状況
-  // ST → 通信開始 ER → 通信エラー FN → 通信終了 SI_*** → 他人スタッフ***が検品中
-  private val _apiCondition:MutableLiveData<String> = MutableLiveData( "" )
-  public val apiCondition:LiveData<String> get() = _apiCondition
-
   // 作業グループリスト
-  private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData( mutableListOf() )
+  private val _groupList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
   public val groupList:LiveData<MutableList<HashItem>> get() = _groupList
 
   // 店舗リスト
-  private val _shopList:MutableLiveData<MutableList<HashItem>> = MutableLiveData( mutableListOf() )
+  private val _shopList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
   public val shopList:LiveData<MutableList<HashItem>> get() = _shopList
 
   // 商品リスト
-  private val _itemList:MutableLiveData<MutableList<PotDataModel03>> = MutableLiveData( mutableListOf() )
+  private val _itemList:MutableLiveData<MutableList<PotDataModel03>> = MutableLiveData()
   public val itemList:LiveData<MutableList<PotDataModel03>> get() = _itemList
 
   // 箱リスト
@@ -49,19 +44,19 @@ class ItemInspection:ViewModel() {
     HashItem( "08", "箱08" ), HashItem( "09", "箱09" ), HashItem( "10", "箱10" ), HashItem( "11", "箱11" ),
     HashItem( "12", "箱12" ), HashItem( "13", "箱13" ), HashItem( "14", "箱14" ), HashItem( "15", "箱15" ),
     HashItem( "16", "箱16" ), HashItem( "17", "箱17" ), HashItem( "18", "箱18" ), HashItem( "19", "箱19" ),
-    HashItem( "20", "箱20" ), HashItem( "", "" ),
+    HashItem( "20", "箱20" ), HashItem( "", " " ),
   )
 
   // 印刷機リスト
   public val printList:List<HashItem> = mutableListOf(
-    HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "", "" ),
+    HashItem( "ELS_FEL_P01", "印刷機01" ), HashItem( "ELS_FEL_P02", "印刷機02" ), HashItem( "ELS_FEL_P03", "印刷機03" ), HashItem( "", " " ),
   )
 
-  // 現在選択している"作業グループ・店舗・箱・印刷機"
-  public var selectedGroupID:String = ""
-  public var selectedShopID:String = ""
-  public var selectedBoxID:String = ""
-  public var selectedPrintID:String = ""
+  // 選択した"作業グループ・店舗・箱・印刷機"
+  public var selectedGroupID:String = " "
+  public var selectedShopID:String = " "
+  public var selectedBoxID:String = " "
+  public var selectedPrintID:String = " "
 
   // 確定処理実行判断フラグ - 店舗のSCMラベルが発行されている場合に警告表示する判定に利用します
   public var isExecute03:String = ""
@@ -79,7 +74,9 @@ class ItemInspection:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _groupList.value = model01.pickGroupList( AppBase.itemInspectionURL )
+        val pairHash01 = model01.pickGroupList( AppBase.itemInspectionURL )
+        _groupList.value = pairHash01.second
+
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "致命的エラー" )
@@ -97,7 +94,9 @@ class ItemInspection:ViewModel() {
       _apiCondition.value = "ST"
 
       try {
-        _shopList.value = model01.pickShopList( AppBase.itemInspectionURL, selectedGroupID )
+        val pairHash01 = model01.pickShopList( AppBase.itemInspectionURL, selectedGroupID )
+        _shopList.value = pairHash01.second
+
         _apiCondition.value = "FN99"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "致命的エラー" )
@@ -124,7 +123,11 @@ class ItemInspection:ViewModel() {
         var apiExclusive:String = "999"
 
         // 検品状態を確認します
-        if( flagExclusive == "exeExclusive" ) apiExclusive = model01.updateSituation( AppBase.itemInspectionURL, "SI-check", selectedGroupID, selectedShopID, AppBase.staffNO )
+        if( flagExclusive == "exeExclusive" ) {
+          val pairHash01 = model01.updateSituation( AppBase.itemInspectionURL, "SI-check", selectedGroupID, selectedShopID, AppBase.staffNO )
+          apiExclusive = pairHash01.second
+        }
+
         if( BuildConfig.DEBUG ) Log.d( "APP-ItemInspection", "検品スタッフ = " + apiExclusive )
 
         // 自分が検品した店舗もしくは誰も検品していない店舗の場合のみ処理します
@@ -133,9 +136,13 @@ class ItemInspection:ViewModel() {
 
         if( apiExclusive == "999" ) {
           // 検品開始状態とします
-          if( flagExclusive == "exeExclusive" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-start", selectedGroupID, selectedShopID, AppBase.staffNO )
+          if( flagExclusive == "exeExclusive" ) {
+            val pairHash02 = model01.updateSituation( AppBase.itemInspectionURL, "SI-start", selectedGroupID, selectedShopID, AppBase.staffNO )
+          }
 
-          _itemList.value = model01.pickItemList( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          // 商品データを取得します
+          val pairHash03 =model01.pickItemList( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          _itemList.value = pairHash03.second
 
           _apiCondition.value = "FN99"
         } else {
@@ -166,7 +173,8 @@ class ItemInspection:ViewModel() {
         // - 自身が担当者でない場合は isExecute01 == "0"  となるのでエラー画面をActivityから出力します
         // - 自身が担当者である場合は isExecute01 != "0"  となるのでそのままクリア処理を実施します
         if( kind == "01" && isExecute01 == "" ) {
-          isExecute01 = model01.pickSICondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID, AppBase.staffNO )
+          val pairHash01 = model01.pickSICondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID, AppBase.staffNO )
+          isExecute01 = pairHash01.second
         }
 
         // 確定ボタンが押されたときは isExecute03 == "" となっているからSCMラベル印刷状況を調査します
@@ -175,17 +183,18 @@ class ItemInspection:ViewModel() {
         // - SCMラベルが印刷されていない場合は isExecute03 == "0" となるのでそのまま確定処理を実施します
 
         if( kind == "03" && isExecute03 == "" ) {
-          isExecute03 = model01.pickSMCondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          val pairHash02 = model01.pickSMCondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
+          isExecute03 = pairHash02.second
         }
 
         if( ( kind == "01" && isExecute01 != "0" ) || kind == "02" || ( kind == "03" && isExecute03 == "0" ) ) {
           model01.deceded( AppBase.itemInspectionURL, kind, selectedGroupID, selectedShopID, selectedBoxID, selectedPrintID, ( itemList.value as MutableList<PotDataModel03> ) )
 
           // 検品完了状態とします
-          if( kind == "03" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID, AppBase.staffNO )
+          if( kind == "03" ) { val pairHash03 = model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID, AppBase.staffNO ) }
 
           // 検品取消状態とします
-          if( kind == "01" ) model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO )
+          if( kind == "01" ) { val pairHash04 = model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO ) }
 
           _apiCondition.value = "FN" + kind
         } else {

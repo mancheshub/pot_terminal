@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.BaseAdapter
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.model.PotDataModel01
@@ -48,7 +47,7 @@ class ItemVerification( val context:Context?, var potDataArray:MutableList<PotDa
     binding01.text01.setTextColor( Color.BLACK )
     binding01.text02.setTextColor( Color.BLACK )
     binding01.text03.setTextColor( Color.BLACK )
-    binding01.amt.setTextColor( Color.BLACK )
+    binding01.amtN.setTextColor( Color.BLACK )
     binding01.amtP.setTextColor( Color.BLACK )
     binding01.cd.setTextColor( Color.BLACK )
     binding01.cn.setTextColor( Color.BLACK )

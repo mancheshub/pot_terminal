@@ -62,37 +62,6 @@
       app:layout_constraintTop_toTopOf="@+id/cd" />
 
     <TextView
-      android:id="@+id/text01"
-      android:layout_width="5dp"
-      android:layout_height="wrap_content"
-      android:gravity="right|center_vertical"
-      android:text="["
-      android:textSize="20sp"
-      app:layout_constraintEnd_toStartOf="@+id/amt"
-      app:layout_constraintTop_toBottomOf="@+id/cd" />
-
-    <TextView
-      android:id="@+id/amt"
-      android:layout_width="60dp"
-      android:layout_height="wrap_content"
-      android:gravity="center_horizontal|center_vertical"
-      android:text="@{viewmodel.amt}"
-      android:textSize="20sp"
-      app:layout_constraintEnd_toStartOf="@+id/text02"
-      app:layout_constraintTop_toTopOf="@+id/text01" />
-
-    <TextView
-      android:id="@+id/text02"
-      android:layout_width="5dp"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="3dp"
-      android:gravity="right|center_vertical"
-      android:text="]"
-      android:textSize="20sp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/text01" />
-
-    <TextView
       android:id="@+id/location"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
@@ -103,6 +72,67 @@
       android:textStyle="bold"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/cd" />
+
+    <TextView
+      android:id="@+id/text01"
+      android:layout_width="10dp"
+      android:layout_height="wrap_content"
+      android:gravity="right|center_vertical"
+      android:paddingTop="7sp"
+      android:paddingBottom="7sp"
+      android:text="["
+      android:textSize="18sp"
+      app:layout_constraintEnd_toStartOf="@+id/amt_n"
+      app:layout_constraintTop_toBottomOf="@+id/cd" />
+
+    <TextView
+      android:id="@+id/amt_n"
+      android:layout_width="40dp"
+      android:layout_height="wrap_content"
+      android:gravity="center|center_vertical"
+      android:paddingTop="7sp"
+      android:paddingBottom="7sp"
+      android:text="@{viewmodel.amt_n}"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toStartOf="@+id/text02"
+      app:layout_constraintTop_toTopOf="@+id/text01" />
+
+    <TextView
+      android:id="@+id/text02"
+      android:layout_width="10dp"
+      android:layout_height="wrap_content"
+      android:gravity="right|center_vertical"
+      android:paddingTop="7sp"
+      android:paddingBottom="7sp"
+      android:text="/"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toStartOf="@+id/amt_p"
+      app:layout_constraintTop_toTopOf="@+id/text01" />
+
+    <TextView
+      android:id="@+id/amt_p"
+      android:layout_width="40dp"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal|center_vertical"
+      android:paddingTop="7sp"
+      android:paddingBottom="7sp"
+      android:text="@{viewmodel.amt_p}"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toStartOf="@+id/text03"
+      app:layout_constraintTop_toTopOf="@+id/text01" />
+
+    <TextView
+      android:id="@+id/text03"
+      android:layout_width="5dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="3dp"
+      android:gravity="right|center_vertical"
+      android:paddingTop="7sp"
+      android:paddingBottom="7sp"
+      android:text="]"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/text01" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.DataConfirmBinding
-import com.bigsize.pot_terminal.model.*
 import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.adapter.DataConfirm as AD_DataConfirm
+import com.bigsize.pot_terminal.model.FileOperation
+import com.bigsize.pot_terminal.model.MessageDialog
+import com.bigsize.pot_terminal.model.DialogCallback
+import com.bigsize.pot_terminal.databinding.DataConfirmBinding
 import com.bigsize.pot_terminal.viewmodel.DataConfirm as VM_DataConfirm
+import com.bigsize.pot_terminal.adapter.DataConfirm as AD_DataConfirm
 
 class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickListener,DialogCallback {
   private val binding01:DataConfirmBinding by dataBinding()
@@ -43,13 +45,12 @@ class DataConfirm:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClickLi
 
     binding01.viewmodel = viewModel01
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
     adapter01 = AD_DataConfirm( applicationContext, viewModel01.potDataArray )
     binding01.lstView01.adapter = adapter01
 
-    // ■ AutoCompleteTextViewアダプタをセットします
-
+    // ファイル名を抽出します
     var menuItems:MutableList<String> = mutableListOf()
     for( _item in AppBase.potDivision ) {
       menuItems.add( _item.name + " ( " + model01.countPotData( _item.division ).toString() + " 行 )" )

@@ -9,6 +9,13 @@ import com.bigsize.pot_terminal.model.PotDivision
 
 class AppBase:Application() {
   companion object {
+    // アクセス先FQDN
+    // 本番 : hightech.bigsize.co.jp
+    // 社内LAN(自宅) : ot-hightech-jp.corp.bigsize.com
+    // 社内LAN(社内) : in-hightech-jp.corp.bigsize.com
+    // ｴﾐｭﾚｰﾀｰ : 10.0.2.2
+    private val fqdnURL:String = "in-hightech-jp.corp.bigsize.com"
+
     // Applicationインスタンス
     public lateinit var app:Application
 
@@ -31,22 +38,31 @@ class AppBase:Application() {
     )
 
     // Wifiの許容レベル - -50〜0まで
-    public val  permitWifiLevel:Int = -60
+    public val  permitWifiLevel:Int = -100
 
     // 特別動作する端末番号
     public val specialDeviceNO:String = "999"
 
-    // 客注出荷棚出関連URL
-    public val hetVerificationURL:String = "http://hightech.bigsize.co.jp/api.php?at=potTerminal&st=hetVerification"
+    // 場所確認関連URL
+    public val locationConfirmURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=locationConfirm"
 
     // POTデータ転送関連URL
-    public val transferURL:String = "http://hightech.bigsize.co.jp/api.php?at=potTerminal&st=potTransfer"
+    public val transferURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=potTransfer"
+
+    // 一覧入庫関連URL
+    public val collationReceivingURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=collationReceiving"
 
     // 商品照合関連URL
-    public val itemInspectionURL:String = "http://hightech.bigsize.co.jp/api.php?at=potTerminal&st=itemInspection"
+    public val itemInspectionURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=itemInspection"
 
-    // ロケーション検索関連URL
-    public val examLocationURL:String = "http://hightech.bigsize.co.jp/api.php?at=potTerminal&st=examLocation"
+    // 商品仕分関連URL
+    public val boxReceivingURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=boxReceiving"
+
+    // 商品箱出関連URL
+    public val boxShippingURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=boxShipping"
+
+    // 棚操作関連URL
+    public val boxOperationURL:String = "http://" + fqdnURL + "/api.php?at=potTerminal&st=boxOperation"
 
     // 正常読取した場合のブザーとバイブレーションのレベル
     public val buzzerOK:Map<String,String> = mapOf( "frequency" to "2000", "sinDuration" to "20", "resDuration" to "0" )

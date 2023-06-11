@@ -58,7 +58,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     // 上書きモードスイッチの初期値を設定します
     if( AppBase.deviceNO == AppBase.specialDeviceNO ) binding01.swhMode01.isChecked = true
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
     adapter01 = AD_ItemVerification( applicationContext, viewModel01.potDataArray )
     binding01.lstView01.adapter = adapter01
@@ -73,7 +73,6 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
 
     scanItemM.observe( this, Observer<String> {
       if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "商品データ = " + scanItemM.value )
-
 
       readItem( scanItemM.value )
     })
@@ -121,13 +120,13 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
       viewModel01.potDataArray = mutableListOf<PotDataModel01>()
 
       // 全データ数とPOTで読んだデータ数を更新します
-      viewModel01.cntRead.value = "0"
       viewModel01.cntTotal.value = "0"
+      viewModel01.cntRead.value = "0"
     }
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     var ii:Int = 0
     var indexNO:Int = 0
@@ -179,8 +178,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
     var position:Int = 0
 
     // ダイアログが表示されていれば閉じます
-    dialogFIN?.dismiss()
-    dialogERR?.dismiss()
+    dialogFIN?.dismiss(); dialogFIN = null;
+    dialogERR?.dismiss(); dialogERR = null;
 
     var cd:String = scanItem.substring( 3, 13 );
     var cn:String = scanItem.substring( 14, 16 );

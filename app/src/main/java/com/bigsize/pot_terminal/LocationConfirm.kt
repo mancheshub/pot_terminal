@@ -8,27 +8,29 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.ExamLocationBinding
-import com.bigsize.pot_terminal.model.*
 import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.adapter.ExamLocation as AD_ExamLocation
-import com.bigsize.pot_terminal.viewmodel.ExamLocation as VM_ExamLocation
+import com.bigsize.pot_terminal.model.AppUtility
+import com.bigsize.pot_terminal.model.DialogCallback
+import com.bigsize.pot_terminal.model.MessageDialog
+import com.bigsize.pot_terminal.model.PotDataModel04
+import com.bigsize.pot_terminal.databinding.LocationConfirmBinding
+import com.bigsize.pot_terminal.viewmodel.LocationConfirm as VM_LocationConfirm
+import com.bigsize.pot_terminal.adapter.LocationConfirm as AD_LocationConfirm
 
-class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionListener,DialogCallback {
-  private val binding01:ExamLocationBinding by dataBinding()
-  private val viewModel01:VM_ExamLocation by viewModels()
+class LocationConfirm:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionListener,DialogCallback {
+  private val binding01:LocationConfirmBinding by dataBinding()
+  private val viewModel01:VM_LocationConfirm by viewModels()
 
-  private lateinit var adapter01:AD_ExamLocation
+  private lateinit var adapter01:AD_LocationConfirm
 
   private val model01:AppUtility = AppUtility()
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
 
-    setContentView( R.layout.exam_location )
+    setContentView( R.layout.location_confirm )
 
     // ■ スキャナを設定します
 
@@ -61,15 +63,15 @@ class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionL
 
     binding01.viewmodel = viewModel01
 
-    // ■ ListViewアダプタをセットします
+    // ■ アダプタを初期化します
 
-    adapter01 = AD_ExamLocation( applicationContext, ( viewModel01.locationList.value as MutableList<PotDataModel04> ) )
+    adapter01 = AD_LocationConfirm( applicationContext, mutableListOf() )
     binding01.lstView01.adapter = adapter01
 
     // ■ 変更を補足します
 
     viewModel01.apiCondition.observe( this, Observer<String> {
-      if( ( viewModel01.apiCondition.value as String ) != "" ) {
+      it ?: return@Observer
 
       // observeの処理中に"viewModel01.apiCondition.value"の値が変更になると困るのでここで一旦記録します
       val apiCondition:String = viewModel01.apiCondition.value as String
@@ -97,26 +99,23 @@ class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionL
       if( apiCondition == "FN" ) {
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
       }
-
-      }
     })
 
     viewModel01.locationList.observe( this, Observer<MutableList<PotDataModel04>> {
-      if( ( viewModel01.locationList.value as MutableList<PotDataModel04> ).size != 0 ) {
+      it ?: return@Observer
+      if( BuildConfig.DEBUG ) Log.d( "APP-LocationConfirm", "ロケーションデータ内容更新" )
 
-      if( BuildConfig.DEBUG ) Log.d( "APP-ExamLocation", "ロケーションデータ内容更新" )
+      var locationList:MutableList<PotDataModel04> = viewModel01.locationList.value!!
 
       // 商品名を取得します
-      viewModel01.txtItn.value = ( viewModel01.locationList.value as MutableList<PotDataModel04> )[0].itn
+      if( locationList.size != 0 ) viewModel01.txtItn.value = locationList[0].itn
 
       // ListViewの内容を更新します
       adapter01.refreshItem( ( viewModel01.locationList.value as MutableList<PotDataModel04> ) )
-
-      }
     })
 
     scanItemM.observe( this, Observer<String> {
-      if( BuildConfig.DEBUG ) Log.d( "APP-ExamLocation", "商品データ = " + scanItemM.value )
+      if( BuildConfig.DEBUG ) Log.d( "APP-LocationConfirm", "商品データ = " + scanItemM.value )
 
       readItem( scanItemM.value )
     })
@@ -137,10 +136,8 @@ class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionL
    * ダイアログで実行する処理を実装します
    */
   override fun fromMessageDialog( callbackType:String ) {
-    if( callbackType == "02" ) {
-      val intent = Intent( Settings.Panel.ACTION_WIFI )
-      startActivityForResult( intent, 0 )
-    }
+    // Wifi電波レベルが低下した場合
+    if( callbackType == "02" ) startActivityForResult( Intent( Settings.Panel.ACTION_WIFI ), 0 )
   }
 
   /**
@@ -164,9 +161,9 @@ class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionL
     claimVibration( AppBase.vibrationOK )
 
     // 今回読んだ商品を記録します
-    viewModel01.memCd = viewModel01.txtCd.value.toString()
-    viewModel01.memCn = ""
-    viewModel01.memSz = ""
+    viewModel01.inputedCd = viewModel01.txtCd.value.toString()
+    viewModel01.inputedCn = ""
+    viewModel01.inputedSz = ""
 
     // 品番・色番・サイズから商品のロケーションを取得します
     viewModel01.pickLocation( "NON" )
@@ -211,9 +208,9 @@ class ExamLocation:DensoWaveBase(),View.OnClickListener,TextView.OnEditorActionL
     viewModel01.txtSz.value = scanItem.substring( 17, 21 ).replace( " ", "" )
 
     // 今回読んだ商品を記録します
-    viewModel01.memCd = scanItem.substring( 3, 13 )
-    viewModel01.memCn = scanItem.substring( 14, 16 )
-    viewModel01.memSz = scanItem.substring( 17, 21 ).replace( " ", "" )
+    viewModel01.inputedCd = scanItem.substring( 3, 13 )
+    viewModel01.inputedCn = scanItem.substring( 14, 16 )
+    viewModel01.inputedSz = scanItem.substring( 17, 21 )
 
     // 品番・色番・サイズから商品のロケーションを取得します
     viewModel01.pickLocation( "NON" )

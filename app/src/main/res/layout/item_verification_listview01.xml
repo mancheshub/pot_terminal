@@ -53,11 +53,11 @@
       android:gravity="right|center_vertical"
       android:text="["
       android:textSize="20sp"
-      app:layout_constraintEnd_toStartOf="@+id/amt"
+      app:layout_constraintEnd_toStartOf="@+id/amt_n"
       app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-      android:id="@+id/amt"
+      android:id="@+id/amt_n"
       android:layout_width="40dp"
       android:layout_height="wrap_content"
       android:gravity="center|center_vertical"

@@ -6,13 +6,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.HetVerification" />
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.BoxShippingPage01" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ItemVerification">
+    tools:context=".BoxShippingPage01"
+    android:descendantFocusability="afterDescendants">
 
     <ProgressBar
       android:id="@+id/prg_view01"
@@ -32,7 +33,6 @@
       android:layout_height="45dp"
       android:layout_marginStart="16dp"
       android:layout_marginEnd="16dp"
-      android:focusedByDefault="false"
       android:hint="伝発グループ"
       android:textColorHint="?android:textColor"
       app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,6 @@
       android:hint="店舗"
       android:textColorHint="?android:textColor"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_group">
 
@@ -66,6 +65,7 @@
         android:id="@+id/txt_shop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoText="false"
         android:editable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +75,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
       android:gravity="center_horizontal|center_vertical"
-      android:text="箱　番　号"
+      android:text="箱　ラ　ベ　ル"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/lay_shop" />
@@ -99,6 +99,7 @@
         android:id="@+id/txt_boxno"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background='@{viewmodel.bkgBoxno == "A" ? @color/box_labelA : viewmodel.bkgBoxno == "B" ? @color/box_labelB : viewmodel.bkgBoxno == "C" ? @color/box_labelC : viewmodel.bkgBoxno == "D" ? @color/box_labelD : viewmodel.bkgBoxno == "E" ? @color/box_labelE : @color/box_labelN}'
         android:enabled="false"
         android:gravity="center_horizontal|center_vertical"
         android:text="@={viewmodel.txtBoxno}"
@@ -161,9 +162,11 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="3dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
+      android:background="@drawable/border"
+      android:divider="#00000000"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

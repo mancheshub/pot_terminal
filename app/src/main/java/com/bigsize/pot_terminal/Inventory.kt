@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
-import com.bigsize.pot_terminal.databinding.InventoryBinding
-import com.bigsize.pot_terminal.model.*
 import com.wada811.databinding.dataBinding
+import com.bigsize.pot_terminal.model.AppUtility
+import com.bigsize.pot_terminal.model.FileOperation
+import com.bigsize.pot_terminal.model.PotDataModel02
+import com.bigsize.pot_terminal.databinding.InventoryBinding
 import com.bigsize.pot_terminal.viewmodel.Inventory as VM_Inventory
 
 class Inventory:DensoWaveBase() {
@@ -96,14 +95,14 @@ class Inventory:DensoWaveBase() {
     claimVibration( AppBase.vibrationOK )
 
     // 今回読んだ棚を記録します
-    viewModel01.setMemLocation( scanShelf.substring( 3 ) )
+    viewModel01.inputedLocation = scanShelf.substring( 3 )
 
-    var ssb = viewModel01.memLocation.substring( 0, 1 );
-    var ssh = viewModel01.memLocation.substring( 1, 2 );
-    var ssf = viewModel01.memLocation.substring( 2, 4 );
-    var sss = viewModel01.memLocation.substring( 4, 7 );
-    var sst = viewModel01.memLocation.substring( 7, 8 );
-    var sso = viewModel01.memLocation.substring( 8 );
+    var ssb = viewModel01.inputedLocation.substring( 0, 1 );
+    var ssh = viewModel01.inputedLocation.substring( 1, 2 );
+    var ssf = viewModel01.inputedLocation.substring( 2, 4 );
+    var sss = viewModel01.inputedLocation.substring( 4, 7 );
+    var sst = viewModel01.inputedLocation.substring( 7, 8 );
+    var sso = viewModel01.inputedLocation.substring( 8 );
 
     // 今回読んだ棚を表示します
     viewModel01.txtLocation.value = ssb + ssh + ssf + "-" + sss + "-" + sst + "-" + sso
@@ -130,14 +129,14 @@ class Inventory:DensoWaveBase() {
     claimVibration( AppBase.vibrationOK )
 
     // 今回読んだ棚を記録します
-    viewModel01.setMemLocation( viewModel01.memLocation.substring( 0, 8 ) + scanBox.substring( 3 ) )
+    viewModel01.inputedLocation = viewModel01.inputedLocation.substring( 0, 8 ) + scanBox.substring( 3 )
 
-    var ssb = viewModel01.memLocation.substring( 0, 1 );
-    var ssh = viewModel01.memLocation.substring( 1, 2 );
-    var ssf = viewModel01.memLocation.substring( 2, 4 );
-    var sss = viewModel01.memLocation.substring( 4, 7 );
-    var sst = viewModel01.memLocation.substring( 7, 8 );
-    var sso = viewModel01.memLocation.substring( 8 );
+    var ssb = viewModel01.inputedLocation.substring( 0, 1 );
+    var ssh = viewModel01.inputedLocation.substring( 1, 2 );
+    var ssf = viewModel01.inputedLocation.substring( 2, 4 );
+    var sss = viewModel01.inputedLocation.substring( 4, 7 );
+    var sst = viewModel01.inputedLocation.substring( 7, 8 );
+    var sso = viewModel01.inputedLocation.substring( 8 );
 
     // 今回読んだ棚を表示します
     viewModel01.txtLocation.value = ssb + ssh + ssf + "-" + sss + "-" + sst + "-" + sso
@@ -165,9 +164,9 @@ class Inventory:DensoWaveBase() {
 
     // ■ 前回読んだ商品があればPOTデータを作成します
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "前回の商品 = " + viewModel01.memItem )
+    if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "前回の商品 = " + viewModel01.inputedItem )
 
-    if( viewModel01.memItem != "" ) {
+    if( viewModel01.inputedItem != "" ) {
       execDataSave()
 
       // 確定した数量を累計します
@@ -176,16 +175,19 @@ class Inventory:DensoWaveBase() {
     }
 
     // 今回読んだ商品を記録します
-    viewModel01.setMemItem( scanItem.substring( 3, 21 ) )
+    viewModel01.inputedItem = scanItem.substring( 3, 21 )
 
-    var cd = model01.eightdigitsCd( viewModel01.memItem.substring( 0, 10 ) )
-    var cn = viewModel01.memItem.substring( 11, 13 )
-    var sz = viewModel01.memItem.substring( 14, 18 ).replace( " ", "" )
+    var cd = model01.eightdigitsCd( viewModel01.inputedItem.substring( 0, 10 ) )
+    var cn = viewModel01.inputedItem.substring( 11, 13 )
+    var sz = viewModel01.inputedItem.substring( 14, 18 ).replace( " ", "" )
 
     // 今回読んだ商品を表示します
     viewModel01.txtItem.value = cd + "  " + cn + "  " + sz
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "記録した商品 = " + viewModel01.memItem )
+    if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "記録した商品 = " + viewModel01.inputedItem )
+
+    // 数量を入力可能とします
+    binding01.edtAmt.isEnabled = true
 
     return true
   }
@@ -214,13 +216,16 @@ class Inventory:DensoWaveBase() {
     viewModel01.countUPAmt( "02", "1" )
 
     // 前回読んだ商品をクリアします
-    viewModel01.setMemItem( "" )
+    viewModel01.inputedItem = ""
 
     // 商品と数量の表示をクリアします
     viewModel01.txtItem.value = ""
     viewModel01.edtAmt.value = ""
 
     binding01.edtAmt.requestFocus()
+
+    // 数量を入力不可とします
+    binding01.edtAmt.isEnabled = false
 
     return true
   }
@@ -242,11 +247,11 @@ class Inventory:DensoWaveBase() {
 
     val edtAmt:String = viewModel01.edtAmt.value.toString()
 
-    if( msgError03 == "" && ( execSubject == "01" || execSubject == "02" ) && viewModel01.memLocation != "" && viewModel01.memItem != "" ) {
+    if( msgError03 == "" && ( execSubject == "01" || execSubject == "02" ) && viewModel01.inputedLocation != "" && viewModel01.inputedItem != "" ) {
       msgError03 = getString( R.string.err_inventory04 )
     }
 
-    if( msgError01 == "" && ( execSubject == "02" || execSubject == "03" ) && viewModel01.memLocation == "" ) {
+    if( msgError01 == "" && ( execSubject == "02" || execSubject == "03" ) && viewModel01.inputedLocation == "" ) {
       msgError01 = getString( R.string.err_inventory02 )
     }
 
@@ -262,11 +267,11 @@ class Inventory:DensoWaveBase() {
       msgError03 = getString( R.string.err_inventory01 )
     }
 
-    if( msgError01 == "" && execSubject == "04" && viewModel01.memLocation == "" ) {
+    if( msgError01 == "" && execSubject == "04" && viewModel01.inputedLocation == "" ) {
       msgError01 = getString( R.string.err_inventory02 )
     }
 
-    if( msgError02== "" && execSubject == "04" && viewModel01.memItem == "" ) {
+    if( msgError02== "" && execSubject == "04" && viewModel01.inputedItem == "" ) {
       msgError02 = getString( R.string.err_inventory03 )
     }
 
@@ -294,8 +299,8 @@ class Inventory:DensoWaveBase() {
 
     dataArray.add( PotDataModel02(
       AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,
-      viewModel01.memItem.substring( 0, 10 ), viewModel01.memItem.substring( 11, 13 ), viewModel01.memItem.substring( 14, 18 ),
-      viewModel01.memLocation, "00000000000", "001", false,
+      viewModel01.inputedItem.substring( 0, 10 ), viewModel01.inputedItem.substring( 11, 13 ), viewModel01.inputedItem.substring( 14, 18 ),
+      viewModel01.inputedLocation, "00000000000", "001", false,
     ) )
 
     if( BuildConfig.DEBUG ) Log.d( "APP-Inventory", "登録" )

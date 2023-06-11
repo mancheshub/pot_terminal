@@ -4,6 +4,7 @@
   <string name="alt_wifi01">Wifiの電波が弱くなっています。Wifiを再設定してください。</string>
   <string name="err_communication01">通信エラーが発生しました。</string>
   <string name="err_communication02">スタッフ番号が取得できません。</string>
+  <string name="err_communication03">Activityインスタンスの取得に失敗しました。</string>
 
   <string name="msg_bluetooth01">接続しました。</string>
   <string name="msg_bluetooth02">切断しました。</string>
@@ -42,9 +43,28 @@
   <string name="msg_item_verification01">照合が完了しました。</string>
   <string name="err_item_verification01">該当の商品がありません。</string>
 
-  <string name="msg_het_verification01">照合が完了しました。</string>
-  <string name="err_het_verification01">該当の商品がありません。</string>
-  <string name="err_het_verification02">棚状況更新に失敗しました。</string>
+  <string name="msg_box_shipping01">照合が完了しました。</string>
+  <string name="err_box_shipping01">該当の商品がありません。</string>
+  <string name="err_box_shipping02">箱状況更新に失敗しました。</string>
+  <string name="err_box_shipping03">箱QRを読んでください。</string>
+  <string name="err_box_shipping04">該当の箱がありません。</string>
+  <string name="alt_box_shipping01">仕分箱にない商品が含まれています。</string>
+  <string name="alt_box_shipping02">箱に商品が残っています。</string>
+
+  <string name="err_box_receiving01">仕分け済みか仕分け対象ではありません。</string>
+  <string name="msg_box_receiving01">仕分が完了しました。</string>
+
+  <string name="msg_box_operation01">照合が完了しました。</string>
+  <string name="msg_box_operation02">箱付替が完了しました。</string>
+  <string name="alt_box_operation01">付替後の箱に商品が残っているため付替できません。</string>
+  <string name="err_box_operation01">該当の商品がありません。</string>
+  <string name="err_box_operation02">箱QRを読んでください。</string>
+
+  <string name="msg_collation_receiving01">照合が完了しました。</string>
+  <string name="err_collation_receiving01">該当の商品がありません。</string>
+  <string name="err_collation_receiving02">商品QRを読んでください。</string>
+  <string name="err_collation_receiving03">棚QRを読んでください。</string>
+  <string name="err_collation_receiving04">階と単位を選択してください。</string>
 
   <string name="msg_item_inspection01">クリアしました。</string>
   <string name="msg_item_inspection02">箱確定しました。</string>
@@ -58,6 +78,8 @@
   <string name="err_item_inspection03">箱確定するデータがありません。</string>
   <string name="err_item_inspection04">確定するデータがありません。</string>
   <string name="err_item_inspection05">他人が担当するデータをクリアできません。</string>
+  <string name="err_item_inspection06">クリアするデータがありません。</string>
+  <string name="err_item_inspection07">数量以上に読まれました。</string>
 
   <string name="msg_data_confirm01">削除しますがよろしいですか？</string>
   <string name="msg_data_confirm02">削除しました。</string>
@@ -66,5 +88,4 @@
   <string name="msg_data_transfer01">転送しますがよろしいですか？</string>
   <string name="msg_data_transfer02">転送しました。</string>
   <string name="err_data_transfer01">転送するデータがありません。</string>
-
 </resources>

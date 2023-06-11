@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable name="viewmodel" type="com.bigsize.pot_terminal.viewmodel.BoxOperationPage02" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BoxOperationPage02"
+    android:descendantFocusability="afterDescendants">
+
+    <ProgressBar
+      android:id="@+id/prg_view01"
+      style="?android:attr/progressBarStyleHorizontal"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:indeterminate="true"
+      android:visibility="invisible"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/txt_view03"
+      android:layout_width="135dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:gravity="left"
+      android:text="付替後の箱ラベル"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/txt_view04" />
+
+    <TextView
+      android:id="@+id/txt_view04"
+      android:layout_width="135dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:gravity="left"
+      android:text="付替前の箱ラベル"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/prg_view01" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_boxno01"
+      style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+      android:layout_width="0dp"
+      android:layout_height="40dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      app:errorEnabled="true"
+      app:expandedHintEnabled="true"
+      app:layout_constraintEnd_toStartOf="@+id/lay_boxno02"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/txt_view04">
+
+      <requestFocus />
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_boxno01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background='@{viewmodel.bkgBoxno01 == "A" ? @color/box_labelA : viewmodel.bkgBoxno01 == "B" ? @color/box_labelB : viewmodel.bkgBoxno01 == "C" ? @color/box_labelC : viewmodel.bkgBoxno01 == "D" ? @color/box_labelD : viewmodel.bkgBoxno01 == "E" ? @color/box_labelE : @color/box_labelN}'
+        android:enabled="false"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@={viewmodel.txtBoxno01}"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/lay_boxno02"
+      style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+      android:layout_width="0dp"
+      android:layout_height="40dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="16dp"
+      app:errorEnabled="true"
+      app:expandedHintEnabled="true"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/lay_boxno01"
+      app:layout_constraintTop_toTopOf="@+id/lay_boxno01">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_boxno02"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background='@{viewmodel.bkgBoxno02 == "A" ? @color/box_labelA : viewmodel.bkgBoxno02 == "B" ? @color/box_labelB : viewmodel.bkgBoxno02 == "C" ? @color/box_labelC : viewmodel.bkgBoxno02 == "D" ? @color/box_labelD : viewmodel.bkgBoxno02 == "E" ? @color/box_labelE : @color/box_labelN}'
+        android:enabled="false"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@={viewmodel.txtBoxno02}"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+      android:id="@+id/txt_view01"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="全"
+      app:layout_constraintEnd_toStartOf="@+id/cnt_total"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <TextView
+      android:id="@+id/cnt_total"
+      android:layout_width="60dp"
+      android:layout_height="45dp"
+      android:layout_marginTop="8dp"
+      android:gravity="center|center_vertical"
+      android:text="@{viewmodel.cntTotal}"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toStartOf="@+id/txt_view02"
+      app:layout_constraintTop_toBottomOf="@+id/lay_boxno01" />
+
+    <TextView
+      android:id="@+id/txt_view02"
+      android:layout_width="wrap_content"
+      android:layout_height="45dp"
+      android:layout_marginEnd="16dp"
+      android:gravity="center_horizontal|center_vertical"
+      android:text="件"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/cnt_total" />
+
+    <ListView
+      android:id="@+id/lst_view01"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      android:background="@drawable/border"
+      android:divider="#00000000"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/cnt_total" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

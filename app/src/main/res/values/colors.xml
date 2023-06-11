@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
+
   <color name="purple_200">#FFBB86FC</color>
   <color name="purple_500">#FF6200EE</color>
   <color name="purple_700">#FF3700B3</color>
@@ -7,4 +9,22 @@
   <color name="teal_700">#FF018786</color>
   <color name="black">#FF000000</color>
   <color name="white">#FFFFFFFF</color>
+
+  <!--
+    箱識別子ごとの背景色
+    M (ホワイト背景の初期背景色)
+    N (グレー背景の初期背景色)
+  -->
+  <color name="box_labelM">#FFFFFF</color>
+  <color name="box_labelN">#DDDDDD</color>
+  <color name="box_labelA">#FF9999</color>
+  <color name="box_labelB">#FFFF00</color>
+  <color name="box_labelC">#6495ED</color>
+  <color name="box_labelD">#7FFFBF</color>
+  <color name="box_labelE">#BBAABB</color>
+
+  <!-- 仕分け時の両サイドの帯の色 -->
+  <color name="band_YS">#512DA8</color>
+  <color name="band_NS">#FFFFFF</color>
+
 </resources>

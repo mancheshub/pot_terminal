@@ -210,7 +210,7 @@ class MessageDialog( val callbackType:String, val title:String, val message:Stri
     }
   }
 
-  public override fun onDestroyView() {
+  override fun onDestroyView() {
     super.onDestroyView()
 
     // Activityのタッチ操作を許可します

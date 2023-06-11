@@ -172,7 +172,6 @@ open class CommonBase:AppCompatActivity() {
       // 権限承認要求ダイアログを表示します
       launcher02.launch( Manifest.permission.ACCESS_FINE_LOCATION )
     }
-
   }
 
   override fun onStart() {
@@ -186,8 +185,12 @@ open class CommonBase:AppCompatActivity() {
   override fun onResume() {
     super.onResume()
 
-    claimSound( playSoundOK )
-    claimVibration( AppBase.vibrationOK )
+    // フラグメント対応していないアクティビティに限ってonResume()時にサウンド＆バイブレーションを発動します
+
+    if( componentName.shortClassName != ".BoxShipping" && componentName.shortClassName != ".BoxOperation" && componentName.shortClassName != ".CollationReceiving" ) {
+      claimSound( playSoundOK )
+      claimVibration( AppBase.vibrationOK )
+    }
 
     if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "onResume" )
   }
@@ -296,182 +299,6 @@ open class CommonBase:AppCompatActivity() {
    */
   public fun claimVibration( pattern:Map<String,Array<String>> ) {
     playVibration.play( pattern["rate"]!!, pattern["volume"]!! )
-  }
-}
-
-
-
-/**
- * ユニテック社製ハンディーターミナル用のアクティビティクラス
- */
-open class UnitechBase:CommonBase() {
-  /**
-   * -- キーボードの各種プロパティ
-   */
-
-  protected val KEY_F01:Int = 999
-  protected val KEY_F02:Int = 999
-  protected val KEY_F03:Int = 999
-  protected val KEY_F04:Int = 999
-  protected val KEY_ENT:Int = 66
-  protected val KEY_BAK:Int = 999
-  protected val KEY_000:Int = 7
-  protected val KEY_001:Int = 8
-  protected val KEY_002:Int = 9
-  protected val KEY_003:Int = 10
-  protected val KEY_004:Int = 11
-  protected val KEY_005:Int = 12
-  protected val KEY_006:Int = 13
-  protected val KEY_007:Int = 14
-  protected val KEY_008:Int = 15
-  protected val KEY_009:Int = 16
-
-  /**
-   * -- スキャナの各種プロパティ
-   */
-
-  protected val receiver by lazy {
-    val readerReceiver = UssReceiver()
-    readerReceiver
-  }
-
-  protected val filter by lazy {
-    val filter = IntentFilter()
-    filter.addAction( "unitech.scanservice.data" )
-    filter
-  }
-
-  /**
-   * -- スキャナの各種メソッド
-   */
-
-  /**
-   * USSサービスを開始します
-   */
-  protected fun startScanService() {
-    var intent = Intent()
-
-    intent.action = "unitech.scanservice.start"
-    sendBroadcast( intent )
-  }
-
-  /**
-   * USSサービスを終了します
-   */
-  protected fun closeScanService() {
-    var intent = Intent()
-
-    intent.action = "unitech.scanservice.close"
-    intent.putExtra( "close", true );
-    sendBroadcast( intent )
-  }
-
-  /**
-   * USSサービスの"App Settings"を変更します
-   */
-  protected fun applyAppSettings() {
-    var bundle = Bundle()
-    var intent = Intent()
-
-    // 読み取り結果をIntentで通知します
-
-    bundle.clear()
-    bundle.putBoolean( "scan2key", false )
-
-    intent.action = "unitech.scanservice.scan2key_setting"
-    intent.putExtras( bundle )
-    sendBroadcast( intent )
-
-    // バーコードの読み取りに成功したとき振動によってユーザーに通知します
-
-    bundle.clear()
-    bundle.putBoolean( "vibration", true )
-
-    intent.action = "unitech.scanservice.vibration"
-    intent.putExtras( bundle )
-    sendBroadcast( intent )
-  }
-
-  /**
-   * USSサービスの"Append.Settings"を変更します
-   */
-  protected fun applyAppendSettings() {
-    var bundle = Bundle()
-    var intent = Intent()
-
-    // スキャンしたデータの末尾に空白を挿入します
-
-    bundle.clear()
-    bundle.putString( "terminator", "" )
-
-    intent.action = "unitech.scanservice.terminator"
-    intent.putExtras( bundle )
-    sendBroadcast( intent )
-  }
-
-  /**
-   * -- ライフサイクルのオーバーライドメソッド
-   */
-
-  override fun onCreate( savedInstanceState:Bundle? ) {
-    super.onCreate( savedInstanceState )
-
-    thread( start = true ) {
-      try {
-        startScanService()
-        Thread.sleep( 500 ) //.USS の開始を 500 ミリ秒以上待機します
-        applyAppSettings()
-        applyAppendSettings()
-      } catch( e:InterruptedException ) {
-        e.printStackTrace()
-      }
-    }
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-
-    if( BuildConfig.DEBUG ) Log.d( "APP-UnitechBase", "onDestroy()" )
-
-    // USSサービスを終了します
-    closeScanService()
-  }
-
-  override fun onResume() {
-    super.onResume()
-
-    if( BuildConfig.DEBUG ) Log.d( "APP-UnitechBase", "onResume()" )
-
-    // SCANの受信を開始します
-    registerReceiver( receiver, filter )
-  }
-
-  override fun onPause() {
-    super.onPause()
-
-    if( BuildConfig.DEBUG ) Log.d( "APP-UnitechBase", "onPause()" )
-
-    // SCANの受信を終了します
-    unregisterReceiver( receiver )
-  }
-
-  /**
-   * スキャナのブロードキャストレシーバークラス
-   */
-  inner class UssReceiver:BroadcastReceiver() {
-    override fun onReceive(context:Context?,intent:Intent? ) {
-      intent ?: return
-
-      if( intent.action.equals( "unitech.scanservice.data" ) ) {
-        val scanData = intent.getStringExtra( "text" )
-
-        if( BuildConfig.DEBUG ) Log.d( "APP-UnitechBase", "読み取り生データ = " + scanData )
-
-        if( scanData.substring( 0, 3 ) == "M-L" ) this@UnitechBase._scanShelf.value = scanData
-        if( scanData.substring( 0, 3 ) == "M-C" ) this@UnitechBase._scanBox.value = scanData
-        if( scanData.substring( 0, 3 ) == "M-H" ) this@UnitechBase._scanItemM.value = scanData
-      }
-    }
   }
 }
 
@@ -626,21 +453,37 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
           if( BuildConfig.DEBUG ) Log.d( "APP-DensoWaveBase", "読み取り生データ = " + this.data )
 
           val _data:String = this.data ?: ""
+          var readFlag:String = "OK"
 
           // クラス名に従ったコードが読めていなければエラーとします
 
-          if( componentName.shortClassName == ".ItemVerification" &&
-              _data.substring( 0, 3 ) != "M-P" && _data.substring( 0, 3 ) != "M-H" ) {
+          if( componentName.shortClassName == ".BoxShipping" &&
+              _data.substring( 0, 3 ) != "M-P" && _data.substring( 0, 3 ) != "M-T" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
+          if( componentName.shortClassName == ".BoxReceiving" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
 
           if( componentName.shortClassName == ".ItemInspection" && _data.substring( 0, 1 ) != "a" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
 
-          if( componentName.shortClassName == ".ExamLocation" && _data.substring( 0, 3 ) != "M-H" ) {
+          if( componentName.shortClassName == ".LocationConfirm" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
+            claimSound( playSoundAR )
+            claimVibration( AppBase.vibrationAR )
+          }
+
+          if( componentName.shortClassName == ".BoxOperation" && _data.substring( 0, 3 ) != "M-T" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
@@ -650,20 +493,22 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
               componentName.shortClassName == ".ShelfReplaceB" || componentName.shortClassName == ".ShelfReplaceS" ||
               componentName.shortClassName == ".Inventory" ) &&
             _data.substring( 0, 3 ) != "M-L" && _data.substring( 0, 3 ) != "M-C" && _data.substring( 0, 3 ) != "M-H" ) {
+            readFlag = "NG"
             claimSound( playSoundAR )
             claimVibration( AppBase.vibrationAR )
           }
 
           // スタッフ番号が不意にクリアされてしまった場合はエラーとします
 
-          if( AppBase.staffNO == "000" ) {
+          if( readFlag == "OK" && AppBase.staffNO == "000" ) {
             val intent = Intent( applicationContext, Failure::class.java )
             intent.putExtra( "MESSAGE", getString( R.string.err_communication02 ) )
             startActivity( intent )
-          } else {
+          } else if( readFlag == "OK" && AppBase.staffNO != "000" ) {
             if( _data.substring( 0, 3 ) == "M-P" ) _scanMultiItem.value = _data
             if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
             if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data
+            if( _data.substring( 0, 3 ) == "M-T" ) _scanBox.value = _data
             if( _data.substring( 0, 3 ) == "M-H" ) _scanItemM.value = _data
             if( _data.substring( 0, 1 ) == "a" ) _scanItemH.value = _data
           }

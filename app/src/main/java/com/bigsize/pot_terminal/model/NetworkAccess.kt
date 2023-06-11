@@ -17,7 +17,247 @@ import okhttp3.Request
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class ExamLocationAPI {
+class CollationReceivingAPI {
+  private val model01:AppUtility = AppUtility()
+
+  private val httpClient = OkHttpClient.Builder()
+    .connectTimeout( 10, TimeUnit.SECONDS )
+    .writeTimeout( 10, TimeUnit.SECONDS )
+    .readTimeout( 30, TimeUnit.SECONDS )
+    .build()
+
+  /**
+   * 返品入庫の単位データを取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [floorID] 階ID
+   * @return 伝発グループデータ
+   */
+  public suspend fun pickH_UnitList( accessURL:String, floorID:String ):Pair<String,MutableList<HashItem>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "HU" )
+      .add( "floorID", floorID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<HashItem> = mutableListOf()
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( HashItem( it.id, it.item ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
+   * 返品入庫対象となる商品データを取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [floorID] 階ID
+   * @param [unitID] 単位ID
+   * @return 商品データ
+   */
+  public suspend fun pickH_ItemList( accessURL:String, floorID:String, unitID:String ):Pair<String,MutableList<PotDataModel04>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "HI" )
+      .add( "floorID", floorID )
+      .add( "unitID", unitID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel04> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      val location:String = it.ssb + it.ssh + it.ssf + "-" + it.sss + "-" + it.sst + "-" + it.sso
+
+      tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.cs, it.itn, location, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
+   * Fキャンセル入庫対象となる商品データを取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [floorID] 階ID
+   * @return 商品データ
+   */
+  public suspend fun pickF_ItemList( accessURL:String, floorID:String ):Pair<String,MutableList<PotDataModel04>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "FI" )
+      .add( "floorID", floorID )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel04> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      val location:String = it.ssb + it.ssh + it.ssf + "-" + it.sss + "-" + it.sst + "-" + it.sso
+
+      tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.cs, it.itn, location, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+}
+
+class BoxOperationAPI {
+  private val model01:AppUtility = AppUtility()
+
+  private val httpClient = OkHttpClient.Builder()
+    .connectTimeout( 10, TimeUnit.SECONDS )
+    .writeTimeout( 10, TimeUnit.SECONDS )
+    .readTimeout( 30, TimeUnit.SECONDS )
+    .build()
+
+  /**
+   * 箱ラベルの情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [boxno] 物理箱ラベル
+   * @return 店舗名
+   */
+  public suspend fun pickBoxInfomation( accessURL:String, boxno:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "S" )
+      .add( "boxno", boxno )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+
+  /**
+   * 箱ラベルから商品を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [boxno] 物理箱ラベル
+   * @return 商品データ
+   */
+  public suspend fun pickItemList( accessURL:String, boxno:String ):Pair<String,MutableList<PotDataModel01>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "I" )
+      .add( "boxno", boxno )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel01> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( PotDataModel01( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
+   * 箱付替を完了します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [boxno01] 付替前箱ラベル
+   * @param [boxno02] 付替後箱ラベル
+   * @return エラー状況
+   */
+  public suspend fun finishReplace( accessURL:String, boxno01:String, boxno02:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "U" )
+      .add( "kind", "01" )
+      .add( "boxno01", boxno01 )
+      .add( "boxno02", boxno02 )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+}
+
+class LocationConfirmAPI {
   private val model01:AppUtility = AppUtility()
 
   private val httpClient = OkHttpClient.Builder()
@@ -36,7 +276,7 @@ class ExamLocationAPI {
    *
    * @return ロケーションデータ
    */
-  public suspend fun pickLocation( accessURL:String, cd:String, cn:String, sz:String ):MutableList<PotDataModel04> {
+  public suspend fun pickLocation( accessURL:String, cd:String, cn:String, sz:String ):Pair<String,MutableList<PotDataModel04>> {
     val formBody = FormBody.Builder()
       .add( "cd", cd )
       .add( "cn", cn )
@@ -56,20 +296,66 @@ class ExamLocationAPI {
       }
     }
 
-    var tempList:MutableList<PotDataModel04> = mutableListOf()
+    val tempList:MutableList<PotDataModel04> = mutableListOf()
     val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       val location:String = it.ssb + it.ssh + it.ssf + "-" + it.sss + "-" + it.sst + "-" + it.sso
 
-      tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.cs, it.itn, location, it.ssa ) )
+      tempList.add( PotDataModel04( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.cs, it.itn, location, "0", it.ssa ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 }
 
-class HetVerificationAPI {
+class BoxReceivingAPI {
+  private val model01:AppUtility = AppUtility()
+
+  private val httpClient = OkHttpClient.Builder()
+    .connectTimeout( 10, TimeUnit.SECONDS )
+    .writeTimeout( 10, TimeUnit.SECONDS )
+    .readTimeout( 30, TimeUnit.SECONDS )
+    .build()
+
+  /**
+   * 箱ラベルを決定します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [cd] 品番
+   * @param [cn] 色番
+   * @param [sz] サイズ
+   * @return 箱ラベルデータ
+   */
+  public suspend fun pickBoxNO( accessURL:String, cd:String, cn:String, sz:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "B" )
+      .add( "cd", cd )
+      .add( "cn", cn )
+      .add( "sz", sz )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+}
+
+class BoxShippingAPI {
   private val model01:AppUtility = AppUtility()
 
   private val httpClient = OkHttpClient.Builder()
@@ -84,7 +370,7 @@ class HetVerificationAPI {
    * @param [accessURL] サーバプログラムのURL
    * @return 伝発グループデータ
    */
-  public suspend fun pickGroupList( accessURL:String ):MutableList<HashItem> {
+  public suspend fun pickGroupList( accessURL:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "G" )
@@ -103,14 +389,14 @@ class HetVerificationAPI {
       }
     }
 
-    var tempList:MutableList<HashItem> = mutableListOf()
+    val tempList:MutableList<HashItem> = mutableListOf()
     val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -120,7 +406,7 @@ class HetVerificationAPI {
    * @param [groupID] 伝発グループID
    * @return 店舗データ
    */
-  public suspend fun pickShopList( accessURL:String, groupID:String ):MutableList<HashItem> {
+  public suspend fun pickShopList( accessURL:String, groupID:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "S" )
@@ -140,15 +426,14 @@ class HetVerificationAPI {
       }
     }
 
-    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
-
     val tempList:MutableList<HashItem> = mutableListOf()
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -157,9 +442,9 @@ class HetVerificationAPI {
    * @param [accessURL] サーバプログラムのURL
    * @param [groupID] 伝発グループID
    * @param [shopID] 店舗ID
-   * @return 店舗データ
+   * @return 商品データ
    */
-  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):MutableList<PotDataModel01> {
+  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):Pair<String,MutableList<PotDataModel01>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "I" )
@@ -180,25 +465,94 @@ class HetVerificationAPI {
       }
     }
 
-    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
-
     val tempList:MutableList<PotDataModel01> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( PotDataModel01( model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, "0", it.ssa ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
-   * 店舗の箱番号を取得します
+   * キャンセル商品情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @return 商品データ
+   */
+  public suspend fun pickCancelItemList( accessURL:String ):Pair<String,MutableList<PotDataModel05>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "C" )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel05> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
+   * 先送商品情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @return 商品データ
+   */
+  public suspend fun pickPostponeItemList( accessURL:String ):Pair<String,MutableList<PotDataModel05>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "P" )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<PotDataModel05> = mutableListOf()
+    val apiResponseBody:APIMcsItemModel = Json.decodeFromString<APIMcsItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( PotDataModel05( it.ssb, model01.eightdigitsCd(it.cd), it.cn.padStart( 2, '0' ), it.sz, it.ssh, it.ssf, "0", it.ssa ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
+   * 店舗の箱ラベルを取得します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [shopID] 店舗ID
-   * @return 箱番号データ
+   * @return 箱ラベルデータ
    */
-  public suspend fun pickBoxNO( accessURL:String, shopID:String ):String {
+  public suspend fun pickBoxNO( accessURL:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "B" )
@@ -218,20 +572,20 @@ class HetVerificationAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 
   /**
-   * 棚出しを完了します
+   * 照合箱出を完了します
    *
    * @param [accessURL] サーバプログラムのURL
    * @param [groupID] 伝発グループID
    * @param [shopID] 店舗ID
    * @return エラー状況
    */
-  public suspend fun finishVerification( accessURL:String, groupID:String, shopID:String ):String {
+  public suspend fun finishShipping( accessURL:String, groupID:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "U" )
       .add( "kind", "01" )
@@ -252,9 +606,73 @@ class HetVerificationAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+
+  /**
+   * キャンセル箱出を完了します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [i_id] 明細番号
+   * @return エラー状況
+   */
+  public suspend fun finishCancelShipping( accessURL:String, i_id:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "U" )
+      .add( "kind", "02" )
+      .add( "i_id", i_id )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
+  }
+
+  /**
+   * 先送箱出を完了します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @param [i_id] 明細番号
+   * @return エラー状況
+   */
+  public suspend fun finishPostponeShipping( accessURL:String, i_id:String ):Pair<String,String> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "U" )
+      .add( "kind", "03" )
+      .add( "i_id", i_id )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
+
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 }
 
@@ -273,7 +691,7 @@ class ItemInspectionAPI {
    * @param [accessURL] サーバプログラムのURL
    * @return 作業グループデータ
    */
-  public suspend fun pickGroupList( accessURL:String ):MutableList<HashItem> {
+  public suspend fun pickGroupList( accessURL:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "G" )
@@ -292,14 +710,14 @@ class ItemInspectionAPI {
       }
     }
 
-    var tempList:MutableList<HashItem> = mutableListOf()
+    val tempList:MutableList<HashItem> = mutableListOf()
     val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -309,7 +727,7 @@ class ItemInspectionAPI {
    * @param [groupID] 作業グループID
    * @return 店舗データ
    */
-  public suspend fun pickShopList( accessURL:String, groupID:String ):MutableList<HashItem> {
+  public suspend fun pickShopList( accessURL:String, groupID:String ):Pair<String,MutableList<HashItem>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "S" )
@@ -329,15 +747,14 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
-
     val tempList:MutableList<HashItem> = mutableListOf()
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( HashItem( it.id, it.item ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -348,7 +765,7 @@ class ItemInspectionAPI {
    * @param [shopID] 店舗ID
    * @return 店舗データ
    */
-  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):MutableList<PotDataModel03> {
+  public suspend fun pickItemList( accessURL:String, groupID:String, shopID:String ):Pair<String,MutableList<PotDataModel03>> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "I" )
@@ -369,15 +786,14 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APIFoelItemModel = Json.decodeFromString<APIFoelItemModel>( resJSON!! )
-
     val tempList:MutableList<PotDataModel03> = mutableListOf()
+    val apiResponseBody:APIFoelItemModel = Json.decodeFromString<APIFoelItemModel>( resJSON!! )
 
     apiResponseBody.itemArray.forEach {
       tempList.add( PotDataModel03( model01.eightdigitsCd(it.cd), it.cn, it.sz, it.asn21, it.asn22, it.asn23, it.asn24, it.asn25, it.asn53, it.bf0, it.asn30_n.toInt().toString(), it.asn30_p.toInt().toString() ) )
     }
 
-    return tempList
+    return Pair( apiResponseBody.status, tempList )
   }
 
   /**
@@ -389,7 +805,7 @@ class ItemInspectionAPI {
    * @param [staffID] スタッフID
    * @return 店舗データ
    */
-  public suspend fun pickSICondition( accessURL:String, groupID:String, shopID:String, staffID:String ):String {
+  public suspend fun pickSICondition( accessURL:String, groupID:String, shopID:String, staffID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "SI" )
@@ -411,9 +827,9 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 
   /**
@@ -424,7 +840,7 @@ class ItemInspectionAPI {
    * @param [shopID] 店舗ID
    * @return 店舗データ
    */
-  public suspend fun pickSMCondition( accessURL:String, groupID:String, shopID:String ):String {
+  public suspend fun pickSMCondition( accessURL:String, groupID:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "SCM" )
@@ -445,9 +861,9 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
 
   /**
@@ -498,7 +914,7 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 
   /**
@@ -511,7 +927,7 @@ class ItemInspectionAPI {
    * @param [staffID] スタッフID
    * @return 排他結果
    */
-  public suspend fun updateSituation( accessURL:String, kind:String, groupID:String, shopID:String, staffID:String ):String {
+  public suspend fun updateSituation( accessURL:String, kind:String, groupID:String, shopID:String, staffID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "U" )
       .add( "kind", kind )
@@ -533,11 +949,10 @@ class ItemInspectionAPI {
       }
     }
 
-    val apiResponseBody:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
 
-    return apiResponseBody.text
+    return Pair( apiResponseBody.status, apiResponseBody.text01 )
   }
-
 }
 
 class DataTransferAPI {
@@ -583,7 +998,7 @@ class DataTransferAPI {
       }
     }
 
-    val apiResponse:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 
   /**
@@ -624,7 +1039,7 @@ class DataTransferAPI {
       }
     }
 
-    val apiResponse:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 
   /**
@@ -663,6 +1078,6 @@ class DataTransferAPI {
       }
     }
 
-    val apiResponse:APITextModel = Json.decodeFromString<APITextModel>( resJSON!! )
+    val apiResponseBody:APILineModel = Json.decodeFromString<APILineModel>( resJSON!! )
   }
 }
