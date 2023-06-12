@@ -104,6 +104,12 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
     // 作業グループデータを取得します
     viewModel01.pickGroupList()
 
+    // 作業グループが選択されたら店舗データを取得します
+    viewModel01.pickShopList()
+
+    // 作業グループ変更により店舗データがクリアされたので商品データを再取得します
+    viewModel01.pickItemList( "nonExclusive" )
+
     // ■ 変更を補足します
 
     viewModel01.apiCondition.observe( this, Observer<String> {
@@ -267,6 +273,10 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
 
       // アダプタデータを更新します
       adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel03> ) )
+
+      // フォーカスを制御します - 作業グループが未選択なら作業グループに、作業グループが選択済なら店舗にフォーカスを充てます
+      if( viewModel01.selectedGroupID == "" ) { binding01.layGroup.requestFocus() }
+      if( viewModel01.selectedGroupID != "" ) { binding01.layShop.requestFocus() }
     })
 
     scanItemH.observe( this, Observer<String> {
@@ -356,8 +366,8 @@ class ItemInspection:DensoWaveBase(),View.OnClickListener,AdapterView.OnItemClic
         viewModel01.selectedBoxID = "01"
         viewModel01.selectedPrintID = "ELS_FEL_P01"
 
-        // "店舗・箱・印刷機"の選択をクリアします
-        binding01.txtShop.setText( " ", false )
+        // "店舗・箱・印刷機"の選択をクリアします - activityでAutoCompleteTextViewを実装する際はタブインデックスの対象とするため必ず何かの値を選択しておく必要はないです
+        //binding01.txtShop.setText( " ", false )
         binding01.txtBox.setText( "箱01", false )
         binding01.txtPrint.setText( "印刷機01", false )
 
