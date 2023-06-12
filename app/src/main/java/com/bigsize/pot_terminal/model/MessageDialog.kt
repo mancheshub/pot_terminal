@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.Failure
+import com.bigsize.pot_terminal.Entrance
 import com.bigsize.pot_terminal.R
 
 
@@ -27,7 +28,7 @@ class StaffNODialog( val staffNO:String ):DialogFragment() {
     val builder = AlertDialog.Builder( activity )
 
     val txtView = TextView( activity )
-    txtView.text = "利用者"
+    txtView.text = "ログアウト"
     txtView.textSize = 18f
     txtView.setTextColor( Color.WHITE )
     txtView.setBackgroundColor( Color.rgb( 74, 138, 245 ) )
@@ -42,7 +43,17 @@ class StaffNODialog( val staffNO:String ):DialogFragment() {
 
     view.findViewById<TextView>( R.id.txt_number ).text = "スタッフ番号 " + staffNO + " でログイン中 ..."
 
-    builder.setPositiveButton( "OK" ) { dialog, id ->
+    builder.setNegativeButton( "閉じる" ) { dialog, id ->
+      dialog.dismiss();
+    }
+
+    builder.setPositiveButton( "実行" ) { dialog, id ->
+      val intent = Intent( activity, Entrance::class.java )
+      startActivity( intent )
+
+      // 全てのActivityを終了します
+      AppBase.killApp()
+
       dialog.dismiss();
     }
 
@@ -105,7 +116,7 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
         dialog.dismiss();
       }
 
-      builder.setNegativeButton( "キャンセル" ) { dialog, id ->
+      builder.setNegativeButton( "閉じる" ) { dialog, id ->
         dialog.dismiss();
       }
 
