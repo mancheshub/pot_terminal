@@ -34,7 +34,7 @@ class Entrance:DensoWaveBase(),DialogCallback {
 
     // ■ ActionBarを設定します
 
-    supportActionBar?.title = "利用申告"
+    supportActionBar?.title = "ログイン"
     supportActionBar?.setDisplayHomeAsUpEnabled( false )
 
     // ■ バインディングしたレイアウトにデータをセットします

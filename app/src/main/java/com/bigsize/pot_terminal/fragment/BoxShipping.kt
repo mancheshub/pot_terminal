@@ -189,6 +189,10 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
 
       // アダプタデータを更新します
       adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
+
+      // フォーカスを制御します - 伝発グループが未選択なら伝発グループに、伝発グループが選択済なら店舗にフォーカスを充てます
+      if( viewModel01.selectedGroupID == "" ) { binding01.layGroup.requestFocus() }
+      if( viewModel01.selectedGroupID != "" ) { binding01.layShop.requestFocus() }
     })
 
     // ■ イベントを補足します
@@ -277,7 +281,7 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
         viewModel01.selectedShopID = ""
         viewModel01.selectedBoxno = ""
 
-        // 店舗の選択をクリアします
+        // 店舗の選択をクリアします - fragmentでAutoCompleteTextViewを実装する際はタブインデックスの対象とするため必ず何かの値を選択しておきます
         binding01.txtShop.setText( " ", false )
 
         // "箱ラベル・箱ラベル背景色"の表示をクリアします

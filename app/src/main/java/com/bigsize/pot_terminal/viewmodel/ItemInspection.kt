@@ -53,10 +53,10 @@ class ItemInspection:ViewModel() {
   )
 
   // 選択した"作業グループ・店舗・箱・印刷機"
-  public var selectedGroupID:String = " "
-  public var selectedShopID:String = " "
-  public var selectedBoxID:String = " "
-  public var selectedPrintID:String = " "
+  public var selectedGroupID:String = ""
+  public var selectedShopID:String = ""
+  public var selectedBoxID:String = ""
+  public var selectedPrintID:String = ""
 
   // 確定処理実行判断フラグ - 店舗のSCMラベルが発行されている場合に警告表示する判定に利用します
   public var isExecute03:String = ""
