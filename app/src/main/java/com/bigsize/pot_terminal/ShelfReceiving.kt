@@ -258,7 +258,7 @@ class ShelfReceiving:DensoWaveBase() {
       msgError03 = getString( R.string.err_edt_amt04 )
     }
 
-    if( msgError01 == "" && ( execSubject == "03" || execSubject == "04" ) && viewModel01.inputedLocation == "" ) {
+    if( msgError01 == "" && ( execSubject == "02" || execSubject == "03" || execSubject == "04" ) && viewModel01.inputedLocation == "" ) {
       msgError01 = getString( R.string.err_shelf_receiving01 )
     }
 
