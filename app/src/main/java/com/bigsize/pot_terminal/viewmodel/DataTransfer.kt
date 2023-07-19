@@ -120,7 +120,7 @@ class DataTransfer:ViewModel() {
         allLineNO ++
         fileArray.add( line )
 
-        if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "データ読み込み = " + line )
+        if( BuildConfig.DEBUG ) Log.d( "APP-DataTransfer", "データ読み込み " + lineNO + " = " + line )
 
         // 250件に満たない場合は次の行を記録します
         if( lineNO != 250 ) continue
@@ -150,6 +150,7 @@ class DataTransfer:ViewModel() {
 
         lineNO = 0
         fileArray.clear()
+        fileData = ""
       }
 
       // 進捗値を計算します
