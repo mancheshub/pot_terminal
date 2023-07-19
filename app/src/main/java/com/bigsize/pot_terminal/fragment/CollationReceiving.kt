@@ -347,13 +347,16 @@ class CollationReceivingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCa
     }
 
     if( fullLocation01 != fullLocation02 ) {
-      activity01.claimSound( activity01.playSoundNG )
-      activity01.claimVibration( AppBase.vibrationNG )
-
-      // 今回読んだロケーションの記録と表示を元に戻します
       if( compLocation01 != compLocation02 ) {
+        activity01.claimSound( activity01.playSoundNG )
+        activity01.claimVibration( AppBase.vibrationNG )
+
+        // 箱を除いたロケーションすら合致していなければ今回読んだロケーションの記録と表示を元に戻します
         viewModel01.inputedLocation = ""
         viewModel01.txtLocation.value = ""
+      } else {
+        activity01.claimSound( activity01.playSoundOK )
+        activity01.claimVibration( AppBase.vibrationOK )
       }
     }
 
@@ -842,10 +845,12 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
     var fullLocation01:String = scanShelf.substring( 3 )
     var fullLocation02:String = ( viewModel01.itemList.value as MutableList<PotDataModel04> ).get( viewModel01.memPosition.toInt() ).location.replace( "-", "" )
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", "商品と合致した位置 = " + viewModel01.memPosition.toString() )
+    // 今回読んだロケーションと照合対象のロケーションの箱を除いた版を作成します(箱を除いたロケーションで比較するため)
+    val compLocation01:String = scanShelf.substring( 3,11 )
+    val compLocation02:String = ( viewModel01.itemList.value as MutableList<PotDataModel04> ).get( viewModel01.memPosition.toInt() ).location.replace( "-", "" ).substring( 0, 8 )
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", "POTで読んだロケーション = " + fullLocation01 )
-    if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", " 照合対象のロケーション = " + fullLocation02 )
+    if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", "POTで読んだロケーション = " + fullLocation01 + " " + compLocation01 )
+    if( BuildConfig.DEBUG ) Log.d( "APP-CollationReceiving", " 照合対象のロケーション = " + fullLocation02 + " " + compLocation02 )
 
     // 今回読んだロケーションを記録します
     viewModel01.inputedLocation = scanShelf.substring( 3 )
@@ -855,7 +860,7 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
                                     fullLocation01.substring( 4, 7 ) + "-" + fullLocation01.substring( 7, 8 ) + "-" + fullLocation01.substring( 8 )
 
     // 見取図参照のケースで棚QRを読んだらそのまま終了します
-    if( fullLocation02 == "" ) {
+    if( fullLocation02 == "00000000000" ) {
       activity01.claimSound( activity01.playSoundOK )
       activity01.claimVibration( AppBase.vibrationOK )
 
@@ -863,12 +868,17 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
     }
 
     if( fullLocation01 != fullLocation02 ) {
-      activity01.claimSound( activity01.playSoundNG )
-      activity01.claimVibration( AppBase.vibrationNG )
+      if( compLocation01 != compLocation02 ) {
+        activity01.claimSound( activity01.playSoundNG )
+        activity01.claimVibration( AppBase.vibrationNG )
 
-      // 今回読んだロケーションの記録と表示を元に戻します
-      viewModel01.inputedLocation = ""
-      viewModel01.txtLocation.value = ""
+        // 箱を除いたロケーションすら合致していなければ今回読んだロケーションの記録と表示を元に戻します
+        viewModel01.inputedLocation = ""
+        viewModel01.txtLocation.value = ""
+      } else {
+        activity01.claimSound( activity01.playSoundOK )
+        activity01.claimVibration( AppBase.vibrationOK )
+      }
     }
 
     // 商品情報の検品数を更新します
@@ -908,7 +918,7 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
                                     fullLocation01.substring( 4, 7 ) + "-" + fullLocation01.substring( 7, 8 ) + "-" + fullLocation01.substring( 8 )
 
     // 見取図参照のケースで棚QRを読んだらそのまま終了します
-    if( fullLocation02 == "" ) {
+    if( fullLocation02 == "00000000000" ) {
       activity01.claimSound( activity01.playSoundOK )
       activity01.claimVibration( AppBase.vibrationOK )
 
@@ -995,7 +1005,7 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
       viewModel01.memPosition = position.toString()
 
       // 入庫ロケーションを表示します
-      if( ( viewModel01.itemList.value as MutableList<PotDataModel04> )[position].location == "---" ) {
+      if( ( viewModel01.itemList.value as MutableList<PotDataModel04> )[position].location.replace( "-", "" ) == "00000000000" ) {
         viewModel01.txtAddress.value = "見取図参照"
       } else {
         viewModel01.txtAddress.value = ( viewModel01.itemList.value as MutableList<PotDataModel04> )[position].location
@@ -1015,7 +1025,7 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
     var fullLocation:String = ( viewModel01.itemList.value as MutableList<PotDataModel04> ).get( viewModel01.memPosition.toInt() ).location.replace( "-", "" )
 
     // 照合対象のロケーションが見取図参照である時のみ処理します
-    if( fullLocation != "" ) return false
+    if( fullLocation != "00000000000" ) return false
 
     // 商品情報の検品数を更新します
     updateItem()
