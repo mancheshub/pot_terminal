@@ -2,12 +2,14 @@ package com.bigsize.pot_terminal.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,19 +19,15 @@ import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BoxOperation
 import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.model.AppUtility
-import com.bigsize.pot_terminal.model.MessageDialog
-import com.bigsize.pot_terminal.model.DialogCallback
-import com.bigsize.pot_terminal.model.ScanCallback
-import com.bigsize.pot_terminal.model.PotDataModel01
 import com.bigsize.pot_terminal.databinding.BoxOperationPage01Binding
 import com.bigsize.pot_terminal.databinding.BoxOperationPage02Binding
+import com.bigsize.pot_terminal.model.*
 import com.bigsize.pot_terminal.viewmodel.BoxOperationPage01 as VM_BoxOperationPage01
 import com.bigsize.pot_terminal.viewmodel.BoxOperationPage02 as VM_BoxOperationPage02
 import com.bigsize.pot_terminal.adapter.BoxOperationPage01 as AD_BoxOperationPage01
 import com.bigsize.pot_terminal.adapter.BoxOperationPage02 as AD_BoxOperationPage02
 
-class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
+class BoxOperationPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback {
   private lateinit var activity01:BoxOperation
 
   private val binding01:BoxOperationPage01Binding by dataBinding()
@@ -37,7 +35,6 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
 
   private lateinit var adapter01:AD_BoxOperationPage01
   private lateinit var adapter02:ArrayAdapter<String>
-  private lateinit var adapter03:ArrayAdapter<String>
 
   private val model01:AppUtility = AppUtility()
 
@@ -56,6 +53,9 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
     binding01.viewmodel = viewModel01
 
     // ■ アダプタを初期化します
+
+    adapter02 = ArrayAdapter( context!!, R.layout.box_operation_page01_popup01, mutableListOf() )
+    binding01.txtBox.setAdapter( adapter02 )
 
     adapter01 = AD_BoxOperationPage01( context!!, mutableListOf() )
     binding01.lstView01.adapter = adapter01
@@ -96,6 +96,20 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
       }
     })
 
+    viewModel01.boxList.observe( this, Observer<MutableList<HashItem>> {
+      it ?: return@Observer
+      if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "箱ラベルセレクトボックス内容更新" )
+
+      // 箱ラベル名を抽出します
+      var menuItems:MutableList<String> = mutableListOf()
+      for( _item in viewModel01.boxList.value as MutableList<HashItem> ) { menuItems.add( _item.item ) }
+
+      // アダプタデータを更新します
+      adapter02.clear()
+      adapter02.addAll( menuItems )
+      adapter02.notifyDataSetChanged()
+    })
+
     viewModel01.itemList.observe( this, Observer<MutableList<PotDataModel01>> {
       it ?: return@Observer
       if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "商品データ内容更新" )
@@ -109,6 +123,10 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
       // アダプタデータを更新します
       adapter01.refreshItem( ( viewModel01.itemList.value as MutableList<PotDataModel01> ) )
     })
+
+    // ■ イベントを補足します
+
+    binding01.txtBox.setOnItemClickListener( this )
   }
 
   override fun onAttach( context:Context ) {
@@ -125,12 +143,16 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
-    // "箱ラベル・店舗名・箱ラベル背景色・全データ数・POTで読んだデータ数"の表示をクリアします
+    // "箱出対象箱ラベル・箱ラベル・店舗名・箱ラベル背景色・全データ数・POTで読んだデータ数"の表示をクリアします
+    binding01.txtBox.setText( "", false )
     viewModel01.txtBoxno.value = ""
     viewModel01.txtShopname.value = ""
     viewModel01.bkgBoxno.value = "N"
     viewModel01.cntTotal.value = "0"
     viewModel01.cntRead.value = "0"
+
+    // 箱ラベルデータを取得します
+    viewModel01.pickBoxList()
 
     // アダプタデータを更新します
     adapter01.refreshItem( mutableListOf<PotDataModel01>() )
@@ -139,7 +161,8 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
   override fun onPause() {
     super.onPause()
 
-    // 入力した箱ラベルをクリアします
+    // "箱出対象箱ラベル・箱ラベル"をクリアします
+    binding01.txtBox.setText( "", false )
     viewModel01.inputedBoxno = ""
   }
 
@@ -150,11 +173,54 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
   }
 
   /**
-   * ダイアログで実行する処理を実装します
+   * アイテムが選択された時に呼ばれるリスナー定義です
    */
-  override fun fromMessageDialog( callbackType:String ) {
-    // Wifi電波レベルが低下した場合
-    if( callbackType == "04" ) startActivityForResult( Intent( Settings.Panel.ACTION_WIFI ), 0 )
+  override fun onItemClick(parent:AdapterView<*>,v:View,position:Int,id:Long ) {
+    var item:String? = null
+
+    // アイテムが選択されたタイミングでエラーは解消します
+    binding01.layBoxno.error = null
+
+    activity01.claimSound( activity01.playSoundOK )
+    activity01.claimVibration( AppBase.vibrationOK )
+
+    when( v.id ) {
+      R.id.itm_box -> { // 箱ラベル選択
+        item = adapter02.getItem( position )
+
+        // 箱ラベルIDを決定します
+        var position:Int = ( viewModel01.boxList.value as MutableList<HashItem> ).indexOfFirst { it.item == item }
+        var boxID:String = ( viewModel01.boxList.value as MutableList<HashItem> )[position].id
+
+        if( boxID != "" ) {
+          if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "選択アイテム - 箱ラベル = " + boxID + " " + item )
+
+          // 今回読んだ箱ラベルを表示します
+          viewModel01.txtBoxno.value = boxID
+
+          // 箱ラベル背景色を決定します
+          if( boxID.substring( 0, 1 ) == "A" ) viewModel01.bkgBoxno.value = "A"
+          if( boxID.substring( 0, 1 ) == "B" ) viewModel01.bkgBoxno.value = "B"
+          if( boxID.substring( 0, 1 ) == "C" ) viewModel01.bkgBoxno.value = "C"
+          if( boxID.substring( 0, 1 ) == "D" ) viewModel01.bkgBoxno.value = "D"
+          if( boxID.substring( 0, 1 ) == "E" ) viewModel01.bkgBoxno.value = "E"
+
+          // 今回選択した箱ラベルを記録します
+          viewModel01.inputedBoxno = boxID
+
+          // 箱ラベルから店舗名と商品を取得します
+          viewModel01.pickItemList()
+        } else {
+          // "箱ラベル・店舗名・箱ラベル背景色・全データ数・POTで読んだデータ数"の表示をクリアします
+          viewModel01.txtBoxno.value = ""
+          viewModel01.txtShopname.value = ""
+          viewModel01.bkgBoxno.value = "N"
+          viewModel01.cntTotal.value = "0"
+          viewModel01.cntRead.value = "0"
+        }
+      }
+      else -> {}
+    }
   }
 
   /**
@@ -180,8 +246,13 @@ class BoxOperationPage01:Fragment(),DialogCallback,ScanCallback {
     activity01.claimSound( activity01.playSoundOK )
     activity01.claimVibration( AppBase.vibrationOK )
 
+    // "箱出対象箱ラベル"をクリアします
+    binding01.txtBox.setText( "", false )
+
     // 今回読んだ箱ラベルを表示します
     viewModel01.txtBoxno.value = scanBox.substring( 3 )
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "読み込みアイテム - 箱ラベル = " + scanBox )
 
     // 箱ラベル背景色を決定します
     if( scanBox.substring( 3, 4 ) == "A" ) viewModel01.bkgBoxno.value = "A"

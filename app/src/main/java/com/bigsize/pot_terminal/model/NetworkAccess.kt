@@ -154,6 +154,41 @@ class BoxOperationAPI {
     .build()
 
   /**
+   * 箱ラベル情報を取得します
+   *
+   * @param [accessURL] サーバプログラムのURL
+   * @return 箱ラベルデータ
+   */
+  public suspend fun pickBoxList( accessURL:String ):Pair<String,MutableList<HashItem>> {
+    val formBody = FormBody.Builder()
+      .add( "mode", "S" )
+      .add( "kind", "B" )
+      .build()
+
+    val request = Request.Builder()
+      .url( accessURL )
+      .post( formBody )
+      .build()
+
+    val resJSON = withContext( Dispatchers.IO ) {
+      httpClient.newCall( request ).execute().use { response ->
+        if( ! response.isSuccessful ) { throw IOException( "$response" ) }
+
+        response.body?.string()
+      }
+    }
+
+    val tempList:MutableList<HashItem> = mutableListOf()
+    val apiResponseBody:APIHashItemModel = Json.decodeFromString<APIHashItemModel>( resJSON!! )
+
+    apiResponseBody.itemArray.forEach {
+      tempList.add( HashItem( it.id, it.item ) )
+    }
+
+    return Pair( apiResponseBody.status, tempList )
+  }
+
+  /**
    * 箱ラベルの情報を取得します
    *
    * @param [accessURL] サーバプログラムのURL

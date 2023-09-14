@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="windowsサーバー" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="windowsサーバー">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/bin" local="$PROJECT_DIR$/../deadline_system/bin" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

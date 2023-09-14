@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1529b69e-2368-4e17-adcd-c368682bda3e" name="windowsサーバー">
+        <fileTransfer rootFolder="/C:/MyProgram/Monthly_Deadline" accessType="SFTP" host="10.211.55.10" port="22" sshConfigId="730915cf-99f2-4761-9e35-25c5d0aea90a" sshConfig="windowsサーバー">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

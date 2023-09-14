@@ -15,6 +15,7 @@ import java.io.IOException
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.BoxOperationAPI
+import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.PotDataModel01
 
 class BoxOperationPage01:ViewModel() {
@@ -27,6 +28,10 @@ class BoxOperationPage01:ViewModel() {
   // 全データ数とPOTで読んだデータ数
   public val cntTotal:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
   public val cntRead:MutableLiveData<String> by lazy { MutableLiveData( "0" ) }
+
+  // 箱ラベルリスト
+  private val _boxList:MutableLiveData<MutableList<HashItem>> = MutableLiveData()
+  public val boxList:LiveData<MutableList<HashItem>> get() = _boxList
 
   // 箱ラベルと箱ラベル背景色と店舗名
   public val txtBoxno:MutableLiveData<String> by lazy { MutableLiveData( "" ) }
@@ -41,6 +46,26 @@ class BoxOperationPage01:ViewModel() {
   public val itemList:LiveData<MutableList<PotDataModel01>> get() = _itemList
 
   init {}
+
+  /**
+   * 箱ラベルデータを取得します
+   */
+  public fun pickBoxList() {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        val pairHash01 = model01.pickBoxList( AppBase.boxOperationURL )
+        _boxList.value = pairHash01.second
+
+        _apiCondition.value = "FN99"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxOperation", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
 
   /**
    * 箱ラベルから店舗名と商品を取得します
