@@ -150,15 +150,31 @@ class BoxShippingPage01:ViewModel() {
       try {
         val pairHash01 = model01.finishShipping( AppBase.boxShippingURL, selectedGroupID, selectedShopID )
 
-        // 箱出が正常に完了したら箱ラベルに商品が残っていないかをチェックします
-        if( pairHash01.first == "OK" ) {
-          val pairHash02 = model02.pickItemList( AppBase.boxOperationURL, selectedBoxno )
-
-          if( pairHash02.second.size != 0 ) _apiCondition.value = "AL03"
-          if( pairHash02.second.size == 0 ) _apiCondition.value = "FN01"
-        }
-
+        if( pairHash01.first == "OK" ) _apiCondition.value = "FN01"
         if( pairHash01.first == "NG" ) _apiCondition.value = "AL01"
+      } catch( e:Exception ) {
+        if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
+        _apiCondition.value = "ER"
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * 商品の残数チェックを行います
+   */
+  public fun checkItemRest() {
+    viewModelScope.launch {
+      _apiCondition.value = "ST"
+
+      try {
+        val pairHash02 = model02.pickItemList( AppBase.boxOperationURL, selectedBoxno )
+
+        // 棚出状況に変化があったので店舗データと商品データを再取得します
+        pickShopList()
+        pickItemList()
+
+        if( pairHash02.second.size != 0 ) _apiCondition.value = "AL03"
       } catch( e:Exception ) {
         if( BuildConfig.DEBUG ) Log.d( "APP-BoxShipping", "致命的エラー" )
         _apiCondition.value = "ER"

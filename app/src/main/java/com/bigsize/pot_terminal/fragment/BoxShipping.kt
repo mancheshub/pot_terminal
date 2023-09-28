@@ -1,7 +1,9 @@
 package com.bigsize.pot_terminal.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,15 +18,10 @@ import com.bigsize.pot_terminal.R
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BoxShipping
 import com.bigsize.pot_terminal.BuildConfig
-import com.bigsize.pot_terminal.model.AppUtility
-import com.bigsize.pot_terminal.model.MessageDialog
-import com.bigsize.pot_terminal.model.HashItem
-import com.bigsize.pot_terminal.model.PotDataModel01
-import com.bigsize.pot_terminal.model.PotDataModel05
-import com.bigsize.pot_terminal.model.ScanCallback
 import com.bigsize.pot_terminal.databinding.BoxShippingPage01Binding
 import com.bigsize.pot_terminal.databinding.BoxShippingPage02Binding
 import com.bigsize.pot_terminal.databinding.BoxShippingPage03Binding
+import com.bigsize.pot_terminal.model.*
 import com.bigsize.pot_terminal.viewmodel.BoxShippingPage01 as VM_BoxShippingPage01
 import com.bigsize.pot_terminal.viewmodel.BoxShippingPage02 as VM_BoxShippingPage02
 import com.bigsize.pot_terminal.viewmodel.BoxShippingPage03 as VM_BoxShippingPage03
@@ -32,7 +29,7 @@ import com.bigsize.pot_terminal.adapter.BoxShippingPage01 as AD_BoxShippingPage0
 import com.bigsize.pot_terminal.adapter.BoxShippingPage02 as AD_BoxShippingPage02
 import com.bigsize.pot_terminal.adapter.BoxShippingPage03 as AD_BoxShippingPage03
 
-class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback {
+class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,DialogCallback,ScanCallback {
   private lateinit var activity01:BoxShipping
 
   private val binding01:BoxShippingPage01Binding by dataBinding()
@@ -44,7 +41,7 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
 
   private val model01:AppUtility = AppUtility()
 
-  private var dialogERR:MessageDialog? = null
+  private var dialogERR:MessageDialogF? = null
 
   override fun onCreateView( inflater:LayoutInflater, container:ViewGroup?, savedInstanceState:Bundle? ):View? {
     return inflater.inflate( R.layout.box_shipping_page01, container, false )
@@ -98,18 +95,11 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
         if( apiCondition == "AL02" ) { message = getString( R.string.alt_box_shipping01 ); }
         if( apiCondition == "AL03" ) { message = getString( R.string.alt_box_shipping02 ); }
 
-        // AL03の場合は完了後の処理だから店舗の棚出状況に変化があったので店舗データと商品データを再取得します
-
-        if( apiCondition == "AL03" ) {
-          viewModel01.pickShopList()
-          viewModel01.pickItemList()
-        }
-
         activity01.claimSound( activity01.playSoundNG )
         activity01.claimVibration( AppBase.vibrationNG )
 
-        val dialog:MessageDialog = MessageDialog( "00", "警告", message, "OK", "" )
-        dialog.show( parentFragmentManager, "simple" )
+        val dialog:MessageDialogF = MessageDialogF( "00", "警告", message, "OK", "" )
+        dialog.show( childFragmentManager, "simple" )
       }
 
       // プログレスバーを消します - 異常終了
@@ -120,8 +110,8 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
         activity01.claimSound( activity01.playSoundNG )
         activity01.claimVibration( AppBase.vibrationNG )
 
-        val dialog:MessageDialog = MessageDialog( "00", "通信エラー", getString( R.string.err_communication01 ), "OK", "" )
-        dialog.show( parentFragmentManager, "simple" )
+        val dialog:MessageDialogF = MessageDialogF( "00", "通信エラー", getString( R.string.err_communication01 ), "OK", "" )
+        dialog.show( childFragmentManager, "simple" )
       }
 
       // プログレスバーを消します - 正常終了
@@ -135,17 +125,13 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
       if( regex.containsMatchIn( apiCondition ) == true ) {
         binding01.prgView01.visibility = android.widget.ProgressBar.INVISIBLE
 
-        // いずれの処理も店舗の棚出状況に変化があったので店舗データと商品データを再取得します
-        viewModel01.pickShopList()
-        viewModel01.pickItemList()
-
         // 完了ダイアログを表示します
 
         activity01.claimSound( activity01.playSoundFN )
         activity01.claimVibration( AppBase.vibrationFN )
 
-        val dialog:MessageDialog = MessageDialog( "00", "完了", getString( R.string.msg_box_shipping01 ), "OK", "" )
-        dialog.show( parentFragmentManager, "simple" )
+        val dialog:MessageDialogF = MessageDialogF( "01", "完了", getString( R.string.msg_box_shipping01 ), "OK", "" )
+        dialog.show( childFragmentManager, "simple" )
       }
     })
 
@@ -231,6 +217,14 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
 
     // 伝発グループ変更により店舗データがクリアされたので商品データを再取得します
     viewModel01.pickItemList()
+  }
+
+  /**
+   * ダイアログで実行する処理を実装します
+   */
+  override fun fromMessageDialog( callbackType:String ) {
+    // 箱出が完了した場合
+    if( callbackType == "01" ) viewModel01.checkItemRest()
   }
 
   override fun onPause() {
@@ -355,8 +349,8 @@ class BoxShippingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCallback 
       activity01.claimSound( activity01.playSoundNG )
       activity01.claimVibration( AppBase.vibrationNG )
 
-      dialogERR = MessageDialog( "00", "", getString( R.string.err_box_shipping01 ), "OK", "" )
-      dialogERR?.show( parentFragmentManager, "simple" )
+      dialogERR = MessageDialogF( "00", "", getString( R.string.err_box_shipping01 ), "OK", "" )
+      dialogERR?.show( childFragmentManager, "simple" )
     } else {
       activity01.claimSound( activity01.playSoundOK )
       activity01.claimVibration( AppBase.vibrationOK )
