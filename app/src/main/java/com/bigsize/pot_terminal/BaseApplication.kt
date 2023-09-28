@@ -14,7 +14,7 @@ class AppBase:Application() {
     // 社内LAN : in-hightech-jp.corp.bigsize.com
     // 社外LAN : ot-hightech-jp.corp.bigsize.com
     // ｴﾐｭﾚｰﾀｰ : 10.0.2.2
-    private val fqdnURL:String = "in-hightech-jp.corp.bigsize.com"
+    private val fqdnURL:String = "hightech.bigsize.co.jp"
 
     // Applicationインスタンス
     public lateinit var app:Application
