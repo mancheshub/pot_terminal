@@ -134,7 +134,7 @@ class FileOperation() {
       )
     }
 
-    return dataArray
+    return dataArray.sortedByDescending { it.time }.toMutableList()
   }
 
   /**
