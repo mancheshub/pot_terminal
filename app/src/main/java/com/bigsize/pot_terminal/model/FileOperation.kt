@@ -12,6 +12,7 @@ import java.nio.file.StandardOpenOption
 
 class FileOperation() {
   private val model01:AppUtility = AppUtility()
+  private val model02:PreferencesOperation = PreferencesOperation()
 
   /**
    * 端末番号を取得します
@@ -155,7 +156,7 @@ class FileOperation() {
     lateinit var fileData:String
 
     for( _item in dataArray ) {
-      fileData =  AppBase.deviceNO + _item.date + _item.time + _item.staffNO + division + _item.location01 + _item.location02 +
+      fileData =  model02.readDeviceNO() + _item.date + _item.time + _item.staffNO + division + _item.location01 + _item.location02 +
                   model01.convertTrueCd(_item.cd).padStart(10,'0') + _item.cn + _item.sz.padEnd(4,' ') + _item.amt.padStart(3,'0')
       fileArray.add( fileData )
     }

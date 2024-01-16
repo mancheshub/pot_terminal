@@ -2,7 +2,6 @@ package com.bigsize.pot_terminal.adapter
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater

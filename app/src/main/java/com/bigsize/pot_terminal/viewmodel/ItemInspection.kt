@@ -10,9 +10,7 @@ import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.HashItem
 import com.bigsize.pot_terminal.model.ItemInspectionAPI
 import com.bigsize.pot_terminal.model.PotDataModel03
-import kotlinx.serialization.json.Json
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class ItemInspection:ViewModel() {
   private var model01:ItemInspectionAPI = ItemInspectionAPI()
@@ -124,7 +122,7 @@ class ItemInspection:ViewModel() {
 
         // 検品状態を確認します
         if( flagExclusive == "exeExclusive" ) {
-          val pairHash01 = model01.updateSituation( AppBase.itemInspectionURL, "SI-check", selectedGroupID, selectedShopID, AppBase.staffNO )
+          val pairHash01 = model01.updateSituation( AppBase.itemInspectionURL, "SI-check", selectedGroupID, selectedShopID )
           apiExclusive = pairHash01.second
         }
 
@@ -137,7 +135,7 @@ class ItemInspection:ViewModel() {
         if( apiExclusive == "999" ) {
           // 検品開始状態とします
           if( flagExclusive == "exeExclusive" ) {
-            val pairHash02 = model01.updateSituation( AppBase.itemInspectionURL, "SI-start", selectedGroupID, selectedShopID, AppBase.staffNO )
+            val pairHash02 = model01.updateSituation( AppBase.itemInspectionURL, "SI-start", selectedGroupID, selectedShopID )
           }
 
           // 商品データを取得します
@@ -173,7 +171,7 @@ class ItemInspection:ViewModel() {
         // - 自身が担当者でない場合は isExecute01 == "0"  となるのでエラー画面をActivityから出力します
         // - 自身が担当者である場合は isExecute01 != "0"  となるのでそのままクリア処理を実施します
         if( kind == "01" && isExecute01 == "" ) {
-          val pairHash01 = model01.pickSICondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID, AppBase.staffNO )
+          val pairHash01 = model01.pickSICondition( AppBase.itemInspectionURL, selectedGroupID, selectedShopID )
           isExecute01 = pairHash01.second
         }
 
@@ -191,10 +189,10 @@ class ItemInspection:ViewModel() {
           model01.deceded( AppBase.itemInspectionURL, kind, selectedGroupID, selectedShopID, selectedBoxID, selectedPrintID, ( itemList.value as MutableList<PotDataModel03> ) )
 
           // 検品完了状態とします
-          if( kind == "03" ) { val pairHash03 = model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID, AppBase.staffNO ) }
+          if( kind == "03" ) { val pairHash03 = model01.updateSituation( AppBase.itemInspectionURL, "SI-close", selectedGroupID, selectedShopID ) }
 
           // 検品取消状態とします
-          if( kind == "01" ) { val pairHash04 = model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID, AppBase.staffNO ) }
+          if( kind == "01" ) { val pairHash04 = model01.updateSituation( AppBase.itemInspectionURL, "SI-stop", selectedGroupID, selectedShopID ) }
 
           _apiCondition.value = "FN" + kind
         } else {

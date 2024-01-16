@@ -245,7 +245,7 @@ open class CommonBase:AppCompatActivity() {
       R.id.iconItem01 -> {
         if( BuildConfig.DEBUG ) Log.d( "APP-CommonBase", "メニュー01ボタンが選択されました。" )
 
-        val dialog = StaffNODialog( AppBase.staffNO )
+        val dialog = StaffNODialog()
         dialog.show( supportFragmentManager, "simple" )
       }
       else -> {}
@@ -498,13 +498,7 @@ open class DensoWaveBase:CommonBase(),BarcodeManagerListener,BarcodeDataListener
             claimVibration( AppBase.vibrationAR )
           }
 
-          // スタッフ番号が不意にクリアされてしまった場合はエラーとします
-
-          if( readFlag == "OK" && AppBase.staffNO == "000" ) {
-            val intent = Intent( applicationContext, Failure::class.java )
-            intent.putExtra( "MESSAGE", getString( R.string.err_communication02 ) )
-            startActivity( intent )
-          } else if( readFlag == "OK" && AppBase.staffNO != "000" ) {
+          if( readFlag == "OK" ) {
             if( _data.substring( 0, 3 ) == "M-P" ) _scanMultiItem.value = _data
             if( _data.substring( 0, 3 ) == "M-L" ) _scanShelf.value = _data
             if( _data.substring( 0, 3 ) == "M-C" ) _scanBox.value = _data

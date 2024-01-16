@@ -7,16 +7,14 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.CheckBox
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.model.DialogCallback
-import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.model.MessageDialog
 import com.bigsize.pot_terminal.databinding.DataTransferBinding
+import com.bigsize.pot_terminal.model.PreferencesOperation
 import com.bigsize.pot_terminal.viewmodel.DataTransfer as VM_DataTransfer
 import com.bigsize.pot_terminal.adapter.DataTransfer as AD_DataTransfer
 
@@ -25,9 +23,8 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
   private val viewModel01:VM_DataTransfer by viewModels()
 
   private lateinit var adapter01:AD_DataTransfer
-  private lateinit var adapter02:ArrayAdapter<String>
 
-  private var model01:FileOperation = FileOperation()
+  private var model01:PreferencesOperation = PreferencesOperation()
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
@@ -151,7 +148,7 @@ class DataTransfer:DensoWaveBase(),View.OnClickListener,DialogCallback {
       }
 
       // POTデータをアップロードします
-      viewModel01.uploadPOTData( AppBase.deviceNO )
+      viewModel01.uploadPOTData( model01.readDeviceNO() )
     }
 
     // Wifi電波レベルが低下した場合

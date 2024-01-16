@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.LocationConfirmAPI
-import com.bigsize.pot_terminal.model.PotDataModel02
 import com.bigsize.pot_terminal.model.PotDataModel04
 import kotlinx.coroutines.launch
 

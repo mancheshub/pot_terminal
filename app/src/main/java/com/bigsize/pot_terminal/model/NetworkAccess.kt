@@ -1,13 +1,9 @@
 package com.bigsize.pot_terminal.model
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.bigsize.pot_terminal.BuildConfig
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -713,6 +709,7 @@ class BoxShippingAPI {
 
 class ItemInspectionAPI {
   private val model01:AppUtility = AppUtility()
+  private val model02:PreferencesOperation = PreferencesOperation()
 
   private val httpClient = OkHttpClient.Builder()
     .connectTimeout( 10, TimeUnit.SECONDS )
@@ -837,16 +834,15 @@ class ItemInspectionAPI {
    * @param [accessURL] サーバプログラムのURL
    * @param [groupID] 作業グループID
    * @param [shopID] 店舗ID
-   * @param [staffID] スタッフID
    * @return 店舗データ
    */
-  public suspend fun pickSICondition( accessURL:String, groupID:String, shopID:String, staffID:String ):Pair<String,String> {
+  public suspend fun pickSICondition( accessURL:String, groupID:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "S" )
       .add( "kind", "SI" )
       .add( "groupID", groupID )
       .add( "shopID", shopID )
-      .add( "staffID", staffID )
+      .add( "staffID", model02.readStaffNO() )
       .build()
 
     val request = Request.Builder()
@@ -959,16 +955,15 @@ class ItemInspectionAPI {
    * @param [kind] 処理区分 01 : クリア 02 : 箱確定 03 : 確定
    * @param [groupID] 作業グループID
    * @param [shopID] 店舗ID
-   * @param [staffID] スタッフID
    * @return 排他結果
    */
-  public suspend fun updateSituation( accessURL:String, kind:String, groupID:String, shopID:String, staffID:String ):Pair<String,String> {
+  public suspend fun updateSituation( accessURL:String, kind:String, groupID:String, shopID:String ):Pair<String,String> {
     val formBody = FormBody.Builder()
       .add( "mode", "U" )
       .add( "kind", kind )
       .add( "groupID", groupID )
       .add( "shopID", shopID )
-      .add( "staffID", staffID )
+      .add( "staffID", model02.readStaffNO() )
       .build()
 
     val request = Request.Builder()

@@ -14,18 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bigsize.pot_terminal.*
 import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.adapter.ItemInspection
 import com.bigsize.pot_terminal.databinding.CollationReceivingPage01Binding
 import com.bigsize.pot_terminal.databinding.CollationReceivingPage02Binding
 import com.bigsize.pot_terminal.databinding.CollationReceivingPage03Binding
-import com.bigsize.pot_terminal.model.AppUtility
-import com.bigsize.pot_terminal.model.FileOperation
-import com.bigsize.pot_terminal.model.ScanCallback
-import com.bigsize.pot_terminal.model.KeyCallback
-import com.bigsize.pot_terminal.model.MessageDialog
-import com.bigsize.pot_terminal.model.HashItem
-import com.bigsize.pot_terminal.model.PotDataModel02
-import com.bigsize.pot_terminal.model.PotDataModel04
+import com.bigsize.pot_terminal.model.*
 import com.bigsize.pot_terminal.viewmodel.CollationReceivingPage01 as VM_CollationReceivingPage01
 import com.bigsize.pot_terminal.viewmodel.CollationReceivingPage02 as VM_CollationReceivingPage02
 import com.bigsize.pot_terminal.viewmodel.CollationReceivingPage03 as VM_CollationReceivingPage03
@@ -44,6 +36,7 @@ class CollationReceivingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCa
 
   private val model01:AppUtility = AppUtility()
   private val model02:FileOperation = FileOperation()
+  private val model03:PreferencesOperation = PreferencesOperation()
 
   private var dialogFIN:MessageDialog? = null
   private var dialogERR:MessageDialog? = null
@@ -602,7 +595,7 @@ class CollationReceivingPage01:Fragment(),AdapterView.OnItemClickListener,ScanCa
     val dateHash:Map<String,String> = model01.returnPRecodeDate()
 
     dataArray.add( PotDataModel02(
-      AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,
+      model03.readDeviceNO(), dateHash["date"]!!, dateHash["time"]!!, model03.readStaffNO(), devision,
       viewModel01.inputedCd, viewModel01.inputedCn, viewModel01.inputedSz,
       "00000000000", viewModel01.inputedLocation, amt, false,
     ) )
@@ -630,6 +623,7 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
 
   private val model01:AppUtility = AppUtility()
   private val model02:FileOperation = FileOperation()
+  private val model03:PreferencesOperation = PreferencesOperation()
 
   private var dialogFIN:MessageDialog? = null
   private var dialogERR:MessageDialog? = null
@@ -1123,7 +1117,7 @@ class CollationReceivingPage02:Fragment(),AdapterView.OnItemClickListener,ScanCa
     val dateHash:Map<String,String> = model01.returnPRecodeDate()
 
     dataArray.add( PotDataModel02(
-      AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,
+      model03.readDeviceNO(), dateHash["date"]!!, dateHash["time"]!!, model03.readStaffNO(), devision,
       viewModel01.inputedCd, viewModel01.inputedCn, viewModel01.inputedSz,
       "00000000000", viewModel01.inputedLocation, amt, false,
     ) )

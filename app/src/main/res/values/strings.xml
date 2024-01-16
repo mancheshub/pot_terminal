@@ -35,7 +35,7 @@
   <string name="err_shelf_replace_b02">出棚を読んでください。</string>
   <string name="err_shelf_replace_b03">入棚を読んでください。</string>
 
-  <string name="err_inventory01">1のみ入力できます。</string>
+  <string name="err_inventory01">1以外は入力できません。</string>
   <string name="err_inventory02">検棚を読んでください。</string>
   <string name="err_inventory03">商品を読んでください。</string>
   <string name="err_inventory04">1＋ENTで確定してください。</string>

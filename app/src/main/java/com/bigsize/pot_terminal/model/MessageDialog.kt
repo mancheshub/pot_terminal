@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +18,10 @@ import androidx.fragment.app.DialogFragment
 import com.bigsize.pot_terminal.*
 
 
-class StaffNODialog( val staffNO:String ):DialogFragment() {
+class StaffNODialog():DialogFragment() {
   private lateinit var dialog:AlertDialog
+
+  private val model01:PreferencesOperation = PreferencesOperation()
 
   override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
     val builder = AlertDialog.Builder( activity )
@@ -39,7 +40,7 @@ class StaffNODialog( val staffNO:String ):DialogFragment() {
     builder.setCustomTitle( txtView )
     builder.setView( view )
 
-    view.findViewById<TextView>( R.id.txt_number ).text = "スタッフ番号 " + staffNO + " でログイン中 ..."
+    view.findViewById<TextView>( R.id.txt_number ).text = "スタッフ番号 " + model01.readStaffNO() + " でログイン中 ..."
 
     builder.setNegativeButton( "閉じる" ) { dialog, id ->
       dialog.dismiss();
@@ -75,10 +76,10 @@ class StaffNODialog( val staffNO:String ):DialogFragment() {
   }
 }
 
-class DeviceNODialog( val deviceNO:String ):DialogFragment() {
+class DeviceNODialog():DialogFragment() {
   private lateinit var dialog:AlertDialog
 
-  private val model01:FileOperation = FileOperation()
+  private val model01:PreferencesOperation = PreferencesOperation()
 
   override fun onCreateDialog( savedInstanceState:Bundle? ):Dialog {
     val builder = AlertDialog.Builder( activity )
@@ -99,24 +100,21 @@ class DeviceNODialog( val deviceNO:String ):DialogFragment() {
 
     val txtNumber = view.findViewById<EditText>( R.id.txt_number )
 
-      builder.setPositiveButton( "設定" ) { dialog, id ->
-        try {
-          model01.saveDeviceNO( "OVERWRITE", txtNumber.text.toString() )
-        } catch( e:Exception ) {
-          val intent = Intent( activity, Failure::class.java )
-          intent.putExtra( "MESSAGE", "端末番号を保存できませんでした。" )
-          startActivity( intent )
-        }
-
-        // 端末番号を書き換えます
-        AppBase.deviceNO = txtNumber.text.toString()
-
-        dialog.dismiss();
+    builder.setPositiveButton( "設定" ) { dialog, id ->
+      try {
+        model01.saveDeviceNO( txtNumber.text.toString() )
+      } catch( e:Exception ) {
+        val intent = Intent( activity, Failure::class.java )
+        intent.putExtra( "MESSAGE", "端末番号を保存できませんでした。" )
+        startActivity( intent )
       }
 
-      builder.setNegativeButton( "閉じる" ) { dialog, id ->
-        dialog.dismiss();
-      }
+      dialog.dismiss();
+    }
+
+    builder.setNegativeButton( "閉じる" ) { dialog, id ->
+      dialog.dismiss();
+    }
 
     // 戻るボタンでダイアログを閉じないようにします
     setCancelable( false )

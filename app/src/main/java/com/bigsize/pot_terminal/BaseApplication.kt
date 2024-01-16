@@ -14,19 +14,13 @@ class AppBase:Application() {
     // 社内LAN : in-hightech-jp.corp.bigsize.com
     // 社外LAN : ot-hightech-jp.corp.bigsize.com
     // ｴﾐｭﾚｰﾀｰ : 10.0.2.2
-    private val fqdnURL:String = "hightech.bigsize.co.jp"
+    private val fqdnURL:String = "ot-hightech-jp.corp.bigsize.com"
 
     // Applicationインスタンス
     public lateinit var app:Application
 
     // アクティビティインスタンス
     public var activitySet:MutableSet<Activity> = mutableSetOf()
-
-    // 端末番号
-    public var deviceNO:String = "000"
-
-    // スタッフ番号
-    public var staffNO:String = "000"
 
     // POTデータ種別
     public var potDivision:List<PotDivision> = listOf(

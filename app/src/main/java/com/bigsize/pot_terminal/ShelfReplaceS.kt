@@ -11,6 +11,7 @@ import com.bigsize.pot_terminal.model.AppUtility
 import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.model.PotDataModel02
 import com.bigsize.pot_terminal.databinding.ShelfReplaceSBinding
+import com.bigsize.pot_terminal.model.PreferencesOperation
 import com.bigsize.pot_terminal.viewmodel.ShelfReplaceS as VM_ShelfReplaceS
 
 class ShelfReplaceS:DensoWaveBase() {
@@ -19,6 +20,7 @@ class ShelfReplaceS:DensoWaveBase() {
 
   private val model01:AppUtility = AppUtility()
   private val model02:FileOperation = FileOperation()
+  private val model03:PreferencesOperation = PreferencesOperation()
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
@@ -330,7 +332,7 @@ class ShelfReplaceS:DensoWaveBase() {
     val dateHash:Map<String,String> = model01.returnPRecodeDate()
 
     dataArray.add( PotDataModel02(
-      AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,
+      model03.readDeviceNO(), dateHash["date"]!!, dateHash["time"]!!, model03.readStaffNO(), devision,
       viewModel01.inputedItem.substring( 0, 10 ), viewModel01.inputedItem.substring( 11, 13 ), viewModel01.inputedItem.substring( 14, 18 ),
       viewModel01.inputedLocation01, viewModel01.inputedLocation02, amt, false,
     ) )

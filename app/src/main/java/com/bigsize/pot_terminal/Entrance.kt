@@ -8,12 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import com.wada811.databinding.dataBinding
-import com.bigsize.pot_terminal.model.AppUtility
-import com.bigsize.pot_terminal.model.FileOperation
-import com.bigsize.pot_terminal.model.DeviceNODialog
-import com.bigsize.pot_terminal.model.MessageDialog
-import com.bigsize.pot_terminal.model.DialogCallback
 import com.bigsize.pot_terminal.databinding.EntranceBinding
+import com.bigsize.pot_terminal.model.*
 import com.bigsize.pot_terminal.viewmodel.Entrance
 
 class Entrance:DensoWaveBase(),DialogCallback {
@@ -21,7 +17,7 @@ class Entrance:DensoWaveBase(),DialogCallback {
   private val viewModel01:Entrance by viewModels()
 
   private val model01:AppUtility = AppUtility()
-  private val model02:FileOperation = FileOperation()
+  private val model02:PreferencesOperation = PreferencesOperation()
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
@@ -67,7 +63,7 @@ class Entrance:DensoWaveBase(),DialogCallback {
         finish()
       }
       R.id.iconItem01 -> {
-        val dialog = DeviceNODialog( model02.readDeviceNO() )
+        val dialog = DeviceNODialog()
         dialog.show( supportFragmentManager, "simple" )
       }
       R.id.iconItem02 -> {
@@ -131,17 +127,9 @@ class Entrance:DensoWaveBase(),DialogCallback {
       return super.dispatchKeyEvent( event )
     }
 
-    // ■ スタッフ番号をグローバル変数にセットします
+    // ■ 端末番号の有無をチェックします
 
-    AppBase.staffNO = viewModel01.txtNumber.value.toString().padStart( 3, '0' )
-
-    if( BuildConfig.DEBUG ) Log.d( "APP-Entrance", "スタッフ番号 = " + AppBase.staffNO )
-
-    // ■ 端末番号をグローバル変数にセットします
-
-    AppBase.deviceNO = model02.readDeviceNO()
-
-    if( AppBase.deviceNO == "" ) {
+    if( model02.readDeviceNO()== "" ) {
       val intent = Intent( applicationContext, Failure::class.java )
       intent.putExtra( "MESSAGE", "端末番号がセットアップされていません。" )
       startActivity( intent )
@@ -149,6 +137,12 @@ class Entrance:DensoWaveBase(),DialogCallback {
       val intent = Intent( applicationContext, Lineup::class.java )
       startActivity( intent )
     }
+
+    // ■ スタッフ番号をPreferencesに保存します
+
+    model02.saveStaffNO( viewModel01.txtNumber.value.toString().padStart( 3, '0' ) )
+
+    if( BuildConfig.DEBUG ) Log.d( "APP-Entrance", "スタッフ番号 = " + model02.readStaffNO() )
 
     return super.dispatchKeyEvent( event )
   }

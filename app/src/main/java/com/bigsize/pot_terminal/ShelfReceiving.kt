@@ -11,6 +11,7 @@ import com.bigsize.pot_terminal.model.AppUtility
 import com.bigsize.pot_terminal.model.FileOperation
 import com.bigsize.pot_terminal.model.PotDataModel02
 import com.bigsize.pot_terminal.databinding.ShelfReceivingBinding
+import com.bigsize.pot_terminal.model.PreferencesOperation
 import com.bigsize.pot_terminal.viewmodel.ShelfReceiving as VM_ShelfReceiving
 
 class ShelfReceiving:DensoWaveBase() {
@@ -19,6 +20,7 @@ class ShelfReceiving:DensoWaveBase() {
 
   private val model01:AppUtility = AppUtility()
   private val model02:FileOperation = FileOperation()
+  private val model03:PreferencesOperation = PreferencesOperation()
 
   override fun onCreate( savedInstanceState:Bundle? ) {
     super.onCreate( savedInstanceState )
@@ -160,7 +162,7 @@ class ShelfReceiving:DensoWaveBase() {
 
     if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "前回の商品 = " + viewModel01.inputedItem )
 
-    if( AppBase.deviceNO == AppBase.specialDeviceNO && viewModel01.inputedItem != "" ) {
+    if( model03.readDeviceNO() == AppBase.specialDeviceNO && viewModel01.inputedItem != "" ) {
       // 入力チェックを行います
       if( inputCheck( "05" ) == false ) return false
 
@@ -180,9 +182,7 @@ class ShelfReceiving:DensoWaveBase() {
 
     // 特別動作する端末番号でない場合は数量に1を自動入力します
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-ShelfReceiving", "deviceNO specialDeviceNO = " + AppBase.deviceNO + " " + AppBase.specialDeviceNO )
-
-    if( AppBase.deviceNO != AppBase.specialDeviceNO ) viewModel01.edtAmt.value = "1"
+    if( model03.readDeviceNO() != AppBase.specialDeviceNO ) viewModel01.edtAmt.value = "1"
 
     // 数量を入力可能とします
     binding01.edtAmt.isEnabled = true
@@ -214,7 +214,7 @@ class ShelfReceiving:DensoWaveBase() {
 
     // 特別動作する端末番号でない場合は入棚をクリアします
 
-    if( AppBase.deviceNO != AppBase.specialDeviceNO ) {
+    if( model03.readDeviceNO() != AppBase.specialDeviceNO ) {
       viewModel01.inputedLocation = ""
       viewModel01.txtLocation.value = ""
     }
@@ -254,7 +254,7 @@ class ShelfReceiving:DensoWaveBase() {
       msgError03 = getString( R.string.err_edt_amt03 )
     }
 
-    if( msgError03 == "" && execSubject == "04" && AppBase.deviceNO != AppBase.specialDeviceNO && edtAmt != "1" ) {
+    if( msgError03 == "" && execSubject == "04" && model03.readDeviceNO() != AppBase.specialDeviceNO && edtAmt != "1" ) {
       msgError03 = getString( R.string.err_edt_amt04 )
     }
 
@@ -293,7 +293,7 @@ class ShelfReceiving:DensoWaveBase() {
     val dateHash:Map<String,String> = model01.returnPRecodeDate()
 
     dataArray.add( PotDataModel02(
-      AppBase.deviceNO, dateHash["date"]!!, dateHash["time"]!!, AppBase.staffNO, devision,
+      model03.readDeviceNO(), dateHash["date"]!!, dateHash["time"]!!, model03.readStaffNO(), devision,
       viewModel01.inputedItem.substring( 0, 10 ), viewModel01.inputedItem.substring( 11, 13 ), viewModel01.inputedItem.substring( 14, 18 ),
       "00000000000", viewModel01.inputedLocation, amt, false,
     ) )

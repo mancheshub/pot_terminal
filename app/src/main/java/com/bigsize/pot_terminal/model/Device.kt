@@ -1,10 +1,8 @@
 package com.bigsize.pot_terminal.model
 
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioManager
@@ -13,11 +11,8 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
-import com.bigsize.pot_terminal.BuildConfig
 import kotlin.math.roundToInt
 import kotlin.math.sin
-
 
 /**
  * bluetooth管理クラス

@@ -3,20 +3,11 @@ package com.bigsize.pot_terminal
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
 import com.wada811.databinding.dataBinding
 import com.bigsize.pot_terminal.databinding.ItemVerificationBinding
-import com.bigsize.pot_terminal.model.AppUtility
-import com.bigsize.pot_terminal.model.PotDataModel01
-import com.bigsize.pot_terminal.model.MessageDialog
-import com.bigsize.pot_terminal.model.DialogCallback
+import com.bigsize.pot_terminal.model.*
 import com.bigsize.pot_terminal.viewmodel.ItemVerification as VM_ItemVerification
 import com.bigsize.pot_terminal.adapter.ItemVerification as AD_ItemVerification
 
@@ -27,6 +18,7 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
   private lateinit var adapter01:AD_ItemVerification
 
   private val model01:AppUtility = AppUtility()
+  private val model02:PreferencesOperation = PreferencesOperation()
 
   private var dialogFIN:MessageDialog? = null
   private var dialogERR:MessageDialog? = null
@@ -53,10 +45,8 @@ class ItemVerification:DensoWaveBase(),DialogCallback {
 
     binding01.viewmodel = viewModel01
 
-    if( BuildConfig.DEBUG ) Log.d( "APP-ItemVerification", "デバイス番号 = " + AppBase.deviceNO + " " + AppBase.specialDeviceNO )
-
     // 上書きモードスイッチの初期値を設定します
-    if( AppBase.deviceNO == AppBase.specialDeviceNO ) binding01.swhMode01.isChecked = true
+    if( model02.readDeviceNO() == AppBase.specialDeviceNO ) binding01.swhMode01.isChecked = true
 
     // ■ アダプタを初期化します
 

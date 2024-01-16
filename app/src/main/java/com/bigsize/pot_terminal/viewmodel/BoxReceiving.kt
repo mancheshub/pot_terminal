@@ -9,8 +9,6 @@ import com.bigsize.pot_terminal.AppBase
 import com.bigsize.pot_terminal.BuildConfig
 import com.bigsize.pot_terminal.model.AssortHistory
 import com.bigsize.pot_terminal.model.BoxReceivingAPI
-import com.bigsize.pot_terminal.model.PotDataModel01
-import com.bigsize.pot_terminal.model.PotDataModel03
 import kotlinx.coroutines.launch
 
 class BoxReceiving: ViewModel() {
