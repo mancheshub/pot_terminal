@@ -40,6 +40,12 @@ class AppUtility {
     var trueData:String = ""
     var ii:String = ""
 
+    if( BuildConfig.DEBUG ) Log.d( "APP-Utility", "isNumber = " + isNumber(cdData) )
+    if( BuildConfig.DEBUG ) Log.d( "APP-Utility", "lenfth = " + cdData.length )
+
+    // 品番が9999999999の場合はisNumber()がfalseとなるのでここで判定します
+    if( cdData == "9999999999" ) { return cdData }
+
     // 10桁品番の場合はそのまま返却します
     if( isNumber(cdData) && cdData.length == 10 ) { return cdData }
 

@@ -48,6 +48,10 @@ class StaffNODialog():DialogFragment() {
 
     builder.setPositiveButton( "実行" ) { dialog, id ->
       val intent = Intent( activity, Entrance::class.java )
+
+      // スタッフ番号をpreferencesから削除します
+      model01.saveStaffNO( "" )
+
       startActivity( intent )
 
       // 全てのActivityを終了します
@@ -97,6 +101,8 @@ class DeviceNODialog():DialogFragment() {
 
     builder.setCustomTitle( txtView )
     builder.setView( view )
+
+    view.findViewById<TextView>( R.id.txt_number ).text = model01.readDeviceNO()
 
     val txtNumber = view.findViewById<EditText>( R.id.txt_number )
 

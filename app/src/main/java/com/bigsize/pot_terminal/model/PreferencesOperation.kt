@@ -13,7 +13,12 @@ class PreferencesOperation() {
     val sharedPref = AppBase.app.getSharedPreferences( "com.bigsize.pot_terminal.is_preferences", MODE_PRIVATE )
 
     val editor = sharedPref.edit()
-    editor.putString( "deviceNO", deviceNO ).apply()
+
+    if( deviceNO == "" ) {
+      editor.remove("deviceNO").apply()
+    } else {
+      editor.putString( "deviceNO", deviceNO ).apply()
+    }
   }
 
   /**
@@ -36,7 +41,12 @@ class PreferencesOperation() {
     val sharedPref = AppBase.app.getSharedPreferences( "com.bigsize.pot_terminal.is_preferences", MODE_PRIVATE )
 
     val editor = sharedPref.edit()
-    editor.putString( "staffNO", staffNO ).apply()
+
+    if( staffNO == "" ) {
+      editor.remove("staffNO").apply()
+    } else {
+      editor.putString( "staffNO", staffNO ).apply()
+    }
   }
 
   /**

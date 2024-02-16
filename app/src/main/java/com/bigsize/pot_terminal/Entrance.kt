@@ -129,7 +129,7 @@ class Entrance:DensoWaveBase(),DialogCallback {
 
     // ■ 端末番号の有無をチェックします
 
-    if( model02.readDeviceNO()== "" ) {
+    if( model02.readDeviceNO() == "" ) {
       val intent = Intent( applicationContext, Failure::class.java )
       intent.putExtra( "MESSAGE", "端末番号がセットアップされていません。" )
       startActivity( intent )
@@ -138,8 +138,7 @@ class Entrance:DensoWaveBase(),DialogCallback {
       startActivity( intent )
     }
 
-    // ■ スタッフ番号をPreferencesに保存します
-
+    // スタッフ番号をpreferencesに保存します
     model02.saveStaffNO( viewModel01.txtNumber.value.toString().padStart( 3, '0' ) )
 
     if( BuildConfig.DEBUG ) Log.d( "APP-Entrance", "スタッフ番号 = " + model02.readStaffNO() )
